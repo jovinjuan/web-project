@@ -1,14 +1,20 @@
-# web-project
+# Web-Project
 
-<h3>Mock Up</h3>
+<h2>Mock Up</h2>
 <ul>
   <li>
-    <h4>Home</h4>
+    <h3>Home</h3>
+    <img src="/Mockup/Home.jpg" alt="Home Page"  width="500" height="350">
   </li>
    <li>
-    <h4>My Progress</h4>
+    <h3>My Progress</h3>
+     <img src="/Mockup/My Progress.jpg" alt="Progress Page"  width="500" height="350">
   </li>
    <li>
-    <h4>Statistics</h4>
+    <h3>Achievement</h3>
+     <img src="/Mockup/Gamifikasi (ranking).jpg" alt="Achievement Page"  width="500" height="350">
+  </li>
+  <li>
+    <h3>History</h3>
   </li>
 </ul>
