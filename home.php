@@ -12,9 +12,98 @@
 
     <!-- BOOTSTRAP ICON -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <style>
+      body {
+        padding-top: 90px;
+        font-family: sans-serif;
+      }
+
+      .section {
+        padding-left: 40px;
+        margin: 20px;
+        border-radius: 10px;
+        position: relative;
+        height: 230px;
+      }
+
+      .section h4 {
+        margin-bottom: 15px;
+      }
+
+      /* kalau misalnya ada bbrp buku, jarak per buku itu sbsr 10px */
+      .book-container {
+        display: flex;
+        gap: 10px;
+      }
+
+      /* kotak buku */
+      .book {
+        width: 150px;
+        height: 200px;
+        background: #ddd;
+        border-radius: 5px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* tombol "+" di tengah kotak buku  */
+      .add-book-btn {
+        position: absolute;
+        background: rgb(93, 92, 92);
+        color: white;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 50px;
+        cursor: pointer;
+        font-size: 45px;
+      }
+
+      /* explore button */
+      .explore-btn {
+        margin-right: 60px;
+        position: absolute;
+        top: 0px;
+        right: 20px;
+        background: #0d6efd;
+        color: white;
+        padding: 5px 15px;
+        border: none;
+        border-radius: 5px;
+        font-size: 15px;
+      }
+
+      /* add button untuk berada di pojok kanan bawah */
+      .add-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        background: grey;
+        color: white;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 50px;
+        cursor: pointer;
+        font-size: 45px;
+      }
+
+      /* garis horizontal untuk area perbatasan per section */
+      .section-divider {
+        border: none;
+        height: 2px;
+        background-color: grey;
+        margin: 0;
+      }
+    </style>
   </head>
-  <body>
-    <!-- Nav Bar -->
+  <body class="bg-light">
+    <!-- nav bar -->
     <nav class="navbar navbar-expand-lg bg-light shadow p-3 fixed-top">
       <div class="container">
         <i class="bi bi-box-fill"></i>
@@ -22,7 +111,7 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <!-- Area Navigation -->
+        <!-- area navigation -->
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="nav nav-pills">
             <li class="nav-item">
@@ -54,8 +143,47 @@
         </a>
       </div>
     </nav>
-    <!-- Akhir Nav Bar -->
+    <!-- akhir nav bar -->
 
-    <!--  -->
+    <!-- section: currently reading -->
+    <div class="section">
+      <h4>Currently Reading</h4>
+      <button class="explore-btn">Explore</button>
+      <div class="book-container">
+        <div class="book">
+          <div class="add-book-btn">+</div>
+        </div>
+      </div>
+    </div>
+    <br />
+    <hr class="section-divider" />
+
+    <!-- section: to read -->
+    <div class="section">
+      <h4>To Read</h4>
+      <button class="explore-btn">Explore</button>
+      <div class="book-container">
+        <div class="book">
+          <div class="add-book-btn">+</div>
+        </div>
+      </div>
+    </div>
+    <br />
+    <hr class="section-divider" />
+
+    <!-- section: savourite book lists -->
+    <div class="section">
+      <h4>Favourite Book Lists</h4>
+      <button class="explore-btn">Explore</button>
+      <div class="book-container">
+        <div class="book">
+          <div class="add-book-btn">+</div>
+        </div>
+      </div>
+    </div>
+    <br />
+
+    <!-- add button yang ada di pojok bawah kanan -->
+    <div class="add-btn">+</div>
   </body>
 </html>
