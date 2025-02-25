@@ -16,7 +16,7 @@
   <body>
     <!-- Nav Bar -->
     <nav class="navbar navbar-expand-lg bg-light shadow p-3 fixed-top">
-      <div class="container">
+      <div class="container-fluid px-5">
         <i class="bi bi-box-fill"></i>
         <a class="navbar-brand" href="#">[Nama Sistem]</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
