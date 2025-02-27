@@ -20,6 +20,7 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
       /* Membatasi deskripsi agar tidak melebihi beberapa baris */
       .card-text {
@@ -28,7 +29,7 @@
         -webkit-line-clamp: 4;
         -webkit-box-orient: vertical;
         display: box;
-        line-clamp: 4; /* Standard property (not fully supported yet) */
+        line-clamp: 4;
         box-orient: vertical;
       }
       .inProgressTitle {
@@ -43,6 +44,14 @@
       /* In Progress Card Sama Tinggi Tanpa Perubahan Konten */
       .fixed-height-card {
         height: 235px;
+      }
+      .full-height-img {
+        height: 100%;
+      }
+      .statisticsToggle {
+        position: absolute;
+        top: 15px;
+        right: 15px;
       }
     </style>
   </head>
@@ -114,9 +123,9 @@
           <div class="col-7">
             <div class="card px-3 pt-2">
               <div class="card-body">
-                <h5 class="card-title">Card title</h5>
+                <h4 class="card-title">Target</h4>
                 <h6 class="card-subtitle mb-2 text-body-secondary">
-                  Card subtitle
+                  Card subtitle9
                 </h6>
                 <p class="card-text">
                   Some quick example text to build on the card title and make up
@@ -129,14 +138,58 @@
           <div class="col-5">
             <div class="card px-3 pt-2">
               <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <h6 class="card-subtitle mb-2 text-body-secondary">
-                  Card subtitle
-                </h6>
-                <p class="card-text">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </p>
+                <h4 class="card-title">Statistics</h4>
+                <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
+                <p class="card-text"></p>
+                <div class="btn-group mt-1 statisticsToggle">
+                  <button id="weeklyBtn" class="btn btn-primary">Weekly</button>
+                  <button id="monthlyBtn" class="btn btn-primary active">
+                    Monthly
+                  </button>
+                </div>
+                <canvas id="statsLineChart" width="400" height="200"></canvas>
+                <script>
+                  window.onload = function () {
+                    const ctx = document
+                      .getElementById("statsLineChart")
+                      .getContext("2d");
+
+                    // Set up statistik
+                    const labels = [
+                      "Jan",
+                      "Feb",
+                      "Mar",
+                      "Apr",
+                      "May",
+                      "Jun",
+                      "Jul",
+                      "Aug",
+                      "Sep",
+                      "Oct",
+                      "Nov",
+                      "Dec",
+                    ];
+                    const data = {
+                      labels: labels,
+                      datasets: [
+                        {
+                          label: "Monthly Statistics",
+                          data: [10, 22, 3, 6, 18, 0, 0, 5, 12, 0, 0, 0],
+                          fill: false,
+                          borderColor: "rgb(75, 192, 192)",
+                          tension: 0.1,
+                        },
+                      ],
+                    };
+                    // Config Statistik
+                    const config = {
+                      type: "line",
+                      data: data,
+                    };
+                    // Buat Statistik
+                    new Chart(ctx, config);
+                  };
+                </script>
               </div>
             </div>
           </div>
@@ -156,11 +209,11 @@
                       class="card mx-2 fixed-height-card"
                       style="max-width: 432px"
                     >
-                      <div class="row g-0">
-                        <div class="col-md-4">
+                      <div class="row g-0 py-3">
+                        <div class="col-md-4" style="height: 204px">
                           <img
-                            src="..."
-                            class="img-fluid rounded-start"
+                            src="/pic/bookcover1.webp"
+                            class="img-fluid rounded-start full-height-img"
                             alt="..."
                           />
                         </div>
@@ -169,7 +222,7 @@
                             <h5 class="card-title inProgressTitle">
                               ducimus qui blanditiis praesentium
                             </h5>
-                            <p class="card-text">
+                            <p class="card-text p-0">
                               "At vero eos et accusamus et iusto odio
                               dignissimos ducimus qui blanditiis praesentium
                               voluptatum deleniti atque corrupti quos dolores et
@@ -178,6 +231,15 @@
                               deserunt mollitia animi, id est laborum et dolorum
                               fuga.
                             </p>
+                            <progress id="progress" value="32" max="100">
+                              32%
+                            </progress>
+                            <!-- Continue Button -->
+                            <div
+                              class="btn btn-primary position-absolute bottom-0 end-0 m-3"
+                            >
+                              >
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -187,11 +249,11 @@
                       class="card mx-2 fixed-height-card"
                       style="max-width: 432px"
                     >
-                      <div class="row g-0">
-                        <div class="col-md-4">
+                      <div class="row g-0 py-3">
+                        <div class="col-md-4" style="height: 204px">
                           <img
-                            src="..."
-                            class="img-fluid rounded-start"
+                            src="/pic/bookcover1.webp"
+                            class="img-fluid rounded-start full-height-img"
                             alt="..."
                           />
                         </div>
@@ -200,7 +262,7 @@
                             <h5 class="card-title inProgressTitle">
                               ducimus qui blanditiis praesentium
                             </h5>
-                            <p class="card-text">
+                            <p class="card-text p-0">
                               "At vero eos et accusamus et iusto odio
                               dignissimos ducimus qui blanditiis praesentium
                               voluptatum deleniti atque corrupti quos dolores et
@@ -209,6 +271,15 @@
                               deserunt mollitia animi, id est laborum et dolorum
                               fuga.
                             </p>
+                            <progress id="progress" value="32" max="100">
+                              32%
+                            </progress>
+                            <!-- Continue Button -->
+                            <div
+                              class="btn btn-primary position-absolute bottom-0 end-0 m-3"
+                            >
+                              >
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -218,11 +289,11 @@
                       class="card mx-2 fixed-height-card"
                       style="max-width: 432px"
                     >
-                      <div class="row g-0">
-                        <div class="col-md-4">
+                      <div class="row g-0 py-3">
+                        <div class="col-md-4" style="height: 204px">
                           <img
-                            src="..."
-                            class="img-fluid rounded-start"
+                            src="/pic/bookcover1.webp"
+                            class="img-fluid rounded-start full-height-img"
                             alt="..."
                           />
                         </div>
@@ -231,7 +302,7 @@
                             <h5 class="card-title inProgressTitle">
                               ducimus qui blanditiis praesentium
                             </h5>
-                            <p class="card-text">
+                            <p class="card-text p-0">
                               "At vero eos et accusamus et iusto odio
                               dignissimos ducimus qui blanditiis praesentium
                               voluptatum deleniti atque corrupti quos dolores et
@@ -240,6 +311,15 @@
                               deserunt mollitia animi, id est laborum et dolorum
                               fuga.
                             </p>
+                            <progress id="progress" value="32" max="100">
+                              32%
+                            </progress>
+                            <!-- Continue Button -->
+                            <div
+                              class="btn btn-primary position-absolute bottom-0 end-0 m-3"
+                            >
+                              >
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -249,11 +329,11 @@
                       class="card mx-2 fixed-height-card"
                       style="max-width: 432px"
                     >
-                      <div class="row g-0">
-                        <div class="col-md-4">
+                      <div class="row g-0 py-3">
+                        <div class="col-md-4" style="height: 204px">
                           <img
-                            src="..."
-                            class="img-fluid rounded-start"
+                            src="/pic/bookcover1.webp"
+                            class="img-fluid rounded-start full-height-img"
                             alt="..."
                           />
                         </div>
@@ -262,7 +342,7 @@
                             <h5 class="card-title inProgressTitle">
                               ducimus qui blanditiis praesentium
                             </h5>
-                            <p class="card-text">
+                            <p class="card-text p-0">
                               "At vero eos et accusamus et iusto odio
                               dignissimos ducimus qui blanditiis praesentium
                               voluptatum deleniti atque corrupti quos dolores et
@@ -271,6 +351,55 @@
                               deserunt mollitia animi, id est laborum et dolorum
                               fuga.
                             </p>
+                            <progress id="progress" value="32" max="100">
+                              32%
+                            </progress>
+                            <!-- Continue Button -->
+                            <div
+                              class="btn btn-primary position-absolute bottom-0 end-0 m-3"
+                            >
+                              >
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Card 5 -->
+                    <div
+                      class="card mx-2 fixed-height-card"
+                      style="max-width: 432px"
+                    >
+                      <div class="row g-0 py-3">
+                        <div class="col-md-4" style="height: 204px">
+                          <img
+                            src="/pic/bookcover1.webp"
+                            class="img-fluid rounded-start full-height-img"
+                            alt="..."
+                          />
+                        </div>
+                        <div class="col-md-8">
+                          <div class="card-body">
+                            <h5 class="card-title inProgressTitle">
+                              ducimus qui blanditiis praesentium
+                            </h5>
+                            <p class="card-text p-0">
+                              "At vero eos et accusamus et iusto odio
+                              dignissimos ducimus qui blanditiis praesentium
+                              voluptatum deleniti atque corrupti quos dolores et
+                              quas molestias excepturi sint occaecati cupiditate
+                              non provident, similique sunt in culpa qui officia
+                              deserunt mollitia animi, id est laborum et dolorum
+                              fuga.
+                            </p>
+                            <progress id="progress" value="32" max="100">
+                              32%
+                            </progress>
+                            <!-- Continue Button -->
+                            <div
+                              class="btn btn-primary position-absolute bottom-0 end-0 m-3"
+                            >
+                              >
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -281,6 +410,11 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </body>
+</html>
+
       </div>
     </div>
   </body>
