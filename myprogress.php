@@ -53,6 +53,14 @@
         top: 15px;
         right: 15px;
       }
+      .progress-ring {
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        border: 8px solid #dee2e6;
+        border-top: 8px solid rgb(76, 21, 203);
+        transform: rotate(45deg);
+      }
     </style>
   </head>
   <body>
@@ -118,24 +126,68 @@
       <div class="px-5 mt-3">
         <h2>My Progress</h2>
         <h5>Track Your Reading Progress</h5>
-        <div class="row g-4 mt-2">
+        <div class="row g-4 mt-2"> 
           <!-- Circle Chart -->
-          <div class="col-7">
+          <div class="col-5">
             <div class="card px-3 pt-2">
               <div class="card-body">
                 <h4 class="card-title">Target</h4>
-                <h6 class="card-subtitle mb-2 text-body-secondary">
-                  Card subtitle9
-                </h6>
-                <p class="card-text">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </p>
+                <!-- Ring Chart 1 -->
+                <div class="row align-items-center mb-3 my-5">
+                        <div class="col-4">
+                          <svg width="160" height="160" viewBox="0 0 100 100">
+                        <!-- Background Circle -->
+                              <circle cx="50" cy="50" r="40" stroke="#ddd" stroke-width="10" fill="none"/>
+                              <!-- Progress Circle -->
+                              <circle cx="50" cy="50" r="40" stroke="rgb(76, 21, 203)" stroke-width="10" fill="none"
+                                  stroke-dasharray="251.2" stroke-dashoffset="167.5" stroke-linecap="round"/>
+                              <!-- Percentage Text -->
+                              <text x="50" y="55" font-size="18" text-anchor="middle" fill="black" font-weight="bold">33%</text>
+                          </svg>
+
+                        </div>
+                      <div class="col-md-8">
+                        <h2 class="fw-bold mb-3">Judul Buku</h2>
+                        <div class="progress" role="progressbar" aria-label="Progress" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="height: 18px;">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary " style="width: 33%;"></div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between">
+                          <button type="button" class="btn btn-primary border rounded mt-4 ">View Book</button>
+                          <h6 class="fw-bold display">125/750 pages</h6>
+                        </div>
+                      </div>
+                </div>
+              
+              <!-- Ring Chart 2 -->
+              <div class="row align-items-center mt-5 mb-4">
+                  <div class="col-4">
+                  <svg width="160" height="160" viewBox="0 0 100 100">
+                        <!-- Background Circle -->
+                              <circle cx="50" cy="50" r="40" stroke="#ddd" stroke-width="10" fill="none"/>
+                              <!-- Progress Circle -->
+                              <circle cx="50" cy="50" r="40" stroke="rgb(76, 21, 203)" stroke-width="10" fill="none"
+                                  stroke-dasharray="251.2" stroke-dashoffset="167.5" stroke-linecap="round"/>
+                              <!-- Percentage Text -->
+                              <text x="50" y="55" font-size="18" text-anchor="middle" fill="black" font-weight="bold">33%</text>
+                          </svg>
+
+                      </div>
+                        <div class="col-md-8">
+                          <h2 class="fw-bold mb-3">Judul Buku</h2>
+                          <div class="progress" role="progressbar" aria-label="Progress" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="height: 18px;">
+                          <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" style="width: 33%;"></div>
+                          </div>
+                        <div class="d-flex align-items-center justify-content-between">
+                          <button type="button" class="btn btn-primary border rounded mt-4 ">View Book</button>
+                          <h6 class="fw-bold display">150/550 pages</h6>
+                        </div>
+                        </div>
+                  </div>
               </div>
             </div>
           </div>
           <!-- Line Chart -->
-          <div class="col-5">
+          <div class="col-7">
             <div class="card px-3 pt-2">
               <div class="card-body">
                 <h4 class="card-title">Statistics</h4>
@@ -414,4 +466,3 @@
     </div>
   </body>
 </html>
-
