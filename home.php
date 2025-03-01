@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Sistem</title>
 
+    <link rel="stylesheet" href="css/style.css" />
+
     <!-- BOOTSTRAP CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
 
@@ -125,7 +127,7 @@
         height: 50px;
         border-radius: 50%;
         text-align: center;
-        line-height: 50px;
+        line-height: 40px;
         cursor: pointer;
         font-size: 45px;
       }
@@ -142,22 +144,6 @@
         border: none;
         border-radius: 5px;
         font-size: 15px;
-      }
-
-      /* floating add button */
-      .add-btn {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        width: 50px;
-        height: 50px;
-        background: grey;
-        color: white;
-        border-radius: 50%;
-        text-align: center;
-        line-height: 50px;
-        cursor: pointer;
-        font-size: 45px;
       }
 
       .section-divider {
@@ -321,7 +307,5 @@
       </div>
       <br />
     </div>
-    <!-- Floating Add Button -->
-    <div class="add-btn">+</div>
   </body>
 </html>
