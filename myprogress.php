@@ -32,7 +32,7 @@
         line-clamp: 4;
         box-orient: vertical;
       }
-      .inProgressTitle {
+      .card-title {
         overflow: hidden;
         display: -webkit-box;
         -webkit-line-clamp: 1;
@@ -52,6 +52,17 @@
         position: absolute;
         top: 15px;
         right: 15px;
+      }
+      .progress-ring {
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        border: 8px solid #dee2e6;
+        border-top: 8px solid rgb(76, 21, 203);
+        transform: rotate(45deg);
+      }
+      .fixed-height-chart {
+        height: 415px;
       }
     </style>
   </head>
@@ -120,23 +131,131 @@
         <h5>Track Your Reading Progress</h5>
         <div class="row g-4 mt-2">
           <!-- Circle Chart -->
-          <div class="col-7">
-            <div class="card px-3 pt-2">
+          <div class="col-6">
+            <div class="card px-3 pt-2 fixed-height-chart">
               <div class="card-body">
                 <h4 class="card-title">Target</h4>
-                <h6 class="card-subtitle mb-2 text-body-secondary">
-                  Card subtitle9
-                </h6>
-                <p class="card-text">
-                  Some quick example text to build on the card title and make up
-                  the bulk of the card's content.
-                </p>
+                <!-- Ring Chart 1 -->
+                <div class="row align-items-center mb-3 mt-">
+                  <div class="col-4">
+                    <svg width="160" height="160" viewBox="0 0 100 100">
+                      <!-- Background Circle -->
+                      <circle
+                        cx="50"
+                        cy="50"
+                        r="40"
+                        stroke="#ddd"
+                        stroke-width="10"
+                        fill="none"
+                      />
+                      <!-- Progress Circle -->
+                      <circle
+                        cx="50"
+                        cy="50"
+                        r="40"
+                        stroke="rgb(76, 21, 203)"
+                        stroke-width="10"
+                        fill="none"
+                        stroke-dasharray="251.2"
+                        stroke-dashoffset="167.5"
+                        stroke-linecap="round"
+                      />
+                      <!-- Percentage Text -->
+                      <text
+                        x="50"
+                        y="55"
+                        font-size="18"
+                        text-anchor="middle"
+                        fill="black"
+                        font-weight="bold"
+                      >
+                        33%
+                      </text>
+                    </svg>
+                  </div>
+                  <div class="col-md-8">
+                    <h4 class="fw-bold">Monthly Book Explorer</h4>
+                    <p class="card-text">
+                      Finish 2 books within 30 days to stay on track with your
+                      reading goals.
+                    </p>
+
+                    <div
+                      class="d-flex align-items-center justify-content-between"
+                    >
+                      <button
+                        type="button"
+                        class="btn btn-primary border rounded ms-auto"
+                      >
+                        Continue
+                      </button>
+                      <h6 class="fw-bold display"></h6>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Ring Chart 2 -->
+                <div class="row align-items-center mt-2 mb-2">
+                  <div class="col-4">
+                    <svg width="160" height="160" viewBox="0 0 100 100">
+                      <!-- Background Circle -->
+                      <circle
+                        cx="50"
+                        cy="50"
+                        r="40"
+                        stroke="#ddd"
+                        stroke-width="10"
+                        fill="none"
+                      />
+                      <!-- Progress Circle -->
+                      <circle
+                        cx="50"
+                        cy="50"
+                        r="40"
+                        stroke="rgb(76, 21, 203)"
+                        stroke-width="10"
+                        fill="none"
+                        stroke-dasharray="251.2"
+                        stroke-dashoffset="167.5"
+                        stroke-linecap="round"
+                      />
+                      <!-- Percentage Text -->
+                      <text
+                        x="50"
+                        y="55"
+                        font-size="18"
+                        text-anchor="middle"
+                        fill="black"
+                        font-weight="bold"
+                      >
+                        33%
+                      </text>
+                    </svg>
+                  </div>
+                  <div class="col-md-8">
+                    <h4 class="fw-bold">7-Day Reading Streak</h4>
+                    <p class="card-text">
+                      Read at least 20 minutes per day for 7 consecutive days to
+                      build a consistent reading habit.
+                    </p>
+                    <div
+                      class="d-flex align-items-center justify-content-between"
+                    >
+                      <button
+                        type="button"
+                        class="btn btn-primary border rounded ms-auto"
+                      >
+                        Continue
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
           <!-- Line Chart -->
-          <div class="col-5">
-            <div class="card px-3 pt-2">
+          <div class="col-6">
+            <div class="card px-3 pt-2 fixed-height-chart">
               <div class="card-body">
                 <h4 class="card-title">Statistics</h4>
                 <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
@@ -219,17 +338,13 @@
                         </div>
                         <div class="col-md-8">
                           <div class="card-body">
-                            <h5 class="card-title inProgressTitle">
-                              ducimus qui blanditiis praesentium
-                            </h5>
+                            <h5 class="card-title">Silent Echo</h5>
                             <p class="card-text p-0">
-                              "At vero eos et accusamus et iusto odio
-                              dignissimos ducimus qui blanditiis praesentium
-                              voluptatum deleniti atque corrupti quos dolores et
-                              quas molestias excepturi sint occaecati cupiditate
-                              non provident, similique sunt in culpa qui officia
-                              deserunt mollitia animi, id est laborum et dolorum
-                              fuga.
+                              After a global catastrophe leaves most of the
+                              world mute, one woman discovers she can still
+                              speak. Hunted for the secrets she holds, she
+                              embarks on a journey to uncover the truth behind
+                              humanity’s silence.
                             </p>
                             <progress id="progress" value="32" max="100">
                               32%
@@ -259,21 +374,17 @@
                         </div>
                         <div class="col-md-8">
                           <div class="card-body">
-                            <h5 class="card-title inProgressTitle">
-                              ducimus qui blanditiis praesentium
-                            </h5>
+                            <h5 class="card-title">Threads of Destiny</h5>
                             <p class="card-text p-0">
-                              "At vero eos et accusamus et iusto odio
-                              dignissimos ducimus qui blanditiis praesentium
-                              voluptatum deleniti atque corrupti quos dolores et
-                              quas molestias excepturi sint occaecati cupiditate
-                              non provident, similique sunt in culpa qui officia
-                              deserunt mollitia animi, id est laborum et dolorum
-                              fuga.
+                              Two souls, bound by fate across lifetimes, must
+                              find each other again before the world collapses.
+                              Will they uncover their connection in time, or
+                              will history repeat itself?
                             </p>
                             <progress id="progress" value="32" max="100">
                               32%
                             </progress>
+
                             <!-- Continue Button -->
                             <div
                               class="btn btn-primary position-absolute bottom-0 end-0 m-3"
@@ -299,17 +410,12 @@
                         </div>
                         <div class="col-md-8">
                           <div class="card-body">
-                            <h5 class="card-title inProgressTitle">
-                              ducimus qui blanditiis praesentium
-                            </h5>
+                            <h5 class="card-title">The Alchemist’s Curse</h5>
                             <p class="card-text p-0">
-                              "At vero eos et accusamus et iusto odio
-                              dignissimos ducimus qui blanditiis praesentium
-                              voluptatum deleniti atque corrupti quos dolores et
-                              quas molestias excepturi sint occaecati cupiditate
-                              non provident, similique sunt in culpa qui officia
-                              deserunt mollitia animi, id est laborum et dolorum
-                              fuga.
+                              An ambitious young scholar discovers an ancient
+                              formula that promises eternal life. But as he
+                              unlocks its secrets, he realizes that some
+                              knowledge comes with a price too high to pay.
                             </p>
                             <progress id="progress" value="32" max="100">
                               32%
@@ -339,17 +445,12 @@
                         </div>
                         <div class="col-md-8">
                           <div class="card-body">
-                            <h5 class="card-title inProgressTitle">
-                              ducimus qui blanditiis praesentium
-                            </h5>
+                            <h5 class="card-title">The Fractured Path</h5>
                             <p class="card-text p-0">
-                              "At vero eos et accusamus et iusto odio
-                              dignissimos ducimus qui blanditiis praesentium
-                              voluptatum deleniti atque corrupti quos dolores et
-                              quas molestias excepturi sint occaecati cupiditate
-                              non provident, similique sunt in culpa qui officia
-                              deserunt mollitia animi, id est laborum et dolorum
-                              fuga.
+                              A detective with a troubled past stumbles upon a
+                              case that leads him down a road where reality and
+                              illusion blur. As he uncovers the truth, he must
+                              confront the demons he's been running from.
                             </p>
                             <progress id="progress" value="32" max="100">
                               32%
@@ -379,17 +480,13 @@
                         </div>
                         <div class="col-md-8">
                           <div class="card-body">
-                            <h5 class="card-title inProgressTitle">
-                              ducimus qui blanditiis praesentium
-                            </h5>
+                            <h5 class="card-title">Echoes of Eternity</h5>
                             <p class="card-text p-0">
-                              "At vero eos et accusamus et iusto odio
-                              dignissimos ducimus qui blanditiis praesentium
-                              voluptatum deleniti atque corrupti quos dolores et
-                              quas molestias excepturi sint occaecati cupiditate
-                              non provident, similique sunt in culpa qui officia
-                              deserunt mollitia animi, id est laborum et dolorum
-                              fuga.
+                              In a world where memories can be stored and
+                              replayed like movies, a woman discovers a
+                              forgotten past that could change the fate of
+                              humanity. But some secrets are meant to stay
+                              buried
                             </p>
                             <progress id="progress" value="32" max="100">
                               32%
@@ -414,4 +511,3 @@
     </div>
   </body>
 </html>
-
