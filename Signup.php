@@ -56,7 +56,7 @@
       <form onsubmit="redirectToHome(event)">
         <input type="email" placeholder="Email Address" required />
         <input type="password" placeholder="Password" required />
-        <button type="submit">Sign</button>
+        <button type="submit">Sign Up</button>
         <div class="login-link">
           <p>or <br />Already have account <a href="login.php">Login</a></p>
         </div>
