@@ -22,6 +22,11 @@
     />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+      canvas {
+        width: 100% !important;
+        height: 300px !important;
+        max-width: 100%;
+      }
       /* Membatasi deskripsi agar tidak melebihi beberapa baris */
       .card-text {
         overflow: hidden;
@@ -31,6 +36,11 @@
         display: box;
         line-clamp: 4;
         box-orient: vertical;
+      }
+      .active-btn {
+        background-color: rgb(1, 1, 192);
+        color: white;
+        border: 2px solid rgb(1, 1, 192);
       }
       .card-title {
         overflow: hidden;
@@ -136,7 +146,7 @@
               <div class="card-body">
                 <h4 class="card-title">Target</h4>
                 <!-- Ring Chart 1 -->
-                <div class="row align-items-center mb-3 mt-">
+                <div class="row align-items-center mb-3">
                   <div class="col-4">
                     <svg width="160" height="160" viewBox="0 0 100 100">
                       <!-- Background Circle -->
@@ -261,20 +271,20 @@
                 <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
                 <p class="card-text"></p>
                 <div class="btn-group mt-1 statisticsToggle">
-                  <button id="weeklyBtn" class="btn btn-primary">Weekly</button>
-                  <button id="monthlyBtn" class="btn btn-primary active">
+                  <button class="btn btn-primary active-btn" id="monthlyBtn">
                     Monthly
                   </button>
+                  <button class="btn btn-primary" id="dailyBtn">Daily</button>
                 </div>
-                <canvas id="statsLineChart" width="400" height="200"></canvas>
+                <canvas id="myChart"></canvas>
                 <script>
-                  window.onload = function () {
-                    const ctx = document
-                      .getElementById("statsLineChart")
-                      .getContext("2d");
+                  const ctx = document
+                    .getElementById("myChart")
+                    .getContext("2d");
 
-                    // Set up statistik
-                    const labels = [
+                  // Default Monthly Data
+                  let monthlyData = {
+                    labels: [
                       "Jan",
                       "Feb",
                       "Mar",
@@ -287,34 +297,77 @@
                       "Oct",
                       "Nov",
                       "Dec",
-                    ];
-                    const data = {
-                      labels: labels,
-                      datasets: [
-                        {
-                          label: "Monthly Statistics",
-                          data: [10, 22, 3, 6, 18, 0, 0, 5, 12, 0, 0, 0],
-                          fill: false,
-                          borderColor: "rgb(75, 192, 192)",
-                          tension: 0.1,
-                        },
-                      ],
-                    };
-                    // Config Statistik
-                    const config = {
-                      type: "line",
-                      data: data,
-                    };
-                    // Buat Statistik
-                    new Chart(ctx, config);
+                    ],
+                    datasets: [
+                      {
+                        label: "Monthly Statistics",
+                        data: [10, 22, 2, 5, 17, 0, 1, 6, 12, 1, 0, 0],
+                        borderColor: "rgb(75, 192, 192)",
+                        backgroundColor: "rgb(75, 192, 192)",
+                        tension: 0.1,
+                      },
+                    ],
                   };
+
+                  let dailyData = {
+                    labels: [
+                      "Monday",
+                      "Tuesday",
+                      "Wednesday",
+                      "Thursday",
+                      "Friday",
+                      "Saturday",
+                      "Sunday",
+                    ],
+                    datasets: [
+                      {
+                        label: "Daily Statistics",
+                        data: [5, 12, 7, 9, 3, 5, 2],
+                        borderColor: "purple",
+                        backgroundColor: "purple",
+                        tension: 0.1,
+                      },
+                    ],
+                  };
+
+                  let chart = new Chart(ctx, {
+                    type: "line",
+                    data: monthlyData,
+                    options: { responsive: true },
+                  });
+
+                  document
+                    .getElementById("dailyBtn")
+                    .addEventListener("click", function () {
+                      chart.data = dailyData;
+                      chart.update();
+                      toggleActive(this);
+                    });
+
+                  document
+                    .getElementById("monthlyBtn")
+                    .addEventListener("click", function () {
+                      chart.data = monthlyData;
+                      chart.update();
+                      toggleActive(this);
+                    });
+
+                  function toggleActive(button) {
+                    document
+                      .getElementById("dailyBtn")
+                      .classList.remove("active-btn");
+                    document
+                      .getElementById("monthlyBtn")
+                      .classList.remove("active-btn");
+                    button.classList.add("active-btn");
+                  }
                 </script>
               </div>
             </div>
           </div>
           <!-- In Progress -->
           <div class="col">
-            <div class="card px-3 pt-2">
+            <div class="card px-3 py-2 mb-5">
               <div class="card-body">
                 <h4 class="card-title">In Progress</h4>
                 <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
