@@ -23,7 +23,7 @@
         <div class="card-body d-flex align-items-center">
           <div>
             <h5 class="card-title">John Doe</h5>
-            <p class="card-text text-muted">johndoe@example.com</p>
+            <p class="card-text text-muted">johndoe@gmail.com</p>
           </div>
         </div>
       </div>
@@ -43,33 +43,20 @@
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 <label for="emailInput">Email</label>
-                <input type="email" id="emailInput" class="form-control w-50" placeholder="johndoe@example.com" />
+                <input type="email" id="emailInput" class="form-control w-50" placeholder="johndoe@gmail.com" />
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 <span class="py-2">Delete Account</span>
-                <a href="#" class="text-danger">Delete</a>
+                <a href="login.php" class="text-danger">Delete</a>
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 <span class="py-2">Logout</span>
-                <a href="#" class="text-danger">Logout</a>
+                <a href="login.php" class="text-danger">Logout</a>
               </li>
             </ul>
             <button type="submit" class="btn btn-primary">Save</button>
           </form>
           <br />
-
-          <!-- Login Methods Section -->
-          <h5>Login Methods</h5>
-          <ul class="list-group">
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              <span><i class="bi bi-apple"></i> Apple</span>
-              <a href="#" class="text-primary">Connect</a>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              <span><i class="bi bi-google"></i> Google</span>
-              <span class="badge bg-success">Connected</span>
-            </li>
-          </ul>
         </div>
       </div>
     </div>
