@@ -4,8 +4,70 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Sistem</title>
+    <style>
+        /* Styling Sidebar */
+        .sidebar {
+            min-height: 100vh;
+            background: #f8f9fa;
+            padding: 20px;
+        }
 
-    <link rel="stylesheet" href="css/style.css" />
+        /* Ranking List */
+        .ranking-container {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .ranking-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .ranking-item:last-child {
+            border-bottom: none;
+        }
+
+        .ranking-item .avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #ccc;
+            margin-right: 10px;
+        }
+
+        /* Highlighted User */
+        .highlight {
+            background: #555;
+            color: white;
+            border-radius: 10px;
+        }
+
+        /* Badges Section */
+        .badges-container {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .badge-box {
+            width: 80px;
+            height: 100px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+        }
+    </style>
+    
 
     <!-- BOOTSTRAP CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
@@ -55,7 +117,86 @@
       </div>
     </nav>
     <!-- Akhir Nav Bar -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar pt-5 mt-5">
+                <h5>Ranking</h5>
+                <p class="text-muted">Badges</p>
+            </div>
 
-    <!--  -->
+            <!-- Main Content -->
+            <div class="col-md-10 p-4 mt-5 pt-5">
+                <!-- Ranking List -->
+                <h5>Ranking</h5>
+                <div class="ranking-container">
+                    <div class="ranking-item">
+                        <span>1</span>
+                        <div class="d-flex align-items-center">
+                            <div class="avatar"></div>
+                            <span>Name</span>
+                        </div>
+                        <span>xxxx</span>
+                    </div>
+                    <div class="ranking-item">
+                        <span>2</span>
+                        <div class="d-flex align-items-center">
+                            <div class="avatar"></div>
+                            <span>Name</span>
+                        </div>
+                        <span>xxxx</span>
+                    </div>
+                    <div class="ranking-item">
+                        <span>3</span>
+                        <div class="d-flex align-items-center">
+                            <div class="avatar"></div>
+                            <span>Name</span>
+                        </div>
+                        <span>xxxx</span>
+                    </div>
+                    <div class="ranking-item">
+                        <span>4</span>
+                        <div class="d-flex align-items-center">
+                            <div class="avatar"></div>
+                            <span>Name</span>
+                        </div>
+                        <span>xxxx</span>
+                    </div>
+                    <div class="ranking-item">
+                        <span>5</span>
+                        <div class="d-flex align-items-center">
+                            <div class="avatar"></div>
+                            <span>Name</span>
+                        </div>
+                        <span>xxxx</span>
+                    </div>
+
+                    <!-- Highlighted User -->
+                    <div class="ranking-item highlight mt-2">
+                        <span>90</span>
+                        <div class="d-flex align-items-center">
+                            <div class="avatar"></div>
+                            <span>Name</span>
+                        </div>
+                        <span>xxxx</span>
+                    </div>
+                </div>
+
+                <!-- Badges Section -->
+                <div class="badges-container">
+                    <h5>Badges</h5>
+                    <div class="d-flex gap-3">
+                        <div class="badge-box"></div>
+                        <div class="badge-box"></div>
+                        <div class="badge-box"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+   
   </body>
 </html>
