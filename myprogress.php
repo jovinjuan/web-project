@@ -391,13 +391,9 @@
                         </div>
                         <div class="col-md-8">
                           <div class="card-body">
-                            <h5 class="card-title">Silent Echo</h5>
+                            <h5 class="card-title">Tangan di Atas Lebih Baik dari Tangan di Bawah</h5>
                             <p class="card-text p-0">
-                              After a global catastrophe leaves most of the
-                              world mute, one woman discovers she can still
-                              speak. Hunted for the secrets she holds, she
-                              embarks on a journey to uncover the truth behind
-                              humanity’s silence.
+                              Melalui berbagai kisah inspiratif dan prinsip moral, buku ini mendorong pembaca untuk mengembangkan mindset positif, berkontribusi kepada masyarakat, serta meraih kesuksesan dengan membantu sesama. Cocok bagi siapa saja yang ingin menjalani hidup yang lebih bermakna dan berdaya guna.
                             </p>
                             <progress id="progress" value="32" max="100">
                               32%
@@ -427,12 +423,9 @@
                         </div>
                         <div class="col-md-8">
                           <div class="card-body">
-                            <h5 class="card-title">Threads of Destiny</h5>
+                            <h5 class="card-title">Senja Tanpa Suara</h5>
                             <p class="card-text p-0">
-                              Two souls, bound by fate across lifetimes, must
-                              find each other again before the world collapses.
-                              Will they uncover their connection in time, or
-                              will history repeat itself?
+                              Dalam keheningan senja, ada kisah yang tak pernah terucap—tentang rindu yang tertahan, luka yang tersembunyi, dan perjalanan hati yang mencari makna di balik kebisuan.
                             </p>
                             <progress id="progress" value="32" max="100">
                               32%
@@ -463,12 +456,9 @@
                         </div>
                         <div class="col-md-8">
                           <div class="card-body">
-                            <h5 class="card-title">The Alchemist’s Curse</h5>
+                            <h5 class="card-title">Bahagia</h5>
                             <p class="card-text p-0">
-                              An ambitious young scholar discovers an ancient
-                              formula that promises eternal life. But as he
-                              unlocks its secrets, he realizes that some
-                              knowledge comes with a price too high to pay.
+                              Dengan kisah yang menyentuh, refleksi mendalam, dan inspirasi dari berbagai pengalaman, buku ini mengajarkan bahwa kebahagiaan bukan sekadar tujuan, tetapi perjalanan yang bisa ditemukan dalam setiap langkah kecil yang kita ambil.
                             </p>
                             <progress id="progress" value="32" max="100">
                               32%
@@ -498,12 +488,9 @@
                         </div>
                         <div class="col-md-8">
                           <div class="card-body">
-                            <h5 class="card-title">The Fractured Path</h5>
+                            <h5 class="card-title">Langit Biru</h5>
                             <p class="card-text p-0">
-                              A detective with a troubled past stumbles upon a
-                              case that leads him down a road where reality and
-                              illusion blur. As he uncovers the truth, he must
-                              confront the demons he's been running from.
+                              rjalanan seorang tokoh utama yang mencari makna kebahagiaan dalam kehidupannya. Dikelilingi oleh berbagai tantangan, ia belajar dari setiap momen, baik suka maupun duka. Dengan latar belakang kehidupan yang penuh warna, kisah ini menggambarkan bagaimana harapan dan keteguhan hati dapat membimbing seseorang menuju kebahagiaan sejati, layaknya langit biru yang tetap ada setelah badai berlalu.
                             </p>
                             <progress id="progress" value="32" max="100">
                               32%
@@ -533,13 +520,9 @@
                         </div>
                         <div class="col-md-8">
                           <div class="card-body">
-                            <h5 class="card-title">Echoes of Eternity</h5>
+                            <h5 class="card-title">Perahu Kertas</h5>
                             <p class="card-text p-0">
-                              In a world where memories can be stored and
-                              replayed like movies, a woman discovers a
-                              forgotten past that could change the fate of
-                              humanity. But some secrets are meant to stay
-                              buried
+                              Perahu Kertas adalah kisah tentang Kugy, seorang gadis unik yang bercita-cita menjadi penulis dongeng, dan Keenan, seorang pelukis berbakat yang terpaksa menjalani hidup sesuai keinginan keluarganya. Keduanya bertemu dalam perjalanan hidup yang penuh lika-liku, persahabatan, cinta, dan impian yang terhalang oleh realitas. 
                             </p>
                             <progress id="progress" value="32" max="100">
                               32%
