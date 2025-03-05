@@ -95,7 +95,7 @@
     <!-- Nav Bar -->
     <nav class="navbar navbar-expand-lg bg-light shadow p-3 fixed-top">
       <div class="container-fluid px-5">
-        <img src="treadyicon.png" alt="web icon" class = "mx-2" style = "width : 50px;  height : 50px;">
+        <img src="treadyicon.png" alt="web icon" class = "mx-2" style = "width : 50px;  height : 63px;">
         <a class="navbar-brand" href="#" >Tready</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
