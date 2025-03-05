@@ -384,7 +384,7 @@
                       <div class="row g-0 py-3">
                         <div class="col-md-4" style="height: 204px">
                           <img
-                            src="/pic/bookcover1.webp"
+                            src="Image/BookCover1.jpg"
                             class="img-fluid rounded-start full-height-img"
                             alt="..."
                           />
@@ -420,7 +420,7 @@
                       <div class="row g-0 py-3">
                         <div class="col-md-4" style="height: 204px">
                           <img
-                            src="/pic/bookcover1.webp"
+                            src="Image/BookCover2.jpg"
                             class="img-fluid rounded-start full-height-img"
                             alt="..."
                           />
@@ -456,7 +456,7 @@
                       <div class="row g-0 py-3">
                         <div class="col-md-4" style="height: 204px">
                           <img
-                            src="/pic/bookcover1.webp"
+                            src="Image/BookCover3.jpg"
                             class="img-fluid rounded-start full-height-img"
                             alt="..."
                           />
@@ -491,7 +491,7 @@
                       <div class="row g-0 py-3">
                         <div class="col-md-4" style="height: 204px">
                           <img
-                            src="/pic/bookcover1.webp"
+                            src="Image/BookCover4.jpg"
                             class="img-fluid rounded-start full-height-img"
                             alt="..."
                           />
@@ -526,7 +526,7 @@
                       <div class="row g-0 py-3">
                         <div class="col-md-4" style="height: 204px">
                           <img
-                            src="/pic/bookcover1.webp"
+                            src="Image/BookCover5.jpg"
                             class="img-fluid rounded-start full-height-img"
                             alt="..."
                           />
