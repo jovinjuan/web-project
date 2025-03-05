@@ -275,7 +275,7 @@
         <button class="explore-btn">Explore</button>
         <div class="book-container">
           <div class="book">
-            <div class="add-book-btn">+</div>
+            <div class="add-book-btn"><a href="Uploadfile.php" style = "text-decoration : none; color : lightgrey;">+</a></div>
           </div>
         </div>
       </div>
@@ -288,7 +288,7 @@
         <button class="explore-btn">Explore</button>
         <div class="book-container">
           <div class="book">
-            <div class="add-book-btn">+</div>
+            <div class="add-book-btn"><a href="Uploadfile.php" style = "text-decoration : none; color : lightgrey;">+</a></div>
           </div>
         </div>
       </div>
@@ -301,7 +301,7 @@
         <button class="explore-btn">Explore</button>
         <div class="book-container">
           <div class="book">
-            <div class="add-book-btn">+</div>
+            <div class="add-book-btn"><a href="Uploadfile.php" style = "text-decoration : none; color : lightgrey;">+</a></div>
           </div>
         </div>
       </div>
