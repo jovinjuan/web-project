@@ -85,7 +85,6 @@
         .book {
         width: 150px;
         height: 225px;
-        background: #ddd;
         border-radius: 5px;
         position: relative;
         display: flex;
@@ -246,31 +245,31 @@
               <div class="row mb-3 my-4">
                 <!-- Book-->
                 <div class="col-md-2">
-                  <div class="book mb-4"></div>
-                  <div class="book"></div>
+                  <div class="mb-4"><img src="Image/BookCover5.jpg" alt="Cover Buku Perahu Kertas" class = "book"></div>
+                  <div><img src="Image/BookCover4.jpg" alt="Cover Buku Langit Biru" class = "book"></div>
                 </div>
                 <!-- Akhir Book -->
                 <div class="col-md-10">
                   <!-- Informasi Book 1 -->
-                  <h2 class="mt-2 fs-1 mb-2 mx-5">Atomic Habits</h2>
+                  <h2 class="mt-2 fs-1 mb-2 mx-5">Perahu Kertas</h2>
                   <div class="d-flex mb-5 mx-5">
-                  <h5 class = "fw-normal text-secondary me-5">James Clear</h5>
-                  <h5 class = "fw-normal text-secondary">Self</h5>
+                  <h5 class = "fw-normal text-secondary me-5">Cahaya Dewi</h5>
+                  <h5 class = "fw-normal text-secondary">Drama</h5>
                   </div>
                   <div class="d-flex justify-content-between align-items-center mx-5">
-                    <h5 class = "fw-normal text-secondary mt-5">Waktu baca</h5>
+                    <h5 class = "fw-normal text-secondary mt-5">4h 30min</h5>
                     <button type="button" class="btn btn-primary border rounded mt-5 fw-bold">Add to Favourite Lists</button>
                   </div>
                   <hr>
                   <!--Akhir Informasi Book 1 -->
                   <!-- Informasi Book 2 -->
-                  <h2 class="mt-2 fs-1 mb-2 mx-5">Judul Buku</h2>
+                  <h2 class="mt-2 fs-1 mb-2 mx-5">Langit Biru</h2>
                   <div class="d-flex mb-5 mx-5">
-                  <h5 class = "fw-normal text-secondary me-5">Penulis buku</h5>
-                  <h5 class = "fw-normal text-secondary">Genre buku</h5>
+                  <h5 class = "fw-normal text-secondary me-5">Samira Hadid</h5>
+                  <h5 class = "fw-normal text-secondary">Romance/Drama</h5>
                   </div>
                   <div class="d-flex justify-content-between align-items-center mx-5">
-                    <h5 class = "fw-normal text-secondary mt-5">Waktu baca</h5>
+                    <h5 class = "fw-normal text-secondary mt-5">3h 15min</h5>
                     <button type="button" class="btn btn-primary border rounded mt-5 fw-bold">Add to Favourite Lists</button>
                   </div>
                   <!-- Akhir Informasi Book 2 -->
@@ -292,7 +291,7 @@
             <div class="container-fluid pt-5 my-5">
             <div class="px-5 mt-3">
               <h2 class = "mb-5">History</h2>
-              <h1 class = "text-center">2 Maret 2025</h1>
+              <h1 class = "text-center">2 March 2025</h1>
               <hr>
             </div>
             <div class="col-7">
@@ -301,32 +300,32 @@
               <div class="row mb-3 my-4">
                 <!-- Book-->
                 <div class="col-md-2">
-                  <div class="book mb-4"></div>
-                  <div class="book"></div>
+                  <div class="mb-4"><img src="Image/BookCover6.jpg" alt="Cover Buku Harapan Baru" class = "book"></div>
+                  <div><img src="Image/BookCover3.jpg" alt="Cover Buku Bahagia itu Sederhana" class = "book"></div>
                 </div>
                 <!-- Akhir Book -->
                 <div class="col-md-10">
                  <!-- Informasi Book 1 -->
-                 <h2 class="mt-2 fs-1 mb-2 mx-5">Judul Buku</h2>
+                 <h2 class="mt-2 fs-1 mb-2 mx-5">Harapan Baru</h2>
                   <div class="d-flex mb-5 mx-5">
-                  <h5 class = "fw-normal text-secondary me-5">Penulis buku</h5>
-                  <h5 class = "fw-normal text-secondary">Genre buku</h5>
+                  <h5 class = "fw-normal text-secondary me-5">Itsuki Takahashi</h5>
+                  <h5 class = "fw-normal text-secondary">Drama</h5>
                   </div>
                   <div class="d-flex justify-content-between align-items-center mx-5">
-                    <h5 class = "fw-normal text-secondary mt-5">Waktu baca</h5>
-                    <button type="button" class="btn btn-primary border rounded mt-5 fw-bold">Add to Favourite Lists</button>
+                    <h5 class = "fw-normal text-secondary mt-5">229 / 859 pages</h5>
+                    <button type="button" class="btn btn-primary border rounded mt-5 fw-bold">Resume Reading</button>
                   </div>
                   <hr>
                   <!--Akhir Informasi Book 1 -->
                   <!-- Informasi Book 2 -->
-                  <h2 class="mt-2 fs-1 mb-2 mx-5">Judul Buku</h2>
+                  <h2 class="mt-2 fs-1 mb-2 mx-5">Bahagia itu Sederhana</h2>
                   <div class="d-flex mb-5 mx-5">
-                  <h5 class = "fw-normal text-secondary me-5">Penulis buku</h5>
-                  <h5 class = "fw-normal text-secondary">Genre buku</h5>
+                  <h5 class = "fw-normal text-secondary me-5">Francois Mercer</h5>
+                  <h5 class = "fw-normal text-secondary">Drama</h5>
                   </div>
                   <div class="d-flex justify-content-between align-items-center mx-5">
-                    <h5 class = "fw-normal text-secondary mt-5">Waktu baca</h5>
-                    <button type="button" class="btn btn-primary border rounded mt-5 fw-bold">Add to Favourite Lists</button>
+                    <h5 class = "fw-normal text-secondary mt-5">373 / 809 pages</h5>
+                    <button type="button" class="btn btn-primary border rounded mt-5 fw-bold">Resume Reading</button>
                   </div>
                   <!-- Akhir Informasi Book 2 -->
                   </div>
