@@ -490,7 +490,7 @@
                           <div class="card-body">
                             <h5 class="card-title">Langit Biru</h5>
                             <p class="card-text p-0">
-                              rjalanan seorang tokoh utama yang mencari makna kebahagiaan dalam kehidupannya. Dikelilingi oleh berbagai tantangan, ia belajar dari setiap momen, baik suka maupun duka. Dengan latar belakang kehidupan yang penuh warna, kisah ini menggambarkan bagaimana harapan dan keteguhan hati dapat membimbing seseorang menuju kebahagiaan sejati, layaknya langit biru yang tetap ada setelah badai berlalu.
+                              Perrjalanan seorang tokoh utama yang mencari makna kebahagiaan dalam kehidupannya. Dikelilingi oleh berbagai tantangan, ia belajar dari setiap momen, baik suka maupun duka. Dengan latar belakang kehidupan yang penuh warna, kisah ini menggambarkan bagaimana harapan dan keteguhan hati dapat membimbing seseorang menuju kebahagiaan sejati, layaknya langit biru yang tetap ada setelah badai berlalu.
                             </p>
                             <progress id="progress" value="32" max="100">
                               32%
