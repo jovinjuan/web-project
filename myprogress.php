@@ -80,8 +80,8 @@
     <!-- Nav Bar -->
     <nav class="navbar navbar-expand-lg bg-light shadow p-3 fixed-top">
       <div class="container-fluid px-5">
-        <i class="bi bi-box-fill"></i>
-        <a class="navbar-brand" href="#">[Nama Sistem]</a>
+        <img src="treadyicon.png" alt="web icon" class = "mx-2" style = "width : 50px; , height : 50px;">
+        <a class="navbar-brand"href="#">Tready</a>
         <button
           class="navbar-toggler"
           type="button"

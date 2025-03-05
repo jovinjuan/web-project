@@ -133,8 +133,8 @@
     <!-- Nav Bar -->
     <nav class="navbar navbar-expand-lg bg-light shadow p-3 fixed-top">
       <div class="container-fluid px-5">
-        <i class="bi bi-box-fill"></i>
-        <a class="navbar-brand" href="#">[Nama Sistem]</a>
+      <img src="treadyicon.png" alt="web icon" class = "mx-2" style = "width : 50px; , height : 50px;">
+        <a class="navbar-brand" href="#">Tready</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -180,7 +180,7 @@
           </div>
         </nav>
         <!-- profile button, kemudian ketika diklik maka akan beralih ke page settings-->
-        <a href="setting.php" class="btn btn-light">
+        <a href="settings.php" class="btn btn-light">
           <i class="bi bi-person-circle fs-5"></i>
         </a>
       </div>
@@ -245,32 +245,32 @@
               <h4 class="card-title">Top-Viewed Book !</h4>
               <div class="row mb-3 my-4">
                 <!-- Book-->
-                <div class="col-md-4">
+                <div class="col-md-2">
                   <div class="book mb-4"></div>
                   <div class="book"></div>
                 </div>
                 <!-- Akhir Book -->
-                <div class="col-md-8">
+                <div class="col-md-10">
                   <!-- Informasi Book 1 -->
-                  <h2 class="mt-2 fs-1 mb-2" style="margin-left: -100px">Judul Buku</h2>
-                  <div class="d-flex mb-5">
-                  <h5 class = "fw-normal text-secondary me-5" style="margin-left: -100px">Penulis buku</h5>
-                  <h5 class = "fw-normal text-secondary">Genre buku</h5>
+                  <h2 class="mt-2 fs-1 mb-2 mx-5">Atomic Habits</h2>
+                  <div class="d-flex mb-5 mx-5">
+                  <h5 class = "fw-normal text-secondary me-5">James Clear</h5>
+                  <h5 class = "fw-normal text-secondary">Self</h5>
                   </div>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <h5 class = "fw-normal text-secondary mt-5" style="margin-left : -100px">Waktu baca</h5>
+                  <div class="d-flex justify-content-between align-items-center mx-5">
+                    <h5 class = "fw-normal text-secondary mt-5">Waktu baca</h5>
                     <button type="button" class="btn btn-primary border rounded mt-5 fw-bold">Add to Favourite Lists</button>
                   </div>
                   <hr>
                   <!--Akhir Informasi Book 1 -->
                   <!-- Informasi Book 2 -->
-                  <h2 class="mt-2 fs-1 mb-2" style="margin-left: -100px">Judul Buku</h2>
-                  <div class="d-flex mb-5">
-                  <h5 class = "fw-normal text-secondary me-5" style="margin-left: -100px">Penulis buku</h5>
+                  <h2 class="mt-2 fs-1 mb-2 mx-5">Judul Buku</h2>
+                  <div class="d-flex mb-5 mx-5">
+                  <h5 class = "fw-normal text-secondary me-5">Penulis buku</h5>
                   <h5 class = "fw-normal text-secondary">Genre buku</h5>
                   </div>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <h5 class = "fw-normal text-secondary mt-5" style="margin-left : -100px">Waktu baca</h5>
+                  <div class="d-flex justify-content-between align-items-center mx-5">
+                    <h5 class = "fw-normal text-secondary mt-5">Waktu baca</h5>
                     <button type="button" class="btn btn-primary border rounded mt-5 fw-bold">Add to Favourite Lists</button>
                   </div>
                   <!-- Akhir Informasi Book 2 -->
@@ -300,33 +300,33 @@
               <div class="card-body">
               <div class="row mb-3 my-4">
                 <!-- Book-->
-                <div class="col-md-4">
+                <div class="col-md-2">
                   <div class="book mb-4"></div>
                   <div class="book"></div>
                 </div>
                 <!-- Akhir Book -->
-                <div class="col-md-8">
-                  <!-- Informasi Book 1 -->
-                  <h2 class="mt-2 fs-1 mb-2" style="margin-left: -100px">Judul Buku</h2>
-                  <div class="d-flex mb-5">
-                  <h5 class = "fw-normal text-secondary me-5" style="margin-left: -100px">Penulis buku</h5>
+                <div class="col-md-10">
+                 <!-- Informasi Book 1 -->
+                 <h2 class="mt-2 fs-1 mb-2 mx-5">Judul Buku</h2>
+                  <div class="d-flex mb-5 mx-5">
+                  <h5 class = "fw-normal text-secondary me-5">Penulis buku</h5>
                   <h5 class = "fw-normal text-secondary">Genre buku</h5>
                   </div>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <h5 class = "fw-normal text-secondary mt-5" style="margin-left : -100px">Halaman Baca</h5>
-                    <button type="button" class="btn btn-primary border rounded mt-5 fw-bold">Resume Reading</button>
+                  <div class="d-flex justify-content-between align-items-center mx-5">
+                    <h5 class = "fw-normal text-secondary mt-5">Waktu baca</h5>
+                    <button type="button" class="btn btn-primary border rounded mt-5 fw-bold">Add to Favourite Lists</button>
                   </div>
                   <hr>
                   <!--Akhir Informasi Book 1 -->
                   <!-- Informasi Book 2 -->
-                  <h2 class="mt-2 fs-1 mb-2" style="margin-left: -100px">Judul Buku</h2>
-                  <div class="d-flex mb-5">
-                  <h5 class = "fw-normal text-secondary me-5" style="margin-left: -100px">Penulis buku</h5>
+                  <h2 class="mt-2 fs-1 mb-2 mx-5">Judul Buku</h2>
+                  <div class="d-flex mb-5 mx-5">
+                  <h5 class = "fw-normal text-secondary me-5">Penulis buku</h5>
                   <h5 class = "fw-normal text-secondary">Genre buku</h5>
                   </div>
-                  <div class="d-flex justify-content-between align-items-center">
-                    <h5 class = "fw-normal text-secondary mt-5" style="margin-left : -100px">Halaman Baca</h5>
-                    <button type="button" class="btn btn-primary border rounded mt-5 fw-bold">Resume Reading</button>
+                  <div class="d-flex justify-content-between align-items-center mx-5">
+                    <h5 class = "fw-normal text-secondary mt-5">Waktu baca</h5>
+                    <button type="button" class="btn btn-primary border rounded mt-5 fw-bold">Add to Favourite Lists</button>
                   </div>
                   <!-- Akhir Informasi Book 2 -->
                   </div>
