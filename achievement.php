@@ -66,6 +66,22 @@
             justify-content: center;
             background: #f8f9fa;
         }
+       .sidebar-profile {
+        text-align: center;
+        padding: 10px;
+      }
+      .sidebar-profile img {
+        width: 170px;
+        height: 170px;
+        border-radius: 50%;
+        background-color: #555; /* Gray circle */
+        display: block;
+        margin: 0 auto;
+        object-fit: cover;
+      }
+       .achievement-content {
+        padding-top: 20px;
+      }
     </style>
     
 
@@ -118,12 +134,15 @@
     </nav>
     <!-- Akhir Nav Bar -->
     <div class="container-fluid">
-        <div class="row">
+        <div class="row achievement-content">
             <!-- Sidebar -->
             <div class="col-md-2 sidebar pt-5 mt-5">
-                <h5>Ranking</h5>
-                <p class="text-muted">Badges</p>
-            </div>
+          <div class="sidebar-profile">
+            <img id="profile-img" src="" alt="" />
+            <h4 class="pt-3">User Name</h4>
+            <h5 class="fw-normal">Rank: 90</h5>
+          </div>
+        </div>
 
             <!-- Main Content -->
             <div class="col-md-10 p-4 mt-5 pt-5">
@@ -194,9 +213,6 @@
             </div>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-   
-  </body>
 </html>
