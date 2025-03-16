@@ -59,16 +59,6 @@
         .img:hover{
             transform: scale(1.05);
         }
-        .navbar, .footer {
-            background-color: #6c757d;
-        }
-        .card, .grid-item, .footer-item {
-            background-color: #e9ecef;
-            border-radius: 8px;
-        }
-        .footer-item {
-            padding: 10px;
-        }
         .nav-link:hover{
             border-bottom : 1px solid blue;
             transition: 0.3s ease-in-out;
@@ -78,6 +68,10 @@
             padding: 0;
             margin : 0;
             box-sizing : border-box;
+        }
+        .gamified-card svg{
+            width : 40px;
+            height : 40px;
         }
     </style>
 </head>
@@ -183,9 +177,9 @@
             With Tready, every page counts. Track your reading stats in real-time with visually appealing charts, monitor your progress, and read seamlessly all in one place
             </p>
             <ul class="list-unstyled">
-                <li class = "mb-3"><i class="check-icon bi bi-check-circle-fill me-2 "></i><strong>Visual Reading Insights - Track your progress in various charts.</strong></li>
-                <li class = "mb-3"><i class="check-icon bi bi-check-circle-fill me-2 "></i><strong>Seamless Reading - Enjoy a smooth reading experience without distractions.</strong></li>
-                <li class = "mb-3"><i class="check-icon bi bi-check-circle-fill me-2 "></i><strong>Stay on Track with Your Books - Pick up where you left off effortlessly.</strong></li>
+                <li class = "mb-4"><i class="check-icon bi bi-check-circle-fill me-2 "></i><strong>Visual Reading Insights - Track your progress in various charts.</strong></li>
+                <li class = "mb-4"><i class="check-icon bi bi-check-circle-fill me-2 "></i><strong>Seamless Reading - Enjoy a smooth reading experience without distractions.</strong></li>
+                <li class = "mb-4"><i class="check-icon bi bi-check-circle-fill me-2 "></i><strong>Stay on Track with Your Books - Pick up where you left off effortlessly.</strong></li>
             </ul>
         </div>
         <div class="col-md-7">
@@ -197,25 +191,117 @@
 </div>
     </section>
 
-    <!-- Grid Section -->
-    <section class="grid-section bg-light">
-        <div class="container text-center">
-            <h3>Grid Section</h3>
-            <div class="row mt-4">
-                <div class="col-md-3">
-                    <div class="grid-item p-3">Grid 1</div>
+    <!-- Gamified Card Section -->
+    <section class="gamified-card">
+        <div class="container mt-5">
+            <div class="px-5 mt-5 d-flex flex-column justify-content-center align-items-center mb-5">
+            <h2 style = "font-family : Poppins, sans-serif;" class = "fw-bold fs-1 mb-5">Make Reading Fun and Engaging</h2>
+            <p style = "font-family : Poppins, sans-serif;" class = "text-secondary fs-5 mb-3">Transform your reading journey into an exciting adventure with gamification.</p>
+            </div>
+        </div>
+    
+    <div class="container mt-4">
+        <div class="row g-4 ">
+    <!-- Leaderboard -->
+            <div class="col-md-6 ">
+                <div class="card feature-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="text-success fs-3 mb-3"> Leaderboard</h5>
+                    <svg xmlns="http://www.w3.org/2000/svg" class = "me-1" viewBox="0 0 640 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="#0e9a70" d="M353.8 54.1L330.2 6.3c-3.9-8.3-16.1-8.6-20.4 0L286.2 54.1l-52.3 7.5c-9.3 1.4-13.3 12.9-6.4 19.8l38 37-9 52.1c-1.4 9.3 8.2 16.5 16.8 12.2l46.9-24.8 46.6 24.4c8.6 4.3 18.3-2.9 16.8-12.2l-9-52.1 38-36.6c6.8-6.8 2.9-18.3-6.4-19.8l-52.3-7.5zM256 256c-17.7 0-32 14.3-32 32l0 192c0 17.7 14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-192c0-17.7-14.3-32-32-32l-128 0zM32 320c-17.7 0-32 14.3-32 32L0 480c0 17.7 14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-128c0-17.7-14.3-32-32-32L32 320zm416 96l0 64c0 17.7 14.3 32 32 32l128 0c17.7 0 32-14.3 32-32l0-64c0-17.7-14.3-32-32-32l-128 0c-17.7 0-32 14.3-32 32z"/></svg>
+                    </div>   
+                    <p class = "text-secondary mb-3">Compete with other users</p>    
+                    <div class="leaderboard">
+                        <div class="d-flex align-items-center bg-success bg-opacity-10 p-3 rounded-3 mb-2">
+                            <span class="fw-bold text-success me-3">1</span>
+                            <img src="Image/Simon_Sinek.jpg" class="rounded-circle me-3" style="object-fit : cover ; width : 70px; height : 70px " alt="User 1">
+                            <div class="flex-grow-1">
+                            <span class="fw-bold">Simon Sinek</span>
+                            <p class="text-muted small mb-0">2,450 points</p>
+                            </div>
+                            <span class="text-warning">👑</span>
+                        </div>
+                        <div class="d-flex align-items-center bg-success bg-opacity-10 p-3 rounded-3 mb-2">
+                            <span class="fw-bold text-success me-3">2</span>
+                            <img src="Image/Angela_Duckworth.jpg" class="rounded-circle me-3" style="object-fit : cover ; width : 70px; height : 70px " alt="User 1">
+                            <div class="flex-grow-1">
+                            <span class="fw-bold">Angela Duckworth</span>
+                            <p class="text-muted small mb-0">2,250 points</p>
+                            </div>
+                            <span class="text-warning">🥈</span>
+                        </div>
+                        <div class="d-flex align-items-center bg-success bg-opacity-10 p-3 rounded-3 mb-2">
+                            <span class="fw-bold text-success me-3">3</span>
+                            <img src="Image/Paulo_Coelho.jpg" class="rounded-circle me-3" style="object-fit : cover ; width : 70px; height : 70px " alt="User 1">
+                            <div class="flex-grow-1">
+                            <span class="fw-bold">Paulo Coelho</span>
+                            <p class="text-muted small mb-0">2,000 points</p>
+                            </div>
+                            <span class="text-warning">🥉</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="grid-item p-3">Grid 2</div>
+            </div>
+    <!-- Akhir Leaderboard--> 
+    <!-- Badges--> 
+            <div class="col-md-6">
+                <div class="card feature-card">
+                    <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="text-warning fs-3 mb-3 ">Badges</h5>
+                    <svg xmlns="http://www.w3.org/2000/svg" class = "me-1" viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="#FFD43B" d="M173.8 5.5c11-7.3 25.4-7.3 36.4 0L228 17.2c6 3.9 13 5.8 20.1 5.4l21.3-1.3c13.2-.8 25.6 6.4 31.5 18.2l9.6 19.1c3.2 6.4 8.4 11.5 14.7 14.7L344.5 83c11.8 5.9 19 18.3 18.2 31.5l-1.3 21.3c-.4 7.1 1.5 14.2 5.4 20.1l11.8 17.8c7.3 11 7.3 25.4 0 36.4L366.8 228c-3.9 6-5.8 13-5.4 20.1l1.3 21.3c.8 13.2-6.4 25.6-18.2 31.5l-19.1 9.6c-6.4 3.2-11.5 8.4-14.7 14.7L301 344.5c-5.9 11.8-18.3 19-31.5 18.2l-21.3-1.3c-7.1-.4-14.2 1.5-20.1 5.4l-17.8 11.8c-11 7.3-25.4 7.3-36.4 0L156 366.8c-6-3.9-13-5.8-20.1-5.4l-21.3 1.3c-13.2 .8-25.6-6.4-31.5-18.2l-9.6-19.1c-3.2-6.4-8.4-11.5-14.7-14.7L39.5 301c-11.8-5.9-19-18.3-18.2-31.5l1.3-21.3c.4-7.1-1.5-14.2-5.4-20.1L5.5 210.2c-7.3-11-7.3-25.4 0-36.4L17.2 156c3.9-6 5.8-13 5.4-20.1l-1.3-21.3c-.8-13.2 6.4-25.6 18.2-31.5l19.1-9.6C65 70.2 70.2 65 73.4 58.6L83 39.5c5.9-11.8 18.3-19 31.5-18.2l21.3 1.3c7.1 .4 14.2-1.5 20.1-5.4L173.8 5.5zM272 192a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM1.3 441.8L44.4 339.3c.2 .1 .3 .2 .4 .4l9.6 19.1c11.7 23.2 36 37.3 62 35.8l21.3-1.3c.2 0 .5 0 .7 .2l17.8 11.8c5.1 3.3 10.5 5.9 16.1 7.7l-37.6 89.3c-2.3 5.5-7.4 9.2-13.3 9.7s-11.6-2.2-14.8-7.2L74.4 455.5l-56.1 8.3c-5.7 .8-11.4-1.5-15-6s-4.3-10.7-2.1-16zm248 60.4L211.7 413c5.6-1.8 11-4.3 16.1-7.7l17.8-11.8c.2-.1 .4-.2 .7-.2l21.3 1.3c26 1.5 50.3-12.6 62-35.8l9.6-19.1c.1-.2 .2-.3 .4-.4l43.2 102.5c2.2 5.3 1.4 11.4-2.1 16s-9.3 6.9-15 6l-56.1-8.3-32.2 49.2c-3.2 5-8.9 7.7-14.8 7.2s-11-4.3-13.3-9.7z"/></svg>
+                    </div>
+                    <p class = "text-secondary mb-3">Collect badges and achievements!</p>
+                    <div class="badges">
+                        <div class="d-flex justify-content-between text-center">
+                            <div class="d-flex align-items-center flex-column">
+                            <div class="badge-icon bg-primary-subtle rounded-circle p-3">
+                            <span class="fs-3 text-primary">📖</span>
+                            </div>
+                            <p class="small mt-2">Bookworm</p>
+                            </div>
+                           
+                            <div class="badge-icon bg-light rounded-circle p-3">
+                            <span class="fs-3 text-info">⏳</span>
+                            </div>
+                            <p class="small mt-2">Speed Reader</p>
+                            <div class="badge-icon bg-light rounded-circle p-3">
+                            <span class="fs-3 text-success">📈</span>
+                            </div>
+                            <p class="small mt-2">Goal Crusher</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="grid-item p-3">Grid 3</div>
+                    
+            </div>
+        </div>
+    <!-- Akhir Badges--> 
+        </div>
+        <div class="row g-4 mt-5">
+            <div class="col-md-6">
+                <div class="card feature-card">
+                    <h5 class="text-danger fs-3 mb-4"><svg xmlns="http://www.w3.org/2000/svg" class = "me-1" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="#d7410f" d="M159.3 5.4c7.8-7.3 19.9-7.2 27.7 .1c27.6 25.9 53.5 53.8 77.7 84c11-14.4 23.5-30.1 37-42.9c7.9-7.4 20.1-7.4 28 .1c34.6 33 63.9 76.6 84.5 118c20.3 40.8 33.8 82.5 33.8 111.9C448 404.2 348.2 512 224 512C98.4 512 0 404.1 0 276.5c0-38.4 17.8-85.3 45.4-131.7C73.3 97.7 112.7 48.6 159.3 5.4zM225.7 416c25.3 0 47.7-7 68.8-21c42.1-29.4 53.4-88.2 28.1-134.4c-4.5-9-16-9.6-22.5-2l-25.2 29.3c-6.6 7.6-18.5 7.4-24.7-.5c-16.5-21-46-58.5-62.8-79.8c-6.3-8-18.3-8.1-24.7-.1c-33.8 42.5-50.8 69.3-50.8 99.4C112 375.4 162.6 416 225.7 416z"/></svg> Streaks</h5>
+                    <p>Don’t break the chain! Each small win counts.</p>
+                    <span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span>
                 </div>
-                <div class="col-md-3">
-                    <div class="grid-item p-3">Grid 4</div>
+            </div>
+            <div class="col-md-6">
+                <div class="card feature-card">
+                    <h5 class= "fs-3 mb-4" style = "color: #722ff9;"><svg xmlns="http://www.w3.org/2000/svg"  class = "me-1" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="#722ff9" d="M64 32C64 14.3 49.7 0 32 0S0 14.3 0 32L0 64 0 368 0 480c0 17.7 14.3 32 32 32s32-14.3 32-32l0-128 64.3-16.1c41.1-10.3 84.6-5.5 122.5 13.4c44.2 22.1 95.5 24.8 141.7 7.4l34.7-13c12.5-4.7 20.8-16.6 20.8-30l0-247.7c0-23-24.2-38-44.8-27.7l-9.6 4.8c-46.3 23.2-100.8 23.2-147.1 0c-35.1-17.6-75.4-22-113.5-12.5L64 48l0-16z"/></svg> Milestones</h5>
+                    <p>Measure your success daily, weekly, monthly.</p>
+                    <div class="d-flex justify-content-center">
+                        <span class="mx-1 text-primary">&#9711;</span>
+                        <span class="mx-1">&#9711;</span>
+                        <span class="mx-1">&#9711;</span>
+                    </div>
                 </div>
             </div>
         </div>
+        
+        <div class="text-center mt-4">
+            <button class="btn btn-custom">Get Started Free</button>
+        </div>
+    </div>
+    </div>
     </section>
 
     <!-- Footer -->
