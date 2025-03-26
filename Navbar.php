@@ -10,16 +10,16 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="nav nav-pills">
             <li class="nav-item">
-              <a class="nav-link" href="home.php">Home</a>
+                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'home.php' ? 'active' : ''); ?>" aria-current="page" href="home.php">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="myprogress.php">My Progress</a>
+              <a class="nav-link  <?php echo (basename($_SERVER['PHP_SELF']) == 'myprogress.php' ? 'active' : ''); ?>" aria-current="page"  href="myprogress.php">My Progress</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="achievement.php">Achievement</a>
+              <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'achievement.php' ? 'active' : ''); ?>"  aria-current="page"  href="achievement.php">Achievement</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="history.php">History</a>
+                <a class="nav-link <?php echo (basename($_SERVER['PHP_SELF']) == 'history.php' ? 'active' : ''); ?>" aria-current="page" href="history.php">History</a>
             </li>
           </ul>
         </div>
