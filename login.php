@@ -26,6 +26,7 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         width: 400px;
         text-align: center;
+        position: relative;
       }
       .login-box h2 {
         margin-bottom: 20px;
@@ -49,11 +50,45 @@
       .login-box button:hover {
         background: #0056b3;
       }
+      .bg-iframe {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        border: none;
+        z-index: -2;
+      }
+
+      .backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.4); /* Bisa atur transparansi */
+        z-index: -1;
+      }
+      .close-btn {
+        position: absolute;
+        top: 5px;
+        right: 25px;
+        font-size: 45px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+      }
+      .close-btn:hover {
+        color: #333;
+      }
     </style>
   </head>
   <body>
+    <iframe class="bg-iframe" src="Index.php"></iframe>
+    <div class="backdrop"></div>
     <div class="login-box">
       <h2>Login</h2>
+      <p class="close-btn" onclick="closeSignupModal()">×</p>  
       <form onsubmit="redirectToHome(event)">
         <input type="email" placeholder="Email Address" required />
         <input type="password" placeholder="Password" required />
@@ -68,6 +103,9 @@
       function redirectToHome(event) {
         event.preventDefault();
         window.location.href = "Home.php";
+      }
+      function closeSignupModal() {
+        window.location.href = "index.php";  
       }
     </script>
   </body>
