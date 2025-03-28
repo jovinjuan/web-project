@@ -204,8 +204,10 @@
             .analytic-section .row {
             justify-content: center !important;
             padding-left: 0 !important;
-            text-align : center;
-    }
+            text-align : center;}
+            .form-select{
+                display : none;
+            }
         }
     </style>
 </head>
@@ -346,32 +348,33 @@
                 <div class="row g-3 py-5 mt-5 justify-content-start">
                     <div class="col-md-5 col-12">
                         <div class="p-4 border rounded shadow-sm me-2 card">
-                            <h3 class = "display-5 fw-medium ">156</h3>
+                            <h3 class = "display-5 fw-medium count" data-target = "156">0</h3>
                             <p class="mb-0 fs-4 ">Books Read</p>
                         </div>
                     </div>
                     <div class="col-md-5 col-12">
                         <div class="p-4 border rounded shadow-sm mb-4 card">
-                        <h3 class = "display-5 fw-medium ">42k</h3>
+                        <h3 class = "display-5 fw-medium count" data-target = "42000">0</h3>
                         <p class="mb-0 fs-4 ">Pages</p>
                         </div>
                     </div>
                     <div class="col-md-5 col-12">
                         <div class="p-4 border rounded shadow-sm me-2 card">
-                        <h3 class = "display-5 fw-medium">89%</h3>
+                        <h3 class = "display-5 fw-medium count" data-target = "89">0</h3>
                         <p class="mb-0 fs-4">Goals Completion</p>
                         </div>
                     </div>
                     <div class="col-md-5 col-12">
                         <div class="p-4 border rounded shadow-sm card">
-                        <h3 class = "display-5 fw-medium">365</h3>
+                        <h3 class = "display-5 fw-medium count"data-target = "365">0</h3>
                         <p class="mb-0 fs-4">Days Streak</p>
                         </div>
                     </div>
                 </div>
             </div>
+            
             <div class="col-md-5 col-12 chart">
-                <div class="p-4 border rounded shadow-sm bg-light">
+                <div class="p-4 border rounded shadow-sm bg-light card-chart">
                     <div class="d-flex justify-content-between align-items-center">
                         <h5>Reading Progress</h5>
                         <select class="form-select w-auto" id = "filter">
@@ -385,6 +388,47 @@
         </div>
     </div>
     <script>
+        document.addEventListener("DOMContentLoaded", () => {
+    const counters = document.querySelectorAll(".count");
+
+    const animateCount = (counter) => {
+        const target = +counter.getAttribute("data-target");
+        let current = 0;
+        const duration = 2000; // Animation duration in milliseconds
+        const increment = target / (duration / 20); // Adjust increment based on duration
+
+        const updateCounter = () => {
+            current += increment;
+            counter.innerText = Math.ceil(current);
+
+            if (current < target) {
+                setTimeout(updateCounter, 20); // Delay of 20ms for smooth effect
+            } else {
+                counter.innerText = target; // Ensure final value is exact
+            }
+        };
+
+        updateCounter();
+    };
+
+    const observer = new IntersectionObserver(
+        (entries, observer) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        animateCount(entry.target);
+                    }, 500); // 500ms delay before starting animation
+                    observer.unobserve(entry.target);
+                }
+            });
+        },
+        { threshold: 0.5 }
+    );
+
+    counters.forEach((counter) => observer.observe(counter));
+});
+
+       
         const ctx = document
             .getElementById("readingChart")
             .getContext("2d");
