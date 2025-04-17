@@ -5,72 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Sistem</title>
     <style>
-        /* Styling Sidebar */
-        .sidebar {
-            min-height: 100vh;
-            background: #f8f9fa;
-            padding: 20px;
-        }
+        <style>
+        <style>
+    /* Styling Sidebar */
+    .sidebar {
+        min-height: 100vh;
+        background: #f8f9fa;
+        padding: 20px;
+    }
 
-        /* Ranking List */
-        .ranking-container {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-        }
+    /* Ranking List */
+    .ranking-container {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    }
 
-        .ranking-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-        }
+    .ranking-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
 
-        .ranking-item:last-child {
-            border-bottom: none;
-        }
+    .ranking-item:last-child {
+        border-bottom: none;
+    }
 
-        .ranking-item .avatar {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background-color: #ccc;
-            margin-right: 10px;
-        }
+    .ranking-item .avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: #ccc;
+        margin-right: 10px;
+    }
 
-        /* Highlighted User */
-        .highlight {
-            background: #555;
-            color: white;
-            border-radius: 10px;
-        }
+    /* Highlighted User */
+    .highlight {
+        background: #555;
+        color: white;
+        border-radius: 10px;
+    }
 
-        /* Badges Section */
-        .badges-container {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-            margin-top: 20px;
-        }
+    /* Badges Section */
+    .badges-container {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
 
-        .badge-box {
-            width: 80px;
-            height: 100px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #f8f9fa;
-        }
-       .sidebar-profile {
+    .badge-box {
+        width: 80px;
+        height: 100px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f8f9fa;
+    }
+
+    .sidebar-profile {
         text-align: center;
         padding: 10px;
-      }
-      .sidebar-profile img {
+    }
+
+    .sidebar-profile img {
         width: 170px;
         height: 170px;
         border-radius: 50%;
@@ -78,10 +82,22 @@
         display: block;
         margin: 0 auto;
         object-fit: cover;
-      }
-       .achievement-content {
-        padding-top: 20px;
-      }
+    }
+
+    .achievement-content {
+        padding-top: 0px; /* default (desktop) */
+    }
+
+    /* Responsive untuk mobile */
+    @media (max-width: 768px) {
+        .achievement-content {
+            padding-top: 120px !important; /* biar gak ketiban navbar */
+        }
+    }
+</style>
+
+</style>
+
     </style>
     
 
