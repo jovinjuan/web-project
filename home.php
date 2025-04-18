@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -27,7 +26,8 @@
         height: 100%;
         background: #333;
         color: white;
-        padding-top: 20px;
+        overflow-y: auto;
+        padding-top: 0px;
         z-index: 1000; /* sidebar akan selalu di depan */
       }
 
@@ -37,7 +37,7 @@
       }
 
       .sidebar h4 {
-        padding-top: 90px;
+        padding-top: 80px;
         padding-left: 20px;
       }
 
@@ -47,6 +47,10 @@
 
       .sidebar label {
         padding-left: 20px;
+      }
+
+      .sidebar-content {
+        padding: 90px 20px 20px 20px;
       }
 
       /* lapisan gelas pas buka side bar*/
@@ -106,6 +110,7 @@
         gap: 10px;
       }
 
+
       .book {
         width: 150px;
         height: 200px;
@@ -152,6 +157,60 @@
         background-color: grey;
         margin: 0;
       }
+
+    /* Tambahan untuk responsive layout di mobile */
+    @media (max-width: 400px) {
+      .menu-btn {
+        top: 70px;
+        left: 10px;
+        z-index: 1001;
+      }
+
+      .sidebar {
+        width: 100%;
+        left: -100%;
+      }   
+
+      .sidebar.active {
+        left: 0;
+      }
+
+      .content {
+        padding: 10px;
+        margin-left: 0 !important;
+      }
+
+      .section {
+        padding-left: 10px;
+        padding-right: 10px;
+        margin: 15px 0;
+        height: auto;
+      }
+
+      .explore-btn {
+        position: static;
+        display: block;
+        width: 100%;
+        margin: 10px 0;
+      }
+
+      .book-container {
+        justify-content: center;
+      }
+
+      .book {
+        width: 120px;
+        height: 160px;
+      }
+
+      .add-book-btn {
+        width: 40px;
+        height: 40px;
+        line-height: 30px;
+        font-size: 30px;
+      }
+}
+
     </style>
 
     <script>
@@ -200,34 +259,27 @@
 
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
-      <h4 class="fw-bold">Filter All Books</h4>
-      <h5 class="pt-3">I'm in the mood for something...</h5>
-      <label><input type="checkbox" /> inspiring</label>
-      <br />
-      <label><input type="checkbox" /> challenging</label>
-      <br />
-      <label><input type="checkbox" /> emotional</label>
-      <br />
-      <label><input type="checkbox" /> funny</label>
-      <br />
-      <label><input type="checkbox" /> mysterious</label>
-      <br />
-      <label><input type="checkbox" /> relaxing</label>
-      <br />
-      <label><input type="checkbox" /> informative</label>
-      <br />
-
-      <h5 class="pt-3">Type</h5>
-      <label><input type="checkbox" /> Fiction</label>
-      <label><input type="checkbox" /> Non-Fiction</label>
-
-      <h5 class="pt-3">Genres</h5>
-      <label><input type="checkbox" /> Action</label> <br />
-      <label><input type="checkbox" /> Fantasy</label> <br />
-      <label><input type="checkbox" /> Romance</label> <br />
-      <label><input type="checkbox" /> Comedy</label> <br />
-      <label><input type="checkbox" /> Horror</label> <br />
-      <label><input type="checkbox" /> Thriller</label> <br />
+      <div class="sidebar-content">
+        <h4 class="fw-bold">Filter All Books</h4>
+        <h5 class="pt-3">I'm in the mood for something...</h5>
+        <label><input type="checkbox" /> inspiring</label><br />
+        <label><input type="checkbox" /> challenging</label><br />
+        <label><input type="checkbox" /> emotional</label><br />
+        <label><input type="checkbox" /> funny</label><br />
+        <label><input type="checkbox" /> mysterious</label><br />
+        <label><input type="checkbox" /> relaxing</label><br />
+        <label><input type="checkbox" /> informative</label><br />
+        <h5 class="pt-3">Type</h5>
+        <label><input type="checkbox" /> Fiction</label><br />
+        <label><input type="checkbox" /> Non-Fiction</label><br />
+        <h5 class="pt-3">Genres</h5>
+        <label><input type="checkbox" /> Action</label><br />
+        <label><input type="checkbox" /> Fantasy</label><br />
+        <label><input type="checkbox" /> Romance</label><br />
+        <label><input type="checkbox" /> Comedy</label><br />
+        <label><input type="checkbox" /> Horror</label><br />
+        <label><input type="checkbox" /> Thriller</label><br />
+      </div>
     </div>
 
     <!-- Konten -->
