@@ -90,10 +90,15 @@
     <div class="Signup-box">
       <h2>Sign-Up</h2>
       <p class="close-btn" onclick="closeSignupModal()">×</p>
-      <form onsubmit="redirectToHome(event)">
-        <input type="text" placeholder="Name" required>
-        <input type="email" placeholder="Email Address" required />
-        <input type="password" placeholder="Password" required />
+      <form action="register.php" method="post">
+        <input type="text" name="username" placeholder="Name" required />
+        <input type="email" name="email" placeholder="Email Address" required />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
         <button type="submit">Sign Up</button>
         <div class="login-link">
           <p>or <br />Already have account <a href="login.php">Login</a></p>
