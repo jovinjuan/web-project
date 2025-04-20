@@ -89,9 +89,14 @@
     <div class="login-box">
       <h2>Login</h2>
       <p class="close-btn" onclick="closeSignupModal()">×</p>  
-      <form onsubmit="redirectToHome(event)">
-        <input type="email" placeholder="Email Address" required />
-        <input type="password" placeholder="Password" required />
+    <form action="login_check.php" method="POST">
+        <input name="username" type="text" placeholder="Username" required />
+        <input
+          name="password"
+          type="password"
+          placeholder="Password"
+          required
+        />
         <button type="submit">Login</button>
         <div class="signup-link">
           <p>or <br />Create account <a href="Signup.php">Sign up</a></p>
