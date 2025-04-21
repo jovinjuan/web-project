@@ -11,20 +11,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $check->execute();
 
     if ($check->rowCount() > 0) {
-
         header("Location: signup.php?error=username_taken");
         exit;
     } else {
 
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-
         $query = $conn->prepare("INSERT INTO user (username, password, email) VALUES (:username, :password, :email)");
         $query->bindParam(':username', $username);
         $query->bindParam(':password', $hashedPassword);
         $query->bindParam(':email', $email);
 
         if ($query->execute()) {
+            $_SESSION['username'] = $username;
             header("Location: home.php");
             exit;
         } else {
