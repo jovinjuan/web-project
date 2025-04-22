@@ -1,5 +1,7 @@
 <?php
 require "config.php";
+
+if(cekLogin()){
 // periksan username yang ada dalam session
 if (isset($_SESSION['username'])) {
   $username = $_SESSION['username'];
@@ -157,3 +159,8 @@ $result['email']; } ?>
     </div>
   </body>
 </html>
+<?php 
+} else {
+    header('location:index.php');
+}
+?>
