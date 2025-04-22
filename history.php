@@ -1,3 +1,8 @@
+<?php
+require "config.php";
+
+if(cekLogin()){
+?> 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -387,3 +392,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+    <?php 
+} else {
+    header('location:index.php');
+}
+?>
