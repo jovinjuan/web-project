@@ -1,3 +1,8 @@
+<?php
+require "config.php";
+
+if(cekLogin()){
+?> 
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -441,3 +446,8 @@
     }
   </script>
 </html>
+<?php 
+} else {
+    header('location:index.php');
+}
+?>
