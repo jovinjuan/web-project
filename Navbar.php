@@ -1,3 +1,8 @@
+<?php
+require "config.php";
+
+if(cekLogin()){
+?> 
 <!-- Nav Bar -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -75,3 +80,8 @@
   </div>
 </nav>
 <!-- Akhir Nav Bar -->
+<?php 
+} else {
+    header('location:index.php');
+}
+?>
