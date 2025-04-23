@@ -1,8 +1,3 @@
-<?php
-require "config.php";
-
-if(cekLogin()){
-?> 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,26 +13,48 @@ if(cekLogin()){
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('streak-calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, 
-            {
-            initialView: 'dayGridMonth',
-            headerToolbar: {
-            left: 'prev,next today',
+        document.addEventListener('DOMContentLoaded', function () {
+    var calendarEl = document.getElementById('streak-calendar');
+
+    const isMobile = window.innerWidth < 768;
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+            left: isMobile ? 'prev' : 'prev,next',
             center: 'title',
-            right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            },
-            events: [
+            right: isMobile ? 'next' : 'today'
+        },
+        windowResize: function () {
+            // Re-render the calendar if needed on window resize
+            const isMobileNow = window.innerWidth < 768;
+
+            calendar.setOption('headerToolbar', {
+                left: isMobileNow ? 'prev' : 'prev,next',
+                center: 'title',
+                right: isMobileNow ? 'next' : 'today'
+            });
+
+            calendar.setOption('aspectRatio', isMobileNow ? 1.1 : 1.5);
+        },
+        height: 'auto',
+        contentHeight: 'auto',
+        aspectRatio: isMobile ? 1.1 : 1.5,
+        dayMaxEventRows: 2,
+        events: [
             { title: '' },
             { title: '' }
-          ]
-        });
-            calendar.render();
-      });
+        ]
+    });
+
+    calendar.render();
+});
+
+
 </script>
     <style>
-        .streak-info, .top-view-book, .history-item { background-color: #2E2E2E; padding: 1rem; border-radius: 8px; }
+        body{margin : 0; padding : 0; box-sizing : border-box; overflow-x : none;}
+        .top-view-book, .history-item { background-color: #2E2E2E; padding: 1rem; border-radius: 8px; }
         .calendar-container { background-color: #333; padding: 1rem; border-radius: 8px; }
         .quote { font-style: italic; color: #AAA; }
         .cta-btn { margin-top: 0.5rem; }
@@ -54,7 +71,7 @@ if(cekLogin()){
         margin-top: -5px;
         }
         .streak-card {
-            max-width: 1200px;
+            width: 95%;
             border: 1px solid #ddd;
             border-radius: 12px;
             padding: 20px;
@@ -118,7 +135,7 @@ if(cekLogin()){
             color: #ff5722;
         }
         #streak-calendar{
-          width: 1000px;
+          width: 100%;
           min-height : 500px;
           border: 2px solid grey;
           padding : 20px;
@@ -130,32 +147,74 @@ if(cekLogin()){
           border : 2px solid rgba(75, 192, 192,0.5);
           box-shadow: 0 1000px 1000px rgba(30, 204, 204, 0.1);
         }
+        @media(max-width : 767px) {
+          .streak-heading{
+            margin-top : 4em;
+          }
+          .day-circle{
+            width : 40px;
+            height : 40px;
+            margin : 5px;
+            display : flex;
+          }
+          .top-book{
+            margin-left : 50px;
+          }
+          svg{
+            margin-left : 20px;
+          }
+          .streak-info{
+            display : flex;
+            flex-direction : column;
+          }
+          .top-book{
+            text-align : center;
+          }
+
+          .fc .fc-toolbar-title {
+            font-size: 1rem;
+          }
+          .fc .fc-col-header-cell {
+              font-size: 0.7rem;
+              padding: 2px;
+          }
+          .fc .fc-daygrid-day-frame {
+              min-height: 30px !important;
+          }
+          .fc .fc-daygrid-day-number {
+              font-size: 0.7rem;
+          }
+          .fc .fc-button {
+              padding: 0.3em 0.4em;
+              font-size: 0.7rem;
+          }
+        }
 
     </style>
 
 </head>
 <body>
    <!-- Nav Bar -->
-    <?php include 'Navbar.php';
+   <?php include 'Navbar.php';
     ?>
     <!-- Akhir Nav Bar -->
     <!-- Streak -->
-    <div class="container-fluid mt-5 pt-5">
-      <div class="px-5 mt-3">
-        <h2>My Streak</h2>
+    <div class="container-fluid mt-5 pt-5 streak">
+      <div class="px-5 mt-5">
+        <h2 class = "streak-heading">My Streak</h2>
       </div>
         <div class="row g-4 mt-2"> 
           <!-- Circle Chart -->
-          <div class="col-5">
+          <div class="col-md-5 col-12">
             <div class="card px-3 pt-2 streak-card">
               <div class="card-body mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" class = "me-4 mb-5 fire-icon" style = "max-width : 155px; scale : 110%;" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path fill="#d7410f" d="M159.3 5.4c7.8-7.3 19.9-7.2 27.7 .1c27.6 25.9 53.5 53.8 77.7 84c11-14.4 23.5-30.1 37-42.9c7.9-7.4 20.1-7.4 28 .1c34.6 33 63.9 76.6 84.5 118c20.3 40.8 33.8 82.5 33.8 111.9C448 404.2 348.2 512 224 512C98.4 512 0 404.1 0 276.5c0-38.4 17.8-85.3 45.4-131.7C73.3 97.7 112.7 48.6 159.3 5.4zM225.7 416c25.3 0 47.7-7 68.8-21c42.1-29.4 53.4-88.2 28.1-134.4c-4.5-9-16-9.6-22.5-2l-25.2 29.3c-6.6 7.6-18.5 7.4-24.7-.5c-16.5-21-46-58.5-62.8-79.8c-6.3-8-18.3-8.1-24.7-.1c-33.8 42.5-50.8 69.3-50.8 99.4C112 375.4 162.6 416 225.7 416z"/></svg>
-                <div class="d-flex align-items-center justify-content-center align-items-center mb-3">
+                <div class="d-flex align-items-center justify-content-center align-items-center mb-3 streak-info">
                 <h2 class = "streak-number mx-2 ">5</h2>
                 <h4 class = "streak-text">streaks in a week!</h4>
                 </div>
                 <!-- Bagian Lingkaran Hari-->
-                <div class="d-flex justify-content-between mb-2">
+                <div class="d-flex justify-content-between mb-2 flex-wrap">
                     <div>
                         <div class="day-circle active">M</div>
                         <div class="day-label">Mon</div>
@@ -192,8 +251,8 @@ if(cekLogin()){
           </div>
           <!-- Akhir Streak -->
           <!-- Top-View Book -->
-          <div class="col-7">
-            <div class="card px-3 pt-2 me-4">
+          <div class="col-md-7 col-12">
+            <div class="card px-3 pt-2 me-4 top-book">
               <div class="card-body mb-1">
               <h4 class="card-title">Top-Viewed Book !</h4>
               <div class="row mb-3 my-4">
@@ -232,10 +291,10 @@ if(cekLogin()){
               </div>
             </div>
           </div>
-          <div class="col mx-5 me-1 pe-4 ">
+          <div class="col-12 col-md mx-5 me-1 pe-4 ">
             <div class="card px-3 py-2 mb-5">
               <div class="card-body mb-3">
-                <h4 class="card-title">Today's Reading History</h4>
+                <h4 class="card-title">Recent History</h4>
                 <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
                 <p class="card-text"></p>
                 <!-- In Progress Group Card -->
@@ -341,7 +400,7 @@ if(cekLogin()){
             <!-- Akhir Streak Calendar -->
             <!-- History -->
             <div class="container-fluid pt-5 my-5">
-            <div class="px-5 mt-3">
+            <div class="pe-5 mt-3">
               <h2 class = "mb-5">History</h2>
               <h1 class = "text-center">2 March 2025</h1>
               <hr>
@@ -392,8 +451,3 @@ if(cekLogin()){
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-    <?php 
-} else {
-    header('location:index.php');
-}
-?>
