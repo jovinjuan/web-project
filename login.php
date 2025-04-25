@@ -1,3 +1,18 @@
+<?php
+require "config.php";
+
+$error = isset($_GET['error']) ? $_GET['error'] : '';
+
+$errorMessages = [
+'wrong_password' =>'The password you entered is incorrect.',
+'user_not_found' => 'User not found', 
+]; 
+if ($error && isset($errorMessages[$error])) { 
+  $errorMessage = $errorMessages[$error]; 
+} 
+else { 
+  $errorMessage = ''; 
+} ?>
 <!DOCTYPE html>
 <html lang="id">
   <head>
@@ -81,6 +96,15 @@
       .close-btn:hover {
         color: #333;
       }
+      .error-message {
+        background-color: #ffdddd;
+        color: #d8000c;
+        padding-top: 10px;
+        border: 1px solid #d8000c;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        font-size: 16px;
+      }
     </style>
   </head>
   <body>
@@ -89,6 +113,17 @@
     <div class="login-box">
       <h2>Login</h2>
       <p class="close-btn" onclick="closeSignupModal()">×</p>  
+       <?php 
+    if ($errorMessage): 
+    ?>
+    <div class="error-message">
+      <p>
+        <?php echo $errorMessage; ?>
+      </p>
+    </div>
+      <?php 
+        endif; 
+      ?>
     <form action="login_check.php" method="POST">
         <input name="username" type="text" placeholder="Username" required />
         <input
