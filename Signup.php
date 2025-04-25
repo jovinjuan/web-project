@@ -1,3 +1,20 @@
+<?php
+require "config.php";
+
+$error = isset($_GET['error']) ? $_GET['error'] : '';
+
+$errorMessages = [
+'username_taken' =>'This username is already taken. Please choose another one.',
+'registration_failed' => 'An error occurred during registration. Please try
+again.', 
+]; 
+if ($error && isset($errorMessages[$error])) { 
+  $errorMessage = $errorMessages[$error]; 
+} 
+else { 
+  $errorMessage = ''; 
+} ?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -82,6 +99,15 @@
       .close-btn:hover {
         color: #333;
       }
+      .error-message {
+        background-color: #ffdddd;
+        color: #d8000c;
+        padding-top: 10px;
+        border: 1px solid #d8000c;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        font-size: 16px;
+      }
     </style>
   </head>
   <body>
@@ -90,6 +116,17 @@
     <div class="Signup-box">
       <h2>Sign-Up</h2>
       <p class="close-btn" onclick="closeSignupModal()">×</p>
+           <?php 
+    if ($errorMessage): 
+    ?>
+    <div class="error-message">
+      <p>
+        <?php echo $errorMessage; ?>
+      </p>
+    </div>
+    <?php 
+  endif; 
+  ?>
       <form action="register.php" method="post">
         <input type="text" name="username" placeholder="Name" required />
         <input type="email" name="email" placeholder="Email Address" required />
