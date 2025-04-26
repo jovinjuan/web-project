@@ -136,18 +136,16 @@
     <!-- Kotak Upload -->
     <div class="upload-container">
       <button class="close-btn" onclick="goBack()">✖</button>
-      <h3>Upload File</h3>
-      <input class="Box" type="text" placeholder="Author" required />
-      <br />
-      <input class="Box" type="text" placeholder="Judul buku" required />
-      <br>
-      <label class="upload-box">
-        Choose File
-        <input type="file" id="fileInput" />
-      </label>
-      <p class="file-name" id="fileName">No file chosen</p>
-      <div class="col-12">
-    <button class="btn btn-primary" type="submit"  onclick="goBack()">Confirm</button>
+      <div class="content text-center py-2">
+          <h3 class = "fs-2 fw-bold mb-4">Upload File</h3>
+          <label class="upload-box">
+            Choose File
+            <input type="file" id="fileInput" onchange="updateFileStatus()">
+          </label>
+          <p class="file-name" id="fileName">No file chosen</p>
+          <div class="col-12">
+        <a href = "book-display.php"><button class="btn btn-primary" type="submit" id="confirmButton" disabled>Confirm</button></a>
+          </div>
       </div>
     </div>
 
@@ -165,6 +163,19 @@
 
       function goBack() {
         window.history.back();
+      }
+      function updateFileStatus() {
+            const fileInput = document.getElementById('fileInput');
+            const fileStatus = document.getElementById('fileName');
+            const confirmButton = document.getElementById('confirmButton');
+
+            if (fileInput.files.length > 0) {
+                fileStatus.textContent = fileInput.files[0].name;
+                confirmButton.disabled = false;
+            } else {
+                fileStatus.textContent = 'No file chosen';
+                confirmButton.disabled = true;
+            }
       }
     </script>
   </body>
