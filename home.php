@@ -1,8 +1,7 @@
 <?php
 require "config.php";
-
-if(cekLogin()){
 ?> 
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -162,6 +161,12 @@ if(cekLogin()){
         background-color: grey;
         margin: 0;
       }
+      #detail-cover{
+        width: 100%; 
+        height: 100%; 
+        object-fit: cover; 
+        border-radius: 5px
+      }
 
     /* Tambahan untuk responsive layout di mobile */
     @media (max-width: 400px) {
@@ -266,17 +271,6 @@ if(cekLogin()){
     <div class="sidebar" id="sidebar">
       <div class="sidebar-content">
         <h4 class="fw-bold">Filter All Books</h4>
-        <h5 class="pt-3">I'm in the mood for something...</h5>
-        <label><input type="checkbox" /> inspiring</label><br />
-        <label><input type="checkbox" /> challenging</label><br />
-        <label><input type="checkbox" /> emotional</label><br />
-        <label><input type="checkbox" /> funny</label><br />
-        <label><input type="checkbox" /> mysterious</label><br />
-        <label><input type="checkbox" /> relaxing</label><br />
-        <label><input type="checkbox" /> informative</label><br />
-        <h5 class="pt-3">Type</h5>
-        <label><input type="checkbox" /> Fiction</label><br />
-        <label><input type="checkbox" /> Non-Fiction</label><br />
         <h5 class="pt-3">Genres</h5>
         <label><input type="checkbox" /> Action</label><br />
         <label><input type="checkbox" /> Fantasy</label><br />
@@ -286,51 +280,147 @@ if(cekLogin()){
         <label><input type="checkbox" /> Thriller</label><br />
       </div>
     </div>
+    
+    <?php
+    // Ambil data buku yang sudah di-upload dari database
+    $query = $conn->prepare("SELECT * FROM book");
+    $query->execute();
+    $files = $query->fetchAll(PDO::FETCH_ASSOC);
+    ?>
 
     <!-- Konten -->
     <div class="content" id="content">
       <!-- Section: Currently Reading -->
       <div class="section">
         <h4>Currently Reading</h4>
-        <button class="explore-btn">Explore</button>
         <div class="book-container">
+          <?php foreach($files as $file): ?>
+            <div class="book" onclick="showBookDetail(
+                '<?php echo htmlspecialchars($file['title'], ENT_QUOTES); ?>',
+                '<?php echo htmlspecialchars($file['description'], ENT_QUOTES); ?>',
+                '<?php echo htmlspecialchars($file['genre'], ENT_QUOTES); ?>',
+                '<?php echo base64_encode($file['cover_image']); ?>',
+                '<?php echo htmlspecialchars($file['file_path'], ENT_QUOTES); ?>'
+              )">
+            <?php
+          // Ubah data BLOB Menjadi Gambar
+          if ($file['cover_image']) {
+            $coverImageData = base64_encode($file['cover_image']);
+            echo '<img src="data:image/jpeg;base64,' . $coverImageData . '" alt="Book" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">';
+          }
+          ?>
+            </div>
+          <?php endforeach; ?>
           <div class="book">
-            <div class="add-book-btn"><a href="Uploadfile.php" style = "text-decoration : none; color : lightgrey;">+</a></div>
-          </div>
+        <div class="add-book-btn">
+          <a href="Uploadfile.php" style="text-decoration: none; color: lightgrey;">+</a>
         </div>
       </div>
-      <br />
-      <hr class="section-divider" />
+        </div>
+        <br />
+        <hr class="section-divider" />
 
       <!-- Section: To Read -->
-      <div class="section">
+      <div>
+        <br>
         <h4>To Read</h4>
-        <button class="explore-btn">Explore</button>
+        
         <div class="book-container">
+          <?php foreach($files as $file): ?>
+            <div class="book" onclick="showBookDetail(
+                '<?php echo htmlspecialchars($file['title'], ENT_QUOTES); ?>',
+                '<?php echo htmlspecialchars($file['description'], ENT_QUOTES); ?>',
+                '<?php echo htmlspecialchars($file['genre'], ENT_QUOTES); ?>',
+                '<?php echo base64_encode($file['cover_image']); ?>',
+                '<?php echo htmlspecialchars($file['file_path'], ENT_QUOTES); ?>'
+              )">
+            <?php
+          //mengubah File BLOB Menjadi Cover Buku
+          if ($file['cover_image']) {
+            $coverImageData = base64_encode($file['cover_image']);
+
+            echo '<img src="data:image/jpeg;base64,' . $coverImageData . '" alt="Book" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">';
+          }
+          ?>
+            </div>
+          <?php endforeach; ?>
           <div class="book">
-            <div class="add-book-btn"><a href="Uploadfile.php" style = "text-decoration : none; color : lightgrey;">+</a></div>
+            <div class="add-book-btn">
+              <a href="Uploadfile.php" style="text-decoration: none; color: lightgrey;">+</a>
+            </div>
           </div>
         </div>
+        <br />
+        <hr class="section-divider" />
       </div>
-      <br />
-      <hr class="section-divider" />
 
       <!-- Section: Favourite Book -->
-      <div class="section">
-        <h4>Favourite Book Lists</h4>
-        <button class="explore-btn">Explore</button>
+      <div>
+        <br>
+        <h4>Favourite Book</h4>
+
         <div class="book-container">
+          <?php foreach($files as $file): ?>
+            <div class="book" onclick="showBookDetail(
+                '<?php echo htmlspecialchars($file['title'], ENT_QUOTES); ?>',
+                '<?php echo htmlspecialchars($file['description'], ENT_QUOTES); ?>',
+                '<?php echo htmlspecialchars($file['genre'], ENT_QUOTES); ?>',
+                '<?php echo base64_encode($file['cover_image']); ?>',
+                '<?php echo htmlspecialchars($file['file_path'], ENT_QUOTES); ?>'
+              )">
+            <?php
+          // Mengubah BLOB Menjadi Cover
+          if ($file['cover_image']) {
+            $coverImageData = base64_encode($file['cover_image']);
+            echo '<img src="data:image/jpeg;base64,' . $coverImageData . '" alt="Book" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">';
+          }
+          ?>
+            </div>
+          <?php endforeach; ?>
           <div class="book">
-            <div class="add-book-btn"><a href="Uploadfile.php" style = "text-decoration : none; color : lightgrey;">+</a></div>
+            <div class="add-book-btn">
+              <a href="Uploadfile.php" style="text-decoration: none; color: lightgrey;">+</a>
+            </div>
+          </div>
+        </div>
+        <br />
+      </div>
+    </div>
+    <div class="modal fade" id="bookDetailModal" tabindex="-1" aria-labelledby="bookDetailModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-5 mb-3">
+                <img id="detail-cover" class="img-fluid mb-3" style="max-width: 200px;" />
+              </div>
+              <div class="col-md-7 d-flex flex-column justify-content-between">
+                <h3 id="detail-title"></h3>
+                <p id="detail-description"></p>
+                <p><strong>Genre:</strong> <span id="detail-genre"></span></p>
+                <div class="text-end">
+                  <a href="#" id="view-pdf-btn" class="btn btn-primary" target="_blank">Read</a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <br />
     </div>
+  </div>
+
   </body>
+        <script>
+            function showBookDetail(title, description, genre, coverImage, filePath) {
+              document.getElementById('detail-title').textContent = title;
+              document.getElementById('detail-description').textContent = description;
+              document.getElementById('detail-genre').textContent = genre;
+              document.getElementById('detail-cover').src = 'data:image/jpeg;base64,' + coverImage;
+              document.getElementById('view-pdf-btn').href = filePath;
+
+              // Tampilkan modal
+              var myModal = new bootstrap.Modal(document.getElementById('bookDetailModal'));
+              myModal.show();
+            }
+</script>
 </html>
-<?php 
-} else {
-    header('location:index.php');
-}
-?>
