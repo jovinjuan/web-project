@@ -169,30 +169,12 @@ if(isset( $_SESSION['user_id']) && isset($_SESSION['book_id'])){
       <div class="p-4 pt-5">
         <h4 class="fw-bold">Filter All Books</h4>
         <h5 class="pt-3">Genres</h5>
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="action">
-          <label class="form-check-label" for="action">Action</label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="fantasy">
-          <label class="form-check-label" for="fantasy">Fantasy</label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="romance">
-          <label class="form-check-label" for="romance">Romance</label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="comedy">
-          <label class="form-check-label" for="comedy">Comedy</label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="horror">
-          <label class="form-check-label" for="horror">Horror</label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="thriller">
-          <label class="form-check-label" for="thriller">Thriller</label>
-        </div>
+        <label><input type="checkbox" onchange="applyFilters()"> Action</label><br />
+        <label><input type="checkbox" onchange="applyFilters()"> Fantasy</label><br />
+        <label><input type="checkbox" onchange="applyFilters()"> Romance</label><br />
+        <label><input type="checkbox" onchange="applyFilters()"> Comedy</label><br />
+        <label><input type="checkbox" onchange="applyFilters()"> Horror</label><br />
+        <label><input type="checkbox" onchange="applyFilters()"> Thriller</label>
       </div>
     </div>
 
@@ -309,9 +291,9 @@ if(isset( $_SESSION['user_id']) && isset($_SESSION['book_id'])){
       </div>
     <!-- Section: Reading Modal -->
     <div class="modal fade reading-modal" id="readingModal" tabindex="-1" aria-labelledby="readingModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content rounded-4 shadow-lg">
-          <div class="modal-body p-3">
+      <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+          <div class="modal-body p-3 m-3">
             <form action = "readbook.php" method = "POST">
             <input type="hidden" name="book_id" id="book-id-input" value="">
             <input type="hidden" name="progress" id="progress-input" value="">
@@ -327,21 +309,23 @@ if(isset( $_SESSION['user_id']) && isset($_SESSION['book_id'])){
               </div>
             </div>
             <!-- PDF Viewer -->
-            <div class="pdf-viewer d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-              <canvas id="pdf-canvas" style="max-width: 100%; height: auto;"></canvas>
+            <div class="pdf-viewer d-flex justify-content-center align-items-center" style="height: calc(100vh - 200px);">
+              <canvas id="pdf-canvas" style="max-width: 100%; height: 100%;"></canvas>
             </div>
 
             <!-- Navigasi Halaman -->
             <div class="d-flex justify-content-center gap-2 my-3 flex-wrap mb-5">
               <button type = "button" class="btn btn-outline-primary btn-sm mx-5" id="prev-page"><i class="fas fa-arrow-left"></i> Previous</button>
+              <button type = "submit" class="btn btn-success rounded-3 fw-bold" id="bookmark-button"><i class="fa-solid fa-bookmark mx-1"></i> Save Bookmark</button>
+              <button type = "button" class="btn btn-danger rounded-3 fw-bold" id="close-button"><i class="fas fa-times mx-1"></i> Tutup</button>
               <button type = "button" class="btn btn-outline-primary btn-sm mx-5" id="next-page">Next <i class="fas fa-arrow-right"></i></button>
             </div>
 
             <!-- Tombol Aksi -->
             <div class="d-flex justify-content-center gap-3 mt-3">
-              <button type = "submit" class="btn btn-success rounded-3 fw-bold" id="bookmark-button"><i class="fa-solid fa-bookmark mx-1"></i> Save Bookmark</button>
-              <button type = "button" class="btn btn-danger rounded-3 fw-bold" id="close-button"><i class="fas fa-times mx-1"></i> Tutup</button>
+              
             </div>
+            
             </form>
       </div>
     </div>
