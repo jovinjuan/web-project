@@ -1,6 +1,6 @@
 <?php
 require "config.php";
-?> 
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,55 +9,39 @@ require "config.php";
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Sistem</title>
 
-    <link rel="stylesheet" href="css/style.css" />
-
     <!-- BOOTSTRAP CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
 
     <!-- BOOTSTRAP ICON -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+    <!-- Font Awesome untuk ikon -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
     <style>
+      /* Minimal custom CSS for specific adjustments */
       body {
         padding-top: 90px;
       }
 
-      /* sidebar */
+      /* Sidebar */
       .sidebar {
         position: fixed;
         top: 0;
         left: -250px;
         width: 250px;
         height: 100%;
-        background: #333;
-        color: white;
         overflow-y: auto;
-        padding-top: 0px;
-        z-index: 1000; /* sidebar akan selalu di depan */
+        padding-top: 0;
+        z-index: 1000;
+        transition: left 0.3s ease;
       }
 
-      /* saat sidebar terbuka */
       .sidebar.active {
         left: 0;
       }
 
-      .sidebar h4 {
-        padding-top: 80px;
-        padding-left: 20px;
-      }
-
-      .sidebar h5 {
-        padding-left: 20px;
-      }
-
-      .sidebar label {
-        padding-left: 20px;
-      }
-
-      .sidebar-content {
-        padding: 90px 20px 20px 20px;
-      }
-
-      /* lapisan gelas pas buka side bar*/
+      /* Backdrop for sidebar */
       .backdrop {
         position: fixed;
         top: 0;
@@ -73,52 +57,26 @@ require "config.php";
         display: block;
       }
 
-      /* tombol ☰ */
+      /* Menu button */
       .menu-btn {
         font-size: 30px;
-        border-color: rgba(0, 0, 0, 0);
-        background-color: white;
-        box-shadow: 4px 4px 6px rgba(0, 0, 0, 0.1);
+        border: none;
         border-radius: 10px;
         cursor: pointer;
         position: absolute;
         top: 100px;
-        left: 0px;
+        left: 0;
       }
 
-      /* kurangi padding section */
-      .content {
-        margin-left: 0;
-        padding-right: 10px;
-      }
-
-      /* ketika sidebar aktif, maka content otomatis menyusut */
+      /* Content padding when sidebar is active */
       .content.padding {
         margin-left: 250px;
       }
 
-      .section {
-        padding-left: 40px;
-        margin: 20px;
-        border-radius: 10px;
-        position: relative;
-        height: 230px;
-      }
-
-      .section h4 {
-        margin-bottom: 15px;
-      }
-
-      .book-container {
-        display: flex;
-        gap: 10px;
-      }
-
-
+      /* Book container */
       .book {
         width: 150px;
         height: 200px;
-        background: #ddd;
         border-radius: 5px;
         position: relative;
         display: flex;
@@ -126,161 +84,114 @@ require "config.php";
         justify-content: center;
       }
 
-      /* tombol "+" di tengah kotak buku  */
+      /* Add book button */
       .add-book-btn {
         position: absolute;
-        background: rgb(93, 92, 92);
-        color: white;
         border-radius: 50%;
         width: 50px;
         height: 50px;
-        border-radius: 50%;
         text-align: center;
         line-height: 40px;
-        cursor: pointer;
         font-size: 45px;
       }
 
-      /* explore button */
-      .explore-btn {
-        margin-right: 60px;
-        position: absolute;
-        top: 0px;
-        right: 10px;
-        background: #0d6efd;
-        color: white;
-        padding: 5px 15px;
-        border: none;
-        border-radius: 5px;
-        font-size: 15px;
-      }
-
-      .section-divider {
-        border: none;
-        height: 2px;
-        background-color: grey;
-        margin: 0;
-      }
-      #detail-cover{
-        width: 100%; 
-        height: 100%; 
-        object-fit: cover; 
-        border-radius: 5px
-      }
-
-    /* Tambahan untuk responsive layout di mobile */
-    @media (max-width: 400px) {
-      .menu-btn {
-        top: 70px;
-        left: 10px;
-        z-index: 1001;
-      }
-
-      .sidebar {
+      /* PDF viewer in reading modal */
+      .pdf-viewer {
+        border: 2px solid #e5e7eb;
+        border-radius: 15px;
         width: 100%;
-        left: -100%;
-      }   
-
-      .sidebar.active {
-        left: 0;
+        height: 500px;
+        overflow-y: auto;
+        background: #ffffff;
+        transition: border-color 0.3s ease;
       }
 
-      .content {
-        padding: 10px;
-        margin-left: 0 !important;
+      .pdf-viewer:hover {
+        border-color: #93c5fd;
       }
 
-      .section {
-        padding-left: 10px;
-        padding-right: 10px;
-        margin: 15px 0;
-        height: auto;
-      }
+      /* Responsive adjustments */
+      @media (max-width: 400px) {
+        .menu-btn {
+          top: 70px;
+          left: 10px;
+          z-index: 1001;
+        }
 
-      .explore-btn {
-        position: static;
-        display: block;
-        width: 100%;
-        margin: 10px 0;
-      }
+        .sidebar {
+          width: 100%;
+          left: -100%;
+        }
 
-      .book-container {
-        justify-content: center;
-      }
+        .sidebar.active {
+          left: 0;
+        }
 
-      .book {
-        width: 120px;
-        height: 160px;
-      }
+        .content {
+          margin-left: 0 !important;
+        }
 
-      .add-book-btn {
-        width: 40px;
-        height: 40px;
-        line-height: 30px;
-        font-size: 30px;
-      }
-}
+        .book {
+          width: 120px;
+          height: 160px;
+        }
 
+        .add-book-btn {
+          width: 40px;
+          height: 40px;
+          line-height: 30px;
+          font-size: 30px;
+        }
+
+        .pdf-viewer {
+          height: 400px;
+        }
+      }
     </style>
-
-    <script>
-      function toggleSidebar() {
-        let sidebar = document.getElementById("sidebar");
-        let backdrop = document.getElementById("backdrop");
-        let content = document.getElementById("content");
-        let sections = document.querySelectorAll(".section"); // ambil semua elemen dengan class "section"
-
-        sidebar.classList.toggle("active");
-        backdrop.classList.toggle("active");
-        content.classList.toggle("padding");
-
-        sections.forEach((section) => {
-          section.classList.toggle("padding");
-        });
-      }
-
-      function closeSidebar() {
-        let sidebar = document.getElementById("sidebar");
-        let backdrop = document.getElementById("backdrop");
-        let content = document.getElementById("content");
-        let sections = document.querySelectorAll(".section");
-
-        sidebar.classList.remove("active");
-        backdrop.classList.remove("active");
-        content.classList.remove("padding");
-
-        sections.forEach((section) => {
-          section.classList.remove("padding");
-        });
-      }
-    </script>
   </head>
   <body class="bg-light">
     <!-- Nav Bar -->
-    <?php include 'Navbar.php';
-    ?>
+    <?php include 'Navbar.php'; ?>
     <!-- Akhir Nav Bar -->
 
     <!-- Tombol ☰ -->
-    <button class="menu-btn position-fixed" onclick="toggleSidebar()">&#9776;</button>
+    <button class="menu-btn position-fixed btn btn-light shadow-sm" onclick="toggleSidebar()">☰</button>
 
     <!-- Backdrop -->
     <div class="backdrop" id="backdrop" onclick="closeSidebar()"></div>
 
     <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-      <div class="sidebar-content">
+    <div class="sidebar bg-dark text-white" id="sidebar">
+      <div class="p-4 pt-5">
         <h4 class="fw-bold">Filter All Books</h4>
         <h5 class="pt-3">Genres</h5>
-        <label><input type="checkbox" /> Action</label><br />
-        <label><input type="checkbox" /> Fantasy</label><br />
-        <label><input type="checkbox" /> Romance</label><br />
-        <label><input type="checkbox" /> Comedy</label><br />
-        <label><input type="checkbox" /> Horror</label><br />
-        <label><input type="checkbox" /> Thriller</label><br />
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="action">
+          <label class="form-check-label" for="action">Action</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="fantasy">
+          <label class="form-check-label" for="fantasy">Fantasy</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="romance">
+          <label class="form-check-label" for="romance">Romance</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="comedy">
+          <label class="form-check-label" for="comedy">Comedy</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="horror">
+          <label class="form-check-label" for="horror">Horror</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="thriller">
+          <label class="form-check-label" for="thriller">Thriller</label>
+        </div>
       </div>
     </div>
-    
+
     <?php
     // Ambil data buku yang sudah di-upload dari database
     $query = $conn->prepare("SELECT * FROM book");
@@ -289,138 +200,123 @@ require "config.php";
     ?>
 
     <!-- Konten -->
-    <div class="content" id="content">
+    <div class="content px-5 my-5" id="content">
       <!-- Section: Currently Reading -->
-      <div class="section">
-        <h4>Currently Reading</h4>
-        <div class="book-container">
+      <div class="section p-4 bg-white rounded-3 shadow-sm mb-4">
+        <h4 class="fw-bold mb-3">Currently Reading</h4>
+        <div class="d-flex flex-wrap gap-2">
           <?php foreach($files as $file): ?>
-            <div class="book" onclick="showBookDetail(
-                '<?php echo htmlspecialchars($file['title'], ENT_QUOTES); ?>',
-                '<?php echo htmlspecialchars($file['description'], ENT_QUOTES); ?>',
-                '<?php echo htmlspecialchars($file['genre'], ENT_QUOTES); ?>',
-                '<?php echo base64_encode($file['cover_image']); ?>',
-                '<?php echo htmlspecialchars($file['file_path'], ENT_QUOTES); ?>'
-              )">
-            <?php
-          // Ubah data BLOB Menjadi Gambar
-          if ($file['cover_image']) {
-            $coverImageData = base64_encode($file['cover_image']);
-            echo '<img src="data:image/jpeg;base64,' . $coverImageData . '" alt="Book" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">';
-          }
-          ?>
+            <div class="book bg-light me-2" 
+                data-title="<?php echo htmlspecialchars($file['title'], ENT_QUOTES); ?>"
+                data-description="<?php echo htmlspecialchars($file['description'], ENT_QUOTES); ?>"
+                data-genre="<?php echo htmlspecialchars($file['genre'], ENT_QUOTES); ?>"
+                data-cover="<?php echo base64_encode($file['cover_image']); ?>"
+                data-filepath="<?php echo htmlspecialchars($file['file_path'], ENT_QUOTES); ?>"
+                onclick="showBookDetailFromElement(this)">
+              <?php
+              if ($file['cover_image']) {
+                $coverImageData = base64_encode($file['cover_image']);
+                echo '<img src="data:image/jpeg;base64,' . $coverImageData . '" alt="Book" class="w-100 h-100 object-fit-cover rounded-2">';
+              }
+              ?>
             </div>
           <?php endforeach; ?>
-          <div class="book">
-        <div class="add-book-btn">
-          <a href="Uploadfile.php" style="text-decoration: none; color: lightgrey;">+</a>
-        </div>
-      </div>
-        </div>
-        <br />
-        <hr class="section-divider" />
-
-      <!-- Section: To Read -->
-      <div>
-        <br>
-        <h4>To Read</h4>
-        
-        <div class="book-container">
-          <?php foreach($files as $file): ?>
-            <div class="book" onclick="showBookDetail(
-                '<?php echo htmlspecialchars($file['title'], ENT_QUOTES); ?>',
-                '<?php echo htmlspecialchars($file['description'], ENT_QUOTES); ?>',
-                '<?php echo htmlspecialchars($file['genre'], ENT_QUOTES); ?>',
-                '<?php echo base64_encode($file['cover_image']); ?>',
-                '<?php echo htmlspecialchars($file['file_path'], ENT_QUOTES); ?>'
-              )">
-            <?php
-          //mengubah File BLOB Menjadi Cover Buku
-          if ($file['cover_image']) {
-            $coverImageData = base64_encode($file['cover_image']);
-
-            echo '<img src="data:image/jpeg;base64,' . $coverImageData . '" alt="Book" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">';
-          }
-          ?>
-            </div>
-          <?php endforeach; ?>
-          <div class="book">
-            <div class="add-book-btn">
-              <a href="Uploadfile.php" style="text-decoration: none; color: lightgrey;">+</a>
+          <div class="book bg-light me-2">
+            <div class="add-book-btn bg-secondary text-white">
+              <a href="Uploadfile.php" class="text-decoration-none text-light">+</a>
             </div>
           </div>
         </div>
-        <br />
-        <hr class="section-divider" />
+      </div>
+
+      <!-- Section: To Read -->
+      <div class="section p-4 bg-white rounded-3 shadow-sm mb-4">
+        <h4 class="fw-bold mb-3">To Read</h4>
+        <div class="d-flex flex-wrap gap-2">
+          <?php foreach($files as $file): ?>
+            <div class="book bg-light me-2" 
+              data-title="<?php echo htmlspecialchars($file['title'], ENT_QUOTES); ?>"
+              data-description="<?php echo htmlspecialchars($file['description'], ENT_QUOTES); ?>"
+              data-genre="<?php echo htmlspecialchars($file['genre'], ENT_QUOTES); ?>"
+              data-cover="<?php echo base64_encode($file['cover_image']); ?>"
+              data-filepath="<?php echo htmlspecialchars($file['file_path'], ENT_QUOTES); ?>"
+              onclick="showBookDetailFromElement(this)">
+              <?php
+              if ($file['cover_image']) {
+                $coverImageData = base64_encode($file['cover_image']);
+                echo '<img src="data:image/jpeg;base64,' . $coverImageData . '" alt="Book" class="w-100 h-100 object-fit-cover rounded-2">';
+              }
+              ?>
+            </div>
+          <?php endforeach; ?>
+          <div class="book bg-light me-2">
+            <div class="add-book-btn bg-secondary text-white">
+              <a href="Uploadfile.php" class="text-decoration-none text-light">+</a>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Section: Favourite Book -->
-      <div>
-        <br>
-        <h4>Favourite Book</h4>
+      <div class="section p-4 bg-white rounded-3 shadow-sm mb-4">
+        <h4 class="fw-bold mb-3">Favourite Book</h4>
+        <div class="book bg-light me-2">
+          <div class="add-book-btn bg-secondary text-white">
+            <a href="Uploadfile.php" class="text-decoration-none text-light">+</a>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        <div class="book-container">
-          <?php foreach($files as $file): ?>
-            <div class="book" onclick="showBookDetail(
-                '<?php echo htmlspecialchars($file['title'], ENT_QUOTES); ?>',
-                '<?php echo htmlspecialchars($file['description'], ENT_QUOTES); ?>',
-                '<?php echo htmlspecialchars($file['genre'], ENT_QUOTES); ?>',
-                '<?php echo base64_encode($file['cover_image']); ?>',
-                '<?php echo htmlspecialchars($file['file_path'], ENT_QUOTES); ?>'
-              )">
-            <?php
-          // Mengubah BLOB Menjadi Cover
-          if ($file['cover_image']) {
-            $coverImageData = base64_encode($file['cover_image']);
-            echo '<img src="data:image/jpeg;base64,' . $coverImageData . '" alt="Book" style="width: 100%; height: 100%; object-fit: cover; border-radius: 5px;">';
-          }
-          ?>
-            </div>
-          <?php endforeach; ?>
-          <div class="book">
-            <div class="add-book-btn">
-              <a href="Uploadfile.php" style="text-decoration: none; color: lightgrey;">+</a>
+    <!-- Section: Modal -->
+      <div class="modal fade" id="bookDetailModal" tabindex="-1" aria-labelledby="bookDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered custom-modal-size">
+          <div class="modal-content p-4 shadow-lg rounded-4">
+            <div class="modal-body text-center">
+              <img id="detail-cover" class="img-fluid rounded-3 shadow-sm mb-4" style="max-width: 180px;" />
+              <h3 id="detail-title" class="fw-semibold mb-3"></h3>
+              <p id="detail-description" class="text-muted mb-3" style="font-size: 1rem;"></p>
+              <p class="mb-4" style="font-size: 0.95rem;"><strong>Genre:</strong> <span id="detail-genre"></span></p>
+              <button id="view-pdf-btn" class="btn btn-primary rounded-pill px-4" onclick="openReadingModal()">Read</button>
             </div>
           </div>
         </div>
-        <br />
       </div>
-    </div>
-    <div class="modal fade" id="bookDetailModal" tabindex="-1" aria-labelledby="bookDetailModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-md-5 mb-3">
-                <img id="detail-cover" class="img-fluid mb-3" style="max-width: 200px;" />
-              </div>
-              <div class="col-md-7 d-flex flex-column justify-content-between">
-                <h3 id="detail-title"></h3>
-                <p id="detail-description"></p>
-                <p><strong>Genre:</strong> <span id="detail-genre"></span></p>
-                <div class="text-end">
-                  <a href="#" id="view-pdf-btn" class="btn btn-primary" target="_blank">Read</a>
-                </div>
+    <!-- Section: Reading Modal -->
+    <div class="modal fade reading-modal" id="readingModal" tabindex="-1" aria-labelledby="readingModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content rounded-4 shadow-lg">
+          <div class="modal-body p-3">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+              <h3 id="reading-title" class="fw-bold text-primary mb-0"></h3>
+              <div class="d-flex gap-3 p-2 bg-light rounded-3 shadow-sm small">
+                <span><i class="fas fa-chart-line"></i> Progress: <span id="progress">0%</span></span>
+                <span><i class="fas fa-book-open"></i> Halaman: <span id="current-page">1</span> dari <span id="total-pages">1</span></span>
+                <span><i class="fas fa-clock"></i> Membaca: <span id="timer">0 menit</span></span>
               </div>
             </div>
-          </div>
+        <!-- PDF Viewer -->
+        <div class="pdf-viewer d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+          <canvas id="pdf-canvas" style="max-width: 100%; height: auto;"></canvas>
+        </div>
+
+        <!-- Navigasi Halaman -->
+        <div class="d-flex justify-content-center gap-2 my-3 flex-wrap mb-5">
+          <button class="btn btn-outline-primary btn-sm mx-5" id="prev-page"><i class="fas fa-arrow-left"></i> Previous</button>
+          <button class="btn btn-outline-primary btn-sm mx-5" id="next-page">Next <i class="fas fa-arrow-right"></i></button>
+        </div>
+
+        <!-- Tombol Aksi -->
+        <div class="d-flex justify-content-center gap-3 mt-3">
+          <button class="btn btn-danger rounded-3 fw-bold" id="close-button"><i class="fas fa-times"></i> Tutup</button>
         </div>
       </div>
     </div>
   </div>
-
+</div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
+  <script src="home.js"></script>
   </body>
-        <script>
-            function showBookDetail(title, description, genre, coverImage, filePath) {
-              document.getElementById('detail-title').textContent = title;
-              document.getElementById('detail-description').textContent = description;
-              document.getElementById('detail-genre').textContent = genre;
-              document.getElementById('detail-cover').src = 'data:image/jpeg;base64,' + coverImage;
-              document.getElementById('view-pdf-btn').href = filePath;
-
-              // Tampilkan modal
-              var myModal = new bootstrap.Modal(document.getElementById('bookDetailModal'));
-              myModal.show();
-            }
-</script>
 </html>
