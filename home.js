@@ -1,8 +1,43 @@
-
-document.getElementById('close-button').addEventListener('click', function() {
-    // Redirect ke home.php
-    window.location.href = 'home.php';
+document.getElementById("close-button").addEventListener("click", function () {
+  // Redirect ke home.php
+  window.location.href = "home.php";
 });
+function applyFilters() {
+  // Get all checked genres
+  const checkboxes = document.querySelectorAll(
+    '.sidebar input[type="checkbox"]'
+  );
+  const selectedGenres = Array.from(checkboxes)
+    .filter((checkbox) => checkbox.checked)
+    .map((checkbox) => checkbox.parentElement.textContent.trim());
+
+  // Get all book containers
+  const bookContainers = document.querySelectorAll(".book-container");
+
+  // If no genres selected, show all books
+  if (selectedGenres.length === 0) {
+    document.querySelectorAll(".book").forEach((book) => {
+      book.style.display = "block";
+    });
+    return;
+  }
+
+  // Filter books based on selected genres
+  document.querySelectorAll(".book").forEach((book) => {
+    // Skip the add-book button
+    if (book.querySelector(".add-book-btn")) {
+      book.style.display = "block"; // Always show add button
+      return;
+    }
+
+    const genre = book.getAttribute("data-genre");
+    if (selectedGenres.includes(genre)) {
+      book.style.display = "block";
+    } else {
+      book.style.display = "none";
+    }
+  });
+}
 
 function toggleSidebar() {
   let sidebar = document.getElementById("sidebar");
@@ -35,29 +70,39 @@ function closeSidebar() {
 }
 
 function showBookDetailFromElement(element) {
-  const title = element.getAttribute('data-title');
-  const description = element.getAttribute('data-description');
-  const genre = element.getAttribute('data-genre');
-  const coverImage = element.getAttribute('data-cover');
-  const filePath = element.getAttribute('data-filepath');
+  const title = element.getAttribute("data-title");
+  const description = element.getAttribute("data-description");
+  const genre = element.getAttribute("data-genre");
+  const coverImage = element.getAttribute("data-cover");
+  const filePath = element.getAttribute("data-filepath");
 
-  document.getElementById('detail-title').textContent = title;
-  document.getElementById('detail-description').textContent = description;
-  document.getElementById('detail-genre').textContent = genre;
-  document.getElementById('detail-cover').src = 'data:image/jpeg;base64,' + coverImage;
-  document.getElementById('view-pdf-btn').setAttribute('data-filepath', filePath);
-  document.getElementById('reading-title').textContent = title;
+  document.getElementById("detail-title").textContent = title;
+  document.getElementById("detail-description").textContent = description;
+  document.getElementById("detail-genre").textContent = genre;
+  document.getElementById("detail-cover").src =
+    "data:image/jpeg;base64," + coverImage;
+  document
+    .getElementById("view-pdf-btn")
+    .setAttribute("data-filepath", filePath);
+  document.getElementById("reading-title").textContent = title;
 
-  const myModal = new bootstrap.Modal(document.getElementById('bookDetailModal'));
+  const myModal = new bootstrap.Modal(
+    document.getElementById("bookDetailModal")
+  );
   myModal.show();
 }
 
 function openReadingModal() {
-  const filePath = document.getElementById('view-pdf-btn').getAttribute('data-filepath');
-  const readingModal = new bootstrap.Modal(document.getElementById('readingModal'));
+  const filePath = document
+    .getElementById("view-pdf-btn")
+    .getAttribute("data-filepath");
+  const readingModal = new bootstrap.Modal(
+    document.getElementById("readingModal")
+  );
   readingModal.show();
 
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.worker.min.js';
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.worker.min.js";
 
   let pdfDoc = null;
   let currentPage = 1;
@@ -67,16 +112,16 @@ function openReadingModal() {
 
   async function loadPDF() {
     try {
-      console.log('Loading PDF from:', filePath);
+      console.log("Loading PDF from:", filePath);
       pdfDoc = await pdfjsLib.getDocument(filePath).promise;
       totalPages = pdfDoc.numPages;
-      document.getElementById('total-pages').textContent = totalPages;
+      document.getElementById("total-pages").textContent = totalPages;
       renderPage(currentPage);
       updateProgress();
       startTimer();
     } catch (error) {
-      console.error('Error loading PDF:', error);
-      alert('Failed to load PDF: ' + error.message);
+      console.error("Error loading PDF:", error);
+      alert("Failed to load PDF: " + error.message);
     }
   }
 
@@ -84,24 +129,24 @@ function openReadingModal() {
     try {
       const page = await pdfDoc.getPage(pageNum);
       const viewport = page.getViewport({ scale: 1.0 });
-      const canvas = document.getElementById('pdf-canvas');
-      const context = canvas.getContext('2d');
+      const canvas = document.getElementById("pdf-canvas");
+      const context = canvas.getContext("2d");
       canvas.height = viewport.height;
       canvas.width = viewport.width;
 
       const renderContext = {
         canvasContext: context,
-        viewport: viewport
+        viewport: viewport,
       };
       await page.render(renderContext).promise;
-      document.getElementById('current-page').textContent = pageNum;
+      document.getElementById("current-page").textContent = pageNum;
     } catch (error) {
-      console.error('Error rendering page:', error);
-      alert('Failed to render page: ' + error.message);
+      console.error("Error rendering page:", error);
+      alert("Failed to render page: " + error.message);
     }
   }
 
-  document.getElementById('next-page').addEventListener('click', () => {
+  document.getElementById("next-page").addEventListener("click", () => {
     if (currentPage < totalPages) {
       currentPage++;
       renderPage(currentPage);
@@ -109,7 +154,7 @@ function openReadingModal() {
     }
   });
 
-  document.getElementById('prev-page').addEventListener('click', () => {
+  document.getElementById("prev-page").addEventListener("click", () => {
     if (currentPage > 1) {
       currentPage--;
       renderPage(currentPage);
@@ -117,11 +162,9 @@ function openReadingModal() {
     }
   });
 
-  
-
   function updateProgress() {
     const progress = (currentPage / totalPages) * 100;
-    document.getElementById('progress').textContent = progress.toFixed(1) + '%';
+    document.getElementById("progress").textContent = progress.toFixed(1) + "%";
   }
 
   function startTimer() {
@@ -129,12 +172,15 @@ function openReadingModal() {
       const elapsed = Math.floor((Date.now() - startTime) / 1000);
       const minutes = Math.floor(elapsed / 60);
       const seconds = elapsed % 60;
-      document.getElementById('timer').textContent = `${minutes} menit ${seconds} detik`;
+      document.getElementById(
+        "timer"
+      ).textContent = `${minutes} menit ${seconds} detik`;
     }, 1000);
   }
   loadPDF();
-    document.getElementById('readingModal').addEventListener('hidden.bs.modal', () => {
-    clearInterval(timerInterval);
+  document
+    .getElementById("readingModal")
+    .addEventListener("hidden.bs.modal", () => {
+      clearInterval(timerInterval);
     });
 }
-
