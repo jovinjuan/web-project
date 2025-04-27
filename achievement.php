@@ -4,7 +4,13 @@ require "config.php";
 if(cekLogin()){
     if (isset($_SESSION['username'])) {
         $username = $_SESSION['username'];
+        
     }
+    // Mengambil data ranking berdasarkan streak
+    $query = "SELECT username, streak FROM user ORDER BY streak DESC";
+    $stmt = $conn->prepare($query);
+    $stmt->execute();
+    $ranking = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?> 
 <!DOCTYPE html>
 <html lang="en">
@@ -129,56 +135,20 @@ if(cekLogin()){
                 <!-- Ranking List -->
                 <h5>Ranking</h5>
                 <div class="ranking-container">
-                    <div class="ranking-item">
-                        <span>1</span>
-                        <div class="d-flex align-items-center">
-                            <div class="avatar"></div>
-                            <span>Name</span>
-                        </div>
-                        <span>xxxx</span>
-                    </div>
-                    <div class="ranking-item">
-                        <span>2</span>
-                        <div class="d-flex align-items-center">
-                            <div class="avatar"></div>
-                            <span>Name</span>
-                        </div>
-                        <span>xxxx</span>
-                    </div>
-                    <div class="ranking-item">
-                        <span>3</span>
-                        <div class="d-flex align-items-center">
-                            <div class="avatar"></div>
-                            <span>Name</span>
-                        </div>
-                        <span>xxxx</span>
-                    </div>
-                    <div class="ranking-item">
-                        <span>4</span>
-                        <div class="d-flex align-items-center">
-                            <div class="avatar"></div>
-                            <span>Name</span>
-                        </div>
-                        <span>xxxx</span>
-                    </div>
-                    <div class="ranking-item">
-                        <span>5</span>
-                        <div class="d-flex align-items-center">
-                            <div class="avatar"></div>
-                            <span>Name</span>
-                        </div>
-                        <span>xxxx</span>
-                    </div>
-
-                    <!-- Highlighted User -->
-                    <div class="ranking-item highlight mt-2">
-                        <span>90</span>
-                        <div class="d-flex align-items-center">
-                            <div class="avatar"></div>
-                            <span><?php echo htmlspecialchars($username); ?></span>
-                        </div>
-                        <span>xxxx</span>
-                    </div>
+                    <?php 
+                    $rank = 1;  // Inisialisasi peringkat
+                    foreach ($ranking as $user) {
+                        $highlightClass = ($user['username'] === $username) ? 'highlight' : '';
+                        echo '<div class="ranking-item ' . $highlightClass . '">
+                                <span>' . $rank++ . '</span>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar"></div>
+                                    <span>' . htmlspecialchars($user['username']) . '</span>
+                                </div>
+                                <span>' . $user['streak'] . '</span>
+                            </div>';
+                    }      
+                    ?>
                 </div>
 
                 <!-- Badges Section -->
