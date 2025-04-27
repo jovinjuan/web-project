@@ -196,34 +196,38 @@
                             <path fill="#d7410f" d="M159.3 5.4c7.8-7.3 19.9-7.2 27.7 .1c27.6 25.9 53.5 53.8 77.7 84c11-14.4 23.5-30.1 37-42.9c7.9-7.4 20.1-7.4 28 .1c34.6 33 63.9 76.6 84.5 118c20.3 40.8 33.8 82.5 33.8 111.9C448 404.2 348.2 512 224 512C98.4 512 0 404.1 0 276.5c0-38.4 17.8-85.3 45.4-131.7C73.3 97.7 112.7 48.6 159.3 5.4zM225.7 416c25.3 0 47.7-7 68.8-21c42.1-29.4 53.4-88.2 28.1-134.4c-4.5-9-16-9.6-22.5-2l-25.2 29.3c-6.6 7.6-18.5 7.4-24.7-.5c-16.5-21-46-58.5-62.8-79.8c-6.3-8-18.3-8.1-24.7-.1c-33.8 42.5-50.8 69.3-50.8 99.4C112 375.4 162.6 416 225.7 416z"/>
                         </svg>
                         <div class="d-flex flex-column flex-md-row align-items-center justify-content-center mb-3">
-                            <h2 class="streak-number mx-2">5</h2>
+                        <h2 class="streak-number mx-2" id="streak-number">0</h2>
                             <h4 class="streak-text">streaks in a week!</h4>
                         </div>
                         <!-- Bagian Lingkaran Hari-->
-                        <div class="d-flex justify-content-between mb-2">
+                        <div class="d-flex justify-content-center mb-2">
                             <div>
-                                <div class="day-circle active">M</div>
+                                <div id="monday" class="day-circle inactive">M</div>
                                 <div class="day-label">Mon</div>
                             </div>
                             <div>
-                                <div class="day-circle active">T</div>
+                                <div id="tuesday" class="day-circle inactive">T</div>
                                 <div class="day-label">Tue</div>
                             </div>
                             <div>
-                                <div class="day-circle active">W</div>
+                                <div id="wednesday" class="day-circle inactive">W</div>
                                 <div class="day-label">Wed</div>
                             </div>
                             <div>
-                                <div class="day-circle active">Th</div>
+                                <div id="thursday" class="day-circle inactive">Th</div>
                                 <div class="day-label">Thu</div>
                             </div>
                             <div>
-                                <div class="day-circle active">F</div>
+                                <div id="friday" class="day-circle inactive">F</div>
                                 <div class="day-label">Fri</div>
                             </div>
                             <div>
-                                <div class="day-circle inactive">S</div>
+                                <div id="saturday" class="day-circle inactive">S</div>
                                 <div class="day-label">Sat</div>
+                            </div>
+                            <div>
+                              <div id="sunday" class="day-circle inactive">S</div>
+                              <div class="day-label">Sun</div>
                             </div>
                         </div>
                         <!-- Akhir Lingkaran Hari -->
@@ -440,5 +444,61 @@
     <!-- Akhir History -->
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const today = new Date();
+        const todayStr = today.toISOString().split('T')[0]; // format YYYY-MM-DD
+        const todayDay = today.getDay(); // Get the current day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+
+        let lastDate = localStorage.getItem('lastActiveDate');
+        let streak = localStorage.getItem('streak') ? parseInt(localStorage.getItem('streak')) : 0;
+        let activeDays = JSON.parse(localStorage.getItem('activeDays')) || [false, false, false, false, false, false, false]; // Array untuk status hari aktif
+
+        // Tandai hari ini sebagai aktif
+        activeDays[todayDay] = true;
+
+        // Simpan status hari aktif ke localStorage
+        localStorage.setItem('activeDays', JSON.stringify(activeDays));
+
+        // Update tampilan lingkaran hari
+        const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+        activeDays.forEach((active, index) => {
+            const dayElement = document.getElementById(days[index]);
+            if (active) {
+                dayElement.classList.add('active');
+                dayElement.classList.remove('inactive');
+            } else {
+                dayElement.classList.add('inactive');
+                dayElement.classList.remove('active');
+            }
+        });
+
+        // Proses streak (menambah atau mereset)
+        if (lastDate) {
+            const lastActive = new Date(lastDate);
+            const diffTime = today - lastActive;
+            const diffDays = diffTime / (1000 * 60 * 60 * 24); // konversi waktu ke hari
+
+            if (diffDays === 1) {
+                // aktif sehari setelah sebelumnya -> streak lanjut
+                streak += 1;
+            } else if (diffDays > 1) {
+                // skip sehari atau lebih -> streak reset
+                streak = 1;
+            }
+            // kalau diffDays === 0 (masih di hari yang sama), tidak tambah streak
+        } else {
+            // pertama kali main
+            streak = 1;
+        }
+
+        // Simpan tanggal aktif terakhir dan streak ke localStorage
+        localStorage.setItem('lastActiveDate', todayStr);
+        localStorage.setItem('streak', streak);
+
+        // Update tampilan streak di halaman
+        document.getElementById('streak-number').innerText = streak;
+    });
+</script>
 </body>
 </html>
