@@ -17,6 +17,7 @@ if (isset($conn)) {
         // Compare the hashed password
         if (password_verify($password, $user['password'])) {
             $_SESSION['username'] = $user['username'];
+            $_SESSION['user_id'] = $user['user_id'];
             header("Location: home.php");
             exit;
         } else {
