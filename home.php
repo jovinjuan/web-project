@@ -80,7 +80,7 @@ if(isset( $_SESSION['user_id']) && isset($_SESSION['book_id'])){
       /* Book container */
       .book {
         width: 150px;
-        height: 200px;
+        min-height: 200px;
         border-radius: 5px;
         position: relative;
         display: flex;
@@ -97,6 +97,9 @@ if(isset( $_SESSION['user_id']) && isset($_SESSION['book_id'])){
         text-align: center;
         line-height: 40px;
         font-size: 45px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
       }
 
       /* PDF viewer in reading modal */
