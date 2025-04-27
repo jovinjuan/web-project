@@ -1,5 +1,9 @@
 <?php
 require "config.php";
+if(isset( $_SESSION['user_id']) && isset($_SESSION['book_id'])){
+  $user_id = $_SESSION['user_id'];
+  $book_id = $_SESSION['book_id'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -207,6 +211,7 @@ require "config.php";
         <div class="d-flex flex-wrap gap-2">
           <?php foreach($files as $file): ?>
             <div class="book bg-light me-2" 
+                data-book-id="<?php echo htmlspecialchars($file['book_id'], ENT_QUOTES); ?>"
                 data-title="<?php echo htmlspecialchars($file['title'], ENT_QUOTES); ?>"
                 data-description="<?php echo htmlspecialchars($file['description'], ENT_QUOTES); ?>"
                 data-genre="<?php echo htmlspecialchars($file['genre'], ENT_QUOTES); ?>"
@@ -235,6 +240,7 @@ require "config.php";
         <div class="d-flex flex-wrap gap-2">
           <?php foreach($files as $file): ?>
             <div class="book bg-light me-2" 
+              data-book-id="<?php echo htmlspecialchars($file['book_id'], ENT_QUOTES); ?>"
               data-title="<?php echo htmlspecialchars($file['title'], ENT_QUOTES); ?>"
               data-description="<?php echo htmlspecialchars($file['description'], ENT_QUOTES); ?>"
               data-genre="<?php echo htmlspecialchars($file['genre'], ENT_QUOTES); ?>"
@@ -260,6 +266,25 @@ require "config.php";
       <!-- Section: Favourite Book -->
       <div class="section p-4 bg-white rounded-3 shadow-sm mb-4">
         <h4 class="fw-bold mb-3">Favourite Book</h4>
+        <div class="d-flex flex-wrap gap-2">
+          <?php foreach($files as $file): ?>
+            <div class="book bg-light me-2" 
+              data-book-id="<?php echo htmlspecialchars($file['book_id'], ENT_QUOTES); ?>"
+              data-title="<?php echo htmlspecialchars($file['title'], ENT_QUOTES); ?>"
+              data-description="<?php echo htmlspecialchars($file['description'], ENT_QUOTES); ?>"
+              data-genre="<?php echo htmlspecialchars($file['genre'], ENT_QUOTES); ?>"
+              data-cover="<?php echo base64_encode($file['cover_image']); ?>"
+              data-filepath="<?php echo htmlspecialchars($file['file_path'], ENT_QUOTES); ?>"
+              onclick="showBookDetailFromElement(this)">
+              <?php
+              if ($file['cover_image']) {
+                $coverImageData = base64_encode($file['cover_image']);
+                echo '<img src="data:image/jpeg;base64,' . $coverImageData . '" alt="Book" class="w-100 h-100 object-fit-cover rounded-2">';
+              }
+              ?>
+            </div>
+          <?php endforeach; ?>
+        
         <div class="book bg-light me-2">
           <div class="add-book-btn bg-secondary text-white">
             <a href="Uploadfile.php" class="text-decoration-none text-light">+</a>
@@ -287,6 +312,11 @@ require "config.php";
       <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content rounded-4 shadow-lg">
           <div class="modal-body p-3">
+            <form action = "readbook.php" method = "POST">
+            <input type="hidden" name="book_id" id="book-id-input" value="">
+            <input type="hidden" name="progress" id="progress-input" value="">
+            <input type="hidden" name="current_page" id="current-page-input" value="">
+            <input type="hidden" name="timer" id="timer-input" value="">
             <!-- Header -->
             <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
               <h3 id="reading-title" class="fw-bold text-primary mb-0"></h3>
@@ -296,21 +326,23 @@ require "config.php";
                 <span><i class="fas fa-clock"></i> Membaca: <span id="timer">0 menit</span></span>
               </div>
             </div>
-        <!-- PDF Viewer -->
-        <div class="pdf-viewer d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-          <canvas id="pdf-canvas" style="max-width: 100%; height: auto;"></canvas>
-        </div>
+            <!-- PDF Viewer -->
+            <div class="pdf-viewer d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+              <canvas id="pdf-canvas" style="max-width: 100%; height: auto;"></canvas>
+            </div>
 
-        <!-- Navigasi Halaman -->
-        <div class="d-flex justify-content-center gap-2 my-3 flex-wrap mb-5">
-          <button class="btn btn-outline-primary btn-sm mx-5" id="prev-page"><i class="fas fa-arrow-left"></i> Previous</button>
-          <button class="btn btn-outline-primary btn-sm mx-5" id="next-page">Next <i class="fas fa-arrow-right"></i></button>
-        </div>
+            <!-- Navigasi Halaman -->
+            <div class="d-flex justify-content-center gap-2 my-3 flex-wrap mb-5">
+              <button type = "button" class="btn btn-outline-primary btn-sm mx-5" id="prev-page"><i class="fas fa-arrow-left"></i> Previous</button>
+              <button type = "button" class="btn btn-outline-primary btn-sm mx-5" id="next-page">Next <i class="fas fa-arrow-right"></i></button>
+            </div>
 
-        <!-- Tombol Aksi -->
-        <div class="d-flex justify-content-center gap-3 mt-3">
-          <button class="btn btn-danger rounded-3 fw-bold" id="close-button"><i class="fas fa-times"></i> Tutup</button>
-        </div>
+            <!-- Tombol Aksi -->
+            <div class="d-flex justify-content-center gap-3 mt-3">
+              <button type = "submit" class="btn btn-success rounded-3 fw-bold" id="bookmark-button"><i class="fa-solid fa-bookmark mx-1"></i> Save Bookmark</button>
+              <button type = "button" class="btn btn-danger rounded-3 fw-bold" id="close-button"><i class="fas fa-times mx-1"></i> Tutup</button>
+            </div>
+            </form>
       </div>
     </div>
   </div>

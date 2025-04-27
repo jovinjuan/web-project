@@ -1,7 +1,7 @@
 <?php
 require 'config.php';
-require_once('fpdf/fpdf.php'); // Require FPDF library
-require_once('fpdi/src/autoload.php'); // Require  FPDI library
+require_once('vendor/setasign/fpdf/fpdf.php'); // Require FPDF library
+require_once('vendor/setasign/fpdi/src/autoload.php'); // Require  FPDI library
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Ambil data dari form
@@ -67,6 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
               $query->bindParam(':cover_image', $coverImageContent, PDO::PARAM_LOB); // Masukkan Menjadi BLOB
 
               if ($query->execute()) {
+                $book_id = $conn->lastInsertId(); 
+                $_SESSION['book_id'] = $book_id;
                   header("Location: home.php?upload=success");
                   exit;
               } else {
@@ -87,7 +89,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -206,6 +207,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       }
     </style>
   </head>
+  
   <body>
     <!-- Background Home -->
     <iframe class="bg-iframe" src="Home.php"></iframe>
