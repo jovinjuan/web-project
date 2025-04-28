@@ -498,6 +498,22 @@
 
         // Update tampilan streak di halaman
         document.getElementById('streak-number').innerText = streak;
+
+        // Kirim streak untuk disimpan di database
+        fetch('update_streak.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'streak=' + encodeURIComponent(streak)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
     });
 </script>
 </body>
