@@ -298,10 +298,9 @@ if(isset( $_SESSION['user_id']) && isset($_SESSION['book_id'])){
         <div class="modal-content">
           <div class="modal-body p-3 m-3">
             <form action = "readbook.php" method = "POST">
-            <input type="hidden" name="book_id" id="book-id-input" value="">
-            <input type="hidden" name="progress" id="progress-input" value="">
-            <input type="hidden" name="current_page" id="current-page-input" value="">
-            <input type="hidden" name="timer" id="timer-input" value="">
+            <input type="hidden" name="progress" id="progress-input" value = ''>
+            <input type="hidden" name="current_page" id="current-page-input" value = ''>
+            <input type="hidden" name="timer" id="timer-input" value = ''>
             <!-- Header -->
             <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
               <h3 id="reading-title" class="fw-bold text-primary mb-0"></h3>
@@ -323,17 +322,16 @@ if(isset( $_SESSION['user_id']) && isset($_SESSION['book_id'])){
               <button type = "button" class="btn btn-danger rounded-3 fw-bold" id="close-button"><i class="fas fa-times mx-1"></i> Tutup</button>
               <button type = "button" class="btn btn-outline-primary btn-sm mx-5" id="next-page">Next <i class="fas fa-arrow-right"></i></button>
             </div>
-
-            <!-- Tombol Aksi -->
-            <div class="d-flex justify-content-center gap-3 mt-3">
-              
-            </div>
-            
             </form>
+        </div>
       </div>
     </div>
   </div>
 </div>
+<?php 
+echo $user_id;
+echo $book_id;
+?>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
   <script src="home.js"></script>
