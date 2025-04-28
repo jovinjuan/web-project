@@ -10,6 +10,11 @@ $reading_duration = $_POST['timer'];
 $reading_date = $reading_date = date('Y-m-d'); 
 $reading_progress = $_POST['progress'];
 
+$duration_parts = explode(" ", $reading_duration);
+$minutes = intval($duration_parts[0]);
+$seconds = intval($duration_parts[2]);
+$reading_duration_seconds = ($minutes * 60) + $seconds;
+
 $sql = "INSERT INTO reading_activity (user_id,book_id,current_pages,reading_duration,reading_date,reading_progress) VALUE (:user_id,:book_id,:current_pages,:reading_duration,:reading_date,:reading_progress) 
 ON DUPLICATE KEY UPDATE current_pages = :current_pages, reading_duration = :reading_duration, reading_date = :reading_date, reading_progress = :reading_progress";
 
@@ -17,7 +22,7 @@ $query = $conn->prepare($sql);
 $query->bindParam(':user_id',$user_id,PDO::PARAM_INT);
 $query->bindParam(':book_id',$book_id,PDO::PARAM_INT);
 $query->bindParam(':current_pages',$current_pages,PDO::PARAM_INT);
-$query->bindParam(':reading_duration',$reading_duration,PDO::PARAM_INT);
+$query->bindParam(':reading_duration',$reading_duration_seconds,PDO::PARAM_INT);
 $query->bindParam(':reading_date',$reading_date,PDO::PARAM_STR);
 $query->bindParam(':reading_progress',$reading_progress,PDO::PARAM_STR);
 
