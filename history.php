@@ -1,3 +1,7 @@
+<?php
+require "config.php";
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -241,47 +245,52 @@
             </div>
             <!-- Akhir Streak -->
             
-            <!-- Top-View Book -->
+            <!-- Query Data Buku -->
+            <?php
+            $query = "
+                SELECT b.book_id, b.title, b.author, b.genre, b.cover_image, SUM(r.reading_duration) AS total_duration
+                FROM reading_activity r
+                JOIN book b ON r.book_id = b.book_id
+                GROUP BY r.book_id
+                ORDER BY total_duration DESC
+                LIMIT 5
+            ";
+            $stmt = $conn->prepare($query);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            ?>
+
+
+            <!-- Top-Viewed Book Section -->
             <div class="col-12 col-md-7 mt-3 mt-md-0">
                 <div class="card px-3 pt-2 me-md-4">
                     <div class="card-body mb-1">
                         <h4 class="card-title">Top-Viewed Book !</h4>
-                        <div class="row mb-3 my-4">
-                            <!-- Book-->
-                            <div class="col-6 col-md-2 text-center">
-                                <div class="mb-4"><img src="Image/BookCover5.jpg" alt="Cover Buku Perahu Kertas" class="book"></div>
-                                <div class="mt-5"><img src="Image/BookCover4.jpg" alt="Cover Buku Langit Biru" class="book"></div>
-                            </div>
-                            <!-- Akhir Book -->
-                            <div class="col-6 col-md-10">
-                                <!-- Informasi Book 1 -->
-                                <h2 class="mt-2 fs-4 fs-md-1 mb-2 mx-2 mx-md-5">Perahu Kertas</h2>
-                                <div class="d-flex flex-wrap mb-3 mb-md-5 mx-2 mx-md-5">
-                                    <h5 class="fw-normal text-secondary me-3 me-md-5">Cahaya Dewi</h5>
-                                    <h5 class="fw-normal text-secondary">Drama</h5>
+                        <div id="book-list" class="row mb-3 my-4">
+                            <?php foreach ($result as $row): ?>
+                                <div class="col-6 col-md-4 col-lg-3 mb-4">
+                                    <div class="card">
+                                        <?php
+                                        // Untuk gambar cover
+                                        if (!empty($row['cover_image'])) {
+                                            echo '<img src="data:image/jpeg;base64,'.base64_encode($row['cover_image']).'" class="card-img-top" alt="Book Cover">';
+                                        } else {
+                                            echo '<img src="default_cover.jpg" class="card-img-top" alt="Default Cover">';
+                                        }
+                                        ?>
+                                        <div class="card-body">
+                                            <h5 class="card-title"><?php echo htmlspecialchars($row['title']); ?></h5>
+                                            <p class="card-text"><?php echo htmlspecialchars($row['author']); ?></p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mx-2 mx-md-5">
-                                    <h5 class="fw-normal text-secondary mt-2 mt-md-5">4h 30min</h5>
-                                    <button type="button" class="btn btn-primary border rounded mt-2 mt-md-5 fw-bold">Add to Favourite Lists</button>
-                                </div>
-                                <hr class="mb-3 mb-md-5">
-                                <!--Akhir Informasi Book 1 -->
-                                <!-- Informasi Book 2 -->
-                                <h2 class="mt-2 fs-4 fs-md-1 mb-2 mx-2 mx-md-5">Langit Biru</h2>
-                                <div class="d-flex flex-wrap mb-3 mb-md-5 mx-2 mx-md-5">
-                                    <h5 class="fw-normal text-secondary me-3 me-md-5">Samira Hadid</h5>
-                                    <h5 class="fw-normal text-secondary">Romance/Drama</h5>
-                                </div>
-                                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mx-2 mx-md-5">
-                                    <h5 class="fw-normal text-secondary mt-2 mt-md-5">3h 15min</h5>
-                                    <button type="button" class="btn btn-primary border rounded mt-2 mt-md-5 fw-bold">Add to Favourite Lists</button>
-                                </div>
-                                <!-- Akhir Informasi Book 2 -->
-                            </div>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
             </div>
+
+
             
             <div class="col-12 mx-2 mx-md-5 me-md-1 pe-md-4">
                 <div class="card px-3 py-2 mb-5">
@@ -499,7 +508,7 @@
         // Update tampilan streak di halaman
         document.getElementById('streak-number').innerText = streak;
 
-        // Kirim streak untuk disimpan di database
+        // Kirim streak ke server (PHP) untuk disimpan di database
         fetch('update_streak.php', {
             method: 'POST',
             headers: {
