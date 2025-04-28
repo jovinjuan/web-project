@@ -136,20 +136,22 @@ if(cekLogin()){
                 <h5>Ranking</h5>
                 <div class="ranking-container">
                     <?php 
-                    $rank = 1;  // Inisialisasi peringkat
+                    $rank = 1;
                     foreach ($ranking as $user) {
                         $highlightClass = ($user['username'] === $username) ? 'highlight' : '';
                         echo '<div class="ranking-item ' . $highlightClass . '">
-                                <span>' . $rank++ . '</span>
-                                <div class="d-flex align-items-center">
-                                    <div class="avatar"></div>
-                                    <span>' . htmlspecialchars($user['username']) . '</span>
-                                </div>
-                                <span>' . $user['streak'] . '</span>
-                            </div>';
-                    }      
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="rank-number">' . $rank++ . '</div>
+                                <div class="avatar"></div>
+                                <div class="username">' . htmlspecialchars($user['username']) . '</div>
+                            </div>
+                            <div class="streak">' . $user['streak'] . '</div>
+                        </div>';
+                    }
                     ?>
                 </div>
+
+                
 
                 <!-- Badges Section -->
                 <div class="badges-container">
