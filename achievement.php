@@ -105,6 +105,29 @@ if(cekLogin()){
                 padding-top: 120px !important; /* biar gak ketiban navbar */
             }
         }
+        .highlight {
+            background-color:#007bff;
+            padding: 10px;
+            border-radius: 6px;
+            }
+        .rank-col {
+            width: 60px;
+        }
+
+        .username-col {
+            flex-grow: 1;
+        }
+
+        .streak-col {
+            width: 140px;
+            text-align: right;
+        }
+
+        .ranking-item {
+            padding: 8px 0;
+            border-radius: 8px;
+        }
+
     </style>
 
     <!-- BOOTSTRAP CSS -->
@@ -120,49 +143,206 @@ if(cekLogin()){
 
     <div class="container-fluid">
         <div class="row achievement-content">
+            
+            <!-- Statistics -->
+            <?php
+                $query = "
+                    SELECT 
+                        COUNT(DISTINCT r.book_id) AS total_books_read,
+                        SUM(r.current_pages) AS total_pages_read,
+                        ROUND(SUM(r.reading_duration) / 60, 2) AS total_duration_read
+                    FROM reading_activity r
+                    JOIN book b ON r.book_id = b.book_id
+                    WHERE r.user_id = :user_id;
+                ";
+                $stmt = $conn->prepare($query);
+                $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+                $stmt->execute();
+                $result = $stmt->fetch(PDO::FETCH_ASSOC); // Use fetch instead of fetchAll since you only get one row
+                ?>
+
+                <div class="container text-center my-4">
+                <h3 class="fw-bold">
+                Reading Journey
+            </h3>
+                <div class="row me-4">
+                    <div class="col-md-4">
+                    <img src="Image/book.png" alt="Book" class="img-fluid" style="max-height: 295px;">
+                    <p class="mt-2 fs-3 fw-bold">
+                        <span style="font-size:40pt;">
+                        <?= htmlspecialchars($result['total_books_read']) ?>
+                        </span>
+                        books explored!
+                    </p>
+                    <p>
+                    You're creating a library of stories!
+                    </p>
+                    </div>
+                    <div class="col-md-4">
+                    <img src="Image/Reading.png" alt="Pages" class="img-fluid" style="max-height: 300px;">
+                    <p class="mt-2 fs-3 fw-bold">
+                    <span style="font-size:40pt;">
+                        <?= htmlspecialchars($result['total_pages_read']) ?> 
+                        </span>
+                        pages read! 
+                    </p>
+                    <p>
+                    You're turning pages like a pro.
+                    </p>
+                    </div>
+                    <div class="col-md-4">
+                    <img src="Image/Duration.png" alt="Duration" class="img-fluid" style="max-height: 295px;">
+                    <p class="mt-2 fs-3 fw-bold">
+                    <span style="font-size:40pt;">
+                        <?= htmlspecialchars($result['total_duration_read']) ?> 
+                        </span>
+                        minutes of reading! 
+                    </p>
+                    <p>
+                    Your dedication is inspiring.
+                    </p>
+                    </div>
+                </div>
+                </div>
+
+
+               <!-- Akhir Statistics -->
             <!-- Sidebar -->
-            <div class="col-md-2 sidebar">
+            <!-- <div class="col-md-2 sidebar">
                 <div class="sidebar-profile">
                     <img id="profile-img" src="" alt="" />
                     <h4 class="pt-3"><?php echo htmlspecialchars($username); ?></h4>
                     <h5 class="fw-normal">Rank: 90</h5>
                 </div>
-            </div>
-
-            <!-- Main Content -->
-            <div class="col-md-10 p-4">
-                <!-- Ranking List -->
-                <h5>Ranking</h5>
-                <div class="ranking-container">
-                    <?php 
-                    $rank = 1;
-                    foreach ($ranking as $user) {
-                        $highlightClass = ($user['username'] === $username) ? 'highlight' : '';
-                        echo '<div class="ranking-item ' . $highlightClass . '">
-                            <div class="d-flex align-items-center gap-2">
-                                <div class="rank-number">' . $rank++ . '</div>
-                                <div class="avatar"></div>
-                                <div class="username">' . htmlspecialchars($user['username']) . '</div>
-                            </div>
-                            <div class="streak">' . $user['streak'] . '</div>
-                        </div>';
-                    }
-                    ?>
-                </div>
-
-                <!-- Badges Section -->
-                <div class="badges-container">
-                    <h5>Badges</h5>
-                    <div class="d-flex gap-3">
-                        <div class="badge-box"></div>
-                        <div class="badge-box"></div>
-                        <div class="badge-box"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+            </div> -->
+            <div class="container my-4">
+  <div class="row">
     
+    <!-- Ranking Section -->
+    <div class="col-md-7 p-4">
+      <div class="ranking-container">
+        <!-- Header Row -->
+        <div class="d-flex fw-bold text-secondary mb-2 px-3">
+          <div class="rank-col">Rank</div>
+          <div class="username-col">Username</div>
+          <div class="streak-col text-end">Streaks</div>
+        </div>
+
+        <!-- Ranking Data -->
+        <div class="my-2">
+          <?php 
+          $rank = 1;
+          foreach ($ranking as $user) {
+              $highlightClass = ($user['username'] === $username) ? ' highlight' : '';
+              echo '<div class="ranking-item d-flex align-items-center px-3 mb-2' . $highlightClass . '">
+                      <div class="rank-col">' . $rank++ . '</div>
+                      <div class="username-col">' . htmlspecialchars($user['username']) . '</div>
+                      <div class="streak-col text-end">' . $user['streak'] . ' days streaks</div>
+                    </div>';
+          }
+          ?>
+        </div>
+      </div>
+    </div>
+
+    <!-- Badges Section -->
+      <?php
+    $query = "
+    SELECT COUNT(DISTINCT r.book_id) AS total_books_read
+    FROM reading_activity r
+    JOIN book b ON r.book_id = b.book_id
+    WHERE r.user_id = :user_id AND r.current_pages = b.pages
+    ";
+
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $totalBooks = $result['total_books_read'];
+
+    $badgeImage = '';
+    $badgeTitle = '';
+    $badgeSubtitle = '';
+
+    if ($totalBooks >= 80) {
+        $badgeImage = 'Image/Medal1.jpg';
+        $badgeTitle = 'Book Master';
+        $badgeSubtitle = '80+ books read!';
+    } elseif ($totalBooks >= 40) {
+        $badgeImage = 'Image/Medal2.jpg';
+        $badgeTitle = 'Book Champ';
+        $badgeSubtitle = '40+ books read!';
+    } elseif ($totalBooks >= 3) {
+        $badgeImage = 'Image/Medal3.jpg';
+        $badgeTitle = 'Book Explorer';
+        $badgeSubtitle = '20+ books read!';
+    } else {
+        $badgeImage = 'Image/Medal3.jpg';
+        $badgeTitle = 'Start Reading!';
+        $badgeSubtitle = 'Finish books to earn badges!';
+    }
+    ?>
+    <!-- Book Total -->
+    <div class="col-md-5 p-4">
+  <div class="row g-3">
+    <!-- Book Total Badge -->
+    <div class="col-md-6">
+      <div class="card text-center">
+        <div class="card-body">
+          <h5 class="card-title"><?= htmlspecialchars($badgeTitle) ?></h5>
+          <img src="<?= htmlspecialchars($badgeImage) ?>" alt="Book Badge" style="height:200px;">
+          <p class="card-subtitle text-muted"><?= htmlspecialchars($badgeSubtitle) ?></p>
+        </div>
+      </div>
+    </div>
+
+    <?php
+    // Recalculate for duration badge
+    $query = "SELECT SUM(reading_duration) AS total_duration_read FROM reading_activity WHERE user_id = :user_id";
+    $stmt = $conn->prepare($query);
+    $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $duration_minutes = round($result['total_duration_read'] / 60, 2);
+
+    $durationBadgeImage = '';
+    $durationBadgeTitle = '';
+    $durationBadgeSubtitle = '';
+
+    if ($duration_minutes >= 80) {
+        $durationBadgeImage = 'Image/Medal1.jpg';
+        $durationBadgeTitle = 'Reading Master';
+        $durationBadgeSubtitle = '80+ mins of reading!';
+    } elseif ($duration_minutes >= 40) {
+        $durationBadgeImage = 'Image/Medal2.jpg';
+        $durationBadgeTitle = 'Reading Champ';
+        $durationBadgeSubtitle = '40+ mins of reading!';
+    } elseif ($duration_minutes >= 20) {
+        $durationBadgeImage = 'Image/Medal3.jpg';
+        $durationBadgeTitle = 'Reading Starter';
+        $durationBadgeSubtitle = '20+ mins of reading!';
+    } else {
+        $durationBadgeImage = 'Image/Medal3.jpg';
+        $durationBadgeTitle = 'Keep Going!';
+        $durationBadgeSubtitle = 'Read more to earn a badge!';
+    }
+    ?>
+
+    <!-- Duration Badge -->
+    <div class="col-md-6">
+      <div class="card text-center">
+        <div class="card-body">
+          <h5 class="card-title"><?= htmlspecialchars($durationBadgeTitle) ?></h5>
+          <img src="<?= htmlspecialchars($durationBadgeImage) ?>" alt="Duration Badge" style="height:200px;">
+          <p class="card-subtitle text-muted"><?= htmlspecialchars($durationBadgeSubtitle) ?></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
