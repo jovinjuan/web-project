@@ -1,14 +1,20 @@
 <?php
 require "config.php";
 
+// Pastikan user sudah login
 $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 $book_id = isset($_POST['book_id']) ? $_POST['book_id'] : null;
-$current_pages = isset($_POST['current_page']) ? $_POST['current_page'] : null;
+$current_page = isset($_POST['current_page']) ? $_POST['current_page'] : null;
 $reading_duration = isset($_POST['timer']) ? $_POST['timer'] : null;
 $reading_progress = isset($_POST['progress']) ? $_POST['progress'] : null;
 $reading_date = date('Y-m-d');
 
-if ($user_id && $book_id && $current_pages && $reading_duration && $reading_progress) {
+// Validasi input
+if (!$user_id || !$book_id || !$current_page || !$reading_duration || !$reading_progress) {
+    die("Missing required data.");
+}
+
+try {
     // Konversi reading_duration ke detik
     $duration_parts = explode(" ", $reading_duration);
     $minutes = isset($duration_parts[0]) ? intval($duration_parts[0]) : 0;
@@ -21,32 +27,54 @@ if ($user_id && $book_id && $current_pages && $reading_duration && $reading_prog
     $update_status_query->bindParam(':book_id', $book_id, PDO::PARAM_INT);
     $update_status_query->execute();
 
-    // Simpan atau perbarui data aktivitas membaca
-    $sql = "INSERT INTO reading_activity (user_id, book_id, current_pages, reading_duration, reading_date, reading_progress) 
-            VALUES (:user_id, :book_id, :current_pages, :reading_duration, :reading_date, :reading_progress) 
-            ON DUPLICATE KEY UPDATE 
-            current_pages = :current_pages, 
-            reading_duration = :reading_duration, 
-            reading_date = :reading_date, 
-            reading_progress = :reading_progress";
+    // Cek apakah entri sudah ada di reading_activity untuk user_id dan book_id ini
+    $check_sql = "SELECT COUNT(*) FROM reading_activity WHERE user_id = :user_id AND book_id = :book_id";
+    $check_query = $conn->prepare($check_sql);
+    $check_query->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $check_query->bindParam(':book_id', $book_id, PDO::PARAM_INT);
+    $check_query->execute();
+    $entry_exists = $check_query->fetchColumn() > 0;
 
-    $query = $conn->prepare($sql);
-    $query->bindParam(':user_id', $user_id, PDO::PARAM_INT);
-    $query->bindParam(':book_id', $book_id, PDO::PARAM_INT);
-    $query->bindParam(':current_pages', $current_pages, PDO::PARAM_INT);
-    $query->bindParam(':reading_duration', $reading_duration_seconds, PDO::PARAM_INT);
-    $query->bindParam(':reading_date', $reading_date, PDO::PARAM_STR);
-    $query->bindParam(':reading_progress', $reading_progress, PDO::PARAM_STR);
-
-    $result = $query->execute();
+    if ($entry_exists) {
+        // Jika entri sudah ada, lakukan UPDATE
+        $update_sql = "UPDATE reading_activity 
+                       SET current_pages = :current_page, 
+                           reading_duration = :reading_duration, 
+                           reading_date = :reading_date, 
+                           reading_progress = :reading_progress 
+                       WHERE user_id = :user_id AND book_id = :book_id";
+        $update_query = $conn->prepare($update_sql);
+        $update_query->bindParam(':current_page', $current_page, PDO::PARAM_INT);
+        $update_query->bindParam(':reading_duration', $reading_duration_seconds, PDO::PARAM_INT);
+        $update_query->bindParam(':reading_date', $reading_date, PDO::PARAM_STR);
+        $update_query->bindParam(':reading_progress', $reading_progress, PDO::PARAM_STR);
+        $update_query->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $update_query->bindParam(':book_id', $book_id, PDO::PARAM_INT);
+        $result = $update_query->execute();
+    } else {
+        // Jika entri belum ada, lakukan INSERT
+        $insert_sql = "INSERT INTO reading_activity (user_id, book_id, current_pages, reading_duration, reading_date, reading_progress) 
+                       VALUES (:user_id, :book_id, :current_page, :reading_duration, :reading_date, :reading_progress)";
+        $insert_query = $conn->prepare($insert_sql);
+        $insert_query->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $insert_query->bindParam(':book_id', $book_id, PDO::PARAM_INT);
+        $insert_query->bindParam(':current_page', $current_page, PDO::PARAM_INT);
+        $insert_query->bindParam(':reading_duration', $reading_duration_seconds, PDO::PARAM_INT);
+        $insert_query->bindParam(':reading_date', $reading_date, PDO::PARAM_STR);
+        $insert_query->bindParam(':reading_progress', $reading_progress, PDO::PARAM_STR);
+        $result = $insert_query->execute();
+    }
 
     if ($result) {
-        header("Location: home.php?message=success");
+        // Redirect ke myprogress.php
+        header("Location: myprogress.php?message=success");
         exit;
     } else {
-        echo "Error Saving Data";
+        throw new Exception("Failed to save reading activity.");
     }
-} else {
-    echo "Missing required data";
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage();
 }
 ?>
