@@ -210,11 +210,6 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
         </div>
       <?php endif; ?>
     <?php endforeach; ?>
-    <div class="book bg-light me-2">
-      <div class="add-book-btn bg-secondary text-white">
-        <a href="Uploadfile.php" class="text-decoration-none text-light">+</a>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -272,11 +267,6 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
               </div>
             <?php endif; ?>
           <?php endforeach; ?>
-        <div class="book bg-light me-2">
-          <div class="add-book-btn bg-secondary text-white">
-            <a href="Uploadfile.php" class="text-decoration-none text-light">+</a>
-          </div>
-        </div>
       </div>
     </div>
 

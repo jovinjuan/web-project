@@ -22,7 +22,6 @@ require "config.php";
     />
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <style>
-      /* Existing styles remain unchanged */
       .streak-info,
       .top-view-book,
       .history-item {
@@ -150,7 +149,7 @@ require "config.php";
         color: #ff5722;
       }
       #streak-calendar {
-        width: 100%;
+        width: 60%;
         min-height: 500px;
         border: 2px solid grey;
         padding: 20px;
@@ -182,20 +181,13 @@ require "config.php";
         flex-direction: column;
         align-items: center;
       }
-      /* Responsive layout: stack 4 on top, 3 on bottom */
       @media (max-width: 576px) {
         .streak-circle > div {
-          width: 22%; /* 4 per row for 1st line, 3 per row for 2nd line */
+          width: 22%;
         }
         .streak-circle > div:nth-child(n+5) {
           margin-top: 10px;
         }
-      }
-      /* New styles for reading details */
-      #reading-details {
-        background-color: #2e2e2e;
-        border-radius: 8px;
-        padding: 1rem;
       }
     </style>
   </head>
@@ -230,7 +222,6 @@ require "config.php";
                 <h2 class="streak-number mx-2" id="streak-number">0</h2>
                 <h4 class="streak-text">streaks in a week!</h4>
               </div>
-              <!-- Bagian Lingkaran Hari-->
               <div class="d-flex justify-content-center streak-circle">
                 <div>
                   <div id="monday" class="day-circle inactive">M</div>
@@ -261,7 +252,6 @@ require "config.php";
                   <div class="day-label">Sun</div>
                 </div>
               </div>
-              <!-- Akhir Lingkaran Hari -->
             </div>
           </div>
         </div>
@@ -405,21 +395,7 @@ require "config.php";
           </div>
         </div>
 
-        <!-- Reading Details for Selected Date -->
-        <div class="container-fluid pt-5">
-          <div class="row gt-4">
-            <div class="col-12">
-              <div id="reading-details" class="mx-auto hidden">
-                <h4 class="card-title">Reading History for <span id="selected-date"></span></h4>
-                <div class="mt-4">
-                  <div id="book-list" class="row row-cols-1 row-cols-md-3 g-4"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Existing History Section (unchanged) -->
+        <!-- Existing History Section -->
         <div class="container-fluid pt-5 my-5">
           <div class="px-3 px-md-5 mt-3">
             <h2 class="mb-5">History</h2>
@@ -530,74 +506,11 @@ require "config.php";
             right: "dayGridMonth,timeGridWeek,timeGridDay",
           },
           events: <?php echo json_encode($calendarEvents); ?>,
-          dateClick: function (info) {
-            // Update selected date display
-            document.getElementById("selected-date").textContent = info.dateStr;
-            document.getElementById("reading-details").classList.remove("hidden");
-
-            // Fetch books for the selected date via AJAX
-            fetch("fetch_books_by_date.php", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-              },
-              body: "date=" + encodeURIComponent(info.dateStr),
-            })
-              .then((response) => response.json())
-              .then((data) => {
-                const bookList = document.getElementById("book-list");
-                bookList.innerHTML = "";
-
-                if (data.length > 0) {
-                  data.forEach((book) => {
-                    const col = document.createElement("div");
-                    col.className = "col history-card";
-                    col.innerHTML = `
-                      <div class="card h-100">
-                        <div class="row g-0 h-100">
-                          <div class="col-4 p-2 d-flex align-items-center">
-                            ${
-                              book.cover_image
-                                ? `<img src="data:image/jpeg;base64,${book.cover_image}" class="img-fluid rounded-start" alt="Book Cover" style="height:204px;">`
-                                : `<img src="default_cover.jpg" class="img-fluid rounded-start" alt="Default Cover">`
-                            }
-                          </div>
-                          <div class="col-8 d-flex flex-column">
-                            <div class="card-body flex-grow-1 d-flex flex-column">
-                              <h5 class="card-title fs-5 mb-2">${book.title}</h5>
-                              <div class="d-flex justify-content-between mb-2">
-                                <h6 class="fw-normal text-secondary mb-0">${book.description}</h6>
-                              </div>
-                              <progress value="${book.reading_progress}" max="100" class="w-100 mb-2">
-                                ${book.reading_progress}%
-                              </progress>
-                              <div class="mt-auto align-self-end">
-                                ${book.current_pages}/${book.pages} pages
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    `;
-                    bookList.appendChild(col);
-                  });
-                } else {
-                  bookList.innerHTML = `
-                    <div class="col">
-                      <p class="text-center mt-4">No reading history on this date.</p>
-                    </div>
-                  `;
-                }
-              })
-              .catch((error) => {
-                console.error("Error fetching books:", error);
-              });
-          },
         });
         calendar.render();
       });
 
-      // Existing streak script (unchanged)
+      // Perbaikan script streak
       document.addEventListener('DOMContentLoaded', function() {
         const today = new Date();
         const todayStr = today.toISOString().split('T')[0];
@@ -607,9 +520,51 @@ require "config.php";
         let streak = localStorage.getItem('streak') ? parseInt(localStorage.getItem('streak')) : 0;
         let activeDays = JSON.parse(localStorage.getItem('activeDays')) || [false, false, false, false, false, false, false];
 
-        activeDays[todayDay] = true;
-        localStorage.setItem('activeDays', JSON.stringify(activeDays));
+        // Cek apakah halaman sudah di-load hari ini
+        const lastLoadDate = localStorage.getItem('lastLoadDate');
+        const isNewDay = lastLoadDate !== todayStr;
 
+        // Hanya update streak jika hari baru
+        if (isNewDay) {
+          activeDays[todayDay] = true;
+          localStorage.setItem('activeDays', JSON.stringify(activeDays));
+
+          if (lastDate) {
+            const lastActive = new Date(lastDate);
+            const diffTime = today.setHours(0,0,0,0) - lastActive.setHours(0,0,0,0);
+            const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+            if (diffDays === 1) {
+              streak += 1;
+            } else if (diffDays > 1) {
+              streak = 1;
+            }
+          } else {
+            streak = 1;
+          }
+
+          localStorage.setItem('lastActiveDate', todayStr);
+          localStorage.setItem('streak', streak);
+          localStorage.setItem('lastLoadDate', todayStr);
+
+          // Update server
+          fetch('update_streak.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'streak=' + encodeURIComponent(streak)
+          })
+          .then(response => response.json())
+          .then(data => {
+            console.log('Success:', data);
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+        }
+
+        // Update tampilan lingkaran hari dan streak
         const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
         activeDays.forEach((active, index) => {
           const dayElement = document.getElementById(days[index]);
@@ -624,43 +579,11 @@ require "config.php";
           }
         });
 
-        if (lastDate) {
-          const lastActive = new Date(lastDate);
-          const diffTime = today.setHours(0,0,0,0) - lastActive.setHours(0,0,0,0);
-          const diffDays = diffTime / (1000 * 60 * 60 * 24);
-
-          if (diffDays === 1) {
-            streak += 1;
-          } else if (diffDays > 1) {
-            streak = 1;
-          }
-        } else {
-          streak = 1;
-        }
-
-        localStorage.setItem('lastActiveDate', todayStr);
-        localStorage.setItem('streak', streak);
-
         const streakEl = document.getElementById('streak-number');
         if (streakEl) {
           streakEl.innerText = streak;
         }
-
-        fetch('update_streak.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: 'streak=' + encodeURIComponent(streak)
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log('Success:', data);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
-        });
       });
     </script>
-  </body>
+  </body>
 </html>
