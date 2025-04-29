@@ -1,7 +1,7 @@
 <?php
 require 'config.php';
 require_once('vendor/setasign/fpdf/fpdf.php'); // Require FPDF library
-require_once('vendor/setasign/fpdi/src/autoload.php'); // Require  FPDI library
+require_once('vendor/setasign/fpdi/src/autoload.php'); // Require FPDI library
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Ambil data dari form
@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $title = $_POST['title'];
     $description = $_POST['description'];
     $genre = isset($_POST['genre']) ? implode(", ", $_POST['genre']) : '';  // Combine genre values into a string
+    $status = 'to_read'; // Set status default untuk buku baru
 
     // Cek apakah file diupload
     if (isset($_FILES['file']) && $_FILES['file']['error'] === 0) {
@@ -45,30 +46,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Pindahkan file ke folder upload
         if (move_uploaded_file($fileTmpPath, $dest_path)) {
-           //Hitung Jumlah Halaman Buku
+           // Hitung Jumlah Halaman Buku
            $pdf = new \setasign\Fpdi\Fpdi();
            $pdf->setSourceFile($dest_path); 
            $pageCount = $pdf->setSourceFile($dest_path); 
 
-            //Masukkan ke database
+            // Masukkan ke database
             if (isset($_FILES['cover_images']) && $_FILES['cover_images']['error'] === 0) {
               $coverImageTmpPath = $_FILES['cover_images']['tmp_name'];
               $coverImageContent = file_get_contents($coverImageTmpPath); // Baca File Sebagai BLOB
 
               // Masukkan Data ke Database
-              $query = $conn->prepare("INSERT INTO book (author, title, description, genre, pages, file_path, cover_image)
-              VALUES (:author, :title, :description, :genre, :pages, :file_path, :cover_image)");
+              $query = $conn->prepare("INSERT INTO book (author, title, description, genre, pages, file_path, cover_image, status)
+              VALUES (:author, :title, :description, :genre, :pages, :file_path, :cover_image, :status)");
               $query->bindParam(':author', $author);
               $query->bindParam(':title', $title);
               $query->bindParam(':description', $description);
               $query->bindParam(':genre', $genre);
               $query->bindParam(':pages', $pageCount);
               $query->bindParam(':file_path', $dest_path);
-              $query->bindParam(':cover_image', $coverImageContent, PDO::PARAM_LOB); // Masukkan Menjadi BLOB
+              $query->bindParam(':cover_image', $coverImageContent, PDO::PARAM_LOB);
+              $query->bindParam(':status', $status, PDO::PARAM_STR); // Tambahkan status
 
               if ($query->execute()) {
-                $book_id = $conn->lastInsertId(); 
-                $_SESSION['book_id'] = $book_id;
                   header("Location: home.php?upload=success");
                   exit;
               } else {
@@ -89,6 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -216,7 +217,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="backdrop"></div>
 
     <!-- Kotak Upload -->
-
     <div
       class="upload-container d-flex flex-column justify-content-between"
       style="min-height: 400px"
@@ -367,7 +367,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           </div>
 
           <!-- file -->
-           Book File :
+          Book File :
           <div class="row mb-3">
             <div class="col-12">
               <input type="file" name="file" class="form-control" required />
@@ -388,7 +388,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </button>
       </div>
     </div>
-
 
     <script>
       function goBack() {

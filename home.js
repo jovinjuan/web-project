@@ -70,12 +70,16 @@ document.getElementById("close-button").addEventListener("click", function () {
   }
   
   function showBookDetailFromElement(element) {
+    const book_id = element.getAttribute("data-book-id");
     const title = element.getAttribute("data-title");
     const description = element.getAttribute("data-description");
     const genre = element.getAttribute("data-genre");
     const coverImage = element.getAttribute("data-cover");
     const filePath = element.getAttribute("data-filepath");
-  
+
+    const modal = document.getElementById('bookDetailModal');
+    modal.setAttribute('data-book-id', book_id);
+
     document.getElementById("detail-title").textContent = title;
     document.getElementById("detail-description").textContent = description;
     document.getElementById("detail-genre").textContent = genre;
@@ -93,22 +97,35 @@ document.getElementById("close-button").addEventListener("click", function () {
   }
   
   function openReadingModal() {
-    const filePath = document
-      .getElementById("view-pdf-btn")
-      .getAttribute("data-filepath");
-    const readingModal = new bootstrap.Modal(
-      document.getElementById("readingModal")
-    );
+    // Ambil book_id dari modal
+    const modal = document.getElementById('bookDetailModal');
+    const bookId = modal.getAttribute('data-book-id') || '';
+
+    // Set book_id ke input tersembunyi
+    document.getElementById('book-id-input').value = bookId;
+
+    // Ambil filePath dari elemen buku
+    const bookElement = document.querySelector(`.book[data-book-id="${bookId}"]`);
+    const filePath = bookElement ? bookElement.getAttribute('data-filepath') : '';
+
+    // Ambil dan set judul
+    const title = document.getElementById('detail-title').textContent;
+    document.getElementById('reading-title').textContent = title;
+
+    // Buka modal
+    const readingModal = new bootstrap.Modal(document.getElementById('readingModal'));
     readingModal.show();
+
+    // Set PDF.js worker
     pdfjsLib.GlobalWorkerOptions.workerSrc =
       "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.worker.min.js";
-  
+
     let pdfDoc = null;
     let currentPage = 1;
     let totalPages = 0;
     let startTime = Date.now();
     let timerInterval;
-  
+
     async function loadPDF() {
       try {
         console.log("Loading PDF from:", filePath);
@@ -123,7 +140,7 @@ document.getElementById("close-button").addEventListener("click", function () {
         alert("Failed to load PDF: " + error.message);
       }
     }
-  
+
     async function renderPage(pageNum) {
       try {
         const page = await pdfDoc.getPage(pageNum);
@@ -132,7 +149,7 @@ document.getElementById("close-button").addEventListener("click", function () {
         const context = canvas.getContext("2d");
         canvas.height = viewport.height;
         canvas.width = viewport.width;
-  
+
         const renderContext = {
           canvasContext: context,
           viewport: viewport,
@@ -144,7 +161,7 @@ document.getElementById("close-button").addEventListener("click", function () {
         alert("Failed to render page: " + error.message);
       }
     }
-  
+
     document.getElementById("next-page").addEventListener("click", () => {
       if (currentPage < totalPages) {
         currentPage++;
@@ -152,7 +169,7 @@ document.getElementById("close-button").addEventListener("click", function () {
         updateProgress();
       }
     });
-  
+
     document.getElementById("prev-page").addEventListener("click", () => {
       if (currentPage > 1) {
         currentPage--;
@@ -160,12 +177,12 @@ document.getElementById("close-button").addEventListener("click", function () {
         updateProgress();
       }
     });
-  
+
     function updateProgress() {
       const progress = (currentPage / totalPages) * 100;
       document.getElementById("progress").textContent = progress.toFixed(1) + "%";
     }
-  
+
     function startTimer() {
       timerInterval = setInterval(() => {
         const elapsed = Math.floor((Date.now() - startTime) / 1000);
@@ -176,21 +193,22 @@ document.getElementById("close-button").addEventListener("click", function () {
         ).textContent = `${minutes} menit ${seconds} detik`;
       }, 1000);
     }
-    document.getElementById("bookmark-button").addEventListener("click" , function(){
-      // Narik data dari tag span
-      let progress = document.getElementById("progress").textContent.replace("%","");
+
+    document.getElementById("bookmark-button").addEventListener("click", function() {
+      let progress = document.getElementById("progress").textContent.replace("%", "");
       let current_page = document.getElementById("current-page").textContent;
       let timerText = document.getElementById("timer").textContent;
-  
-      // Set value ke tag input 
+
       document.getElementById("progress-input").value = progress;
       document.getElementById("current-page-input").value = current_page;
       document.getElementById("timer-input").value = timerText;
     });
+
     loadPDF();
+
     document
       .getElementById("readingModal")
       .addEventListener("hidden.bs.modal", () => {
         clearInterval(timerInterval);
       });
-  }
+}

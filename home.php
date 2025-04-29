@@ -1,9 +1,6 @@
 <?php
 require "config.php";
-if(isset( $_SESSION['user_id']) && isset($_SESSION['book_id'])){
-  $user_id = $_SESSION['user_id'];
-  $book_id = $_SESSION['book_id'];
-}
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 ?>
 
 <!DOCTYPE html>
@@ -190,86 +187,73 @@ if(isset( $_SESSION['user_id']) && isset($_SESSION['book_id'])){
 
     <!-- Konten -->
     <div class="content px-5 my-5" id="content">
-      <!-- Section: Currently Reading -->
-      <div class="section p-4 bg-white rounded-3 shadow-sm mb-4">
-        <h4 class="fw-bold mb-3">Currently Reading</h4>
-        <div class="d-flex flex-wrap gap-2">
-          <?php foreach($files as $file): ?>
-            <div class="book bg-light me-2" 
-                data-book-id="<?php echo htmlspecialchars($file['book_id'], ENT_QUOTES); ?>"
-                data-title="<?php echo htmlspecialchars($file['title'], ENT_QUOTES); ?>"
-                data-description="<?php echo htmlspecialchars($file['description'], ENT_QUOTES); ?>"
-                data-genre="<?php echo htmlspecialchars($file['genre'], ENT_QUOTES); ?>"
-                data-cover="<?php echo base64_encode($file['cover_image']); ?>"
-                data-filepath="<?php echo htmlspecialchars($file['file_path'], ENT_QUOTES); ?>"
-                onclick="showBookDetailFromElement(this)">
-              <?php
-              if ($file['cover_image']) {
-                $coverImageData = base64_encode($file['cover_image']);
-                echo '<img src="data:image/jpeg;base64,' . $coverImageData . '" alt="Book" class="w-100 h-100 object-fit-cover rounded-2">';
-              }
-              ?>
-            </div>
-          <?php endforeach; ?>
-          <div class="book bg-light me-2">
-            <div class="add-book-btn bg-secondary text-white">
-              <a href="Uploadfile.php" class="text-decoration-none text-light">+</a>
-            </div>
-          </div>
+     <!-- Section: Currently Reading -->
+<div class="section p-4 bg-white rounded-3 shadow-sm mb-4">
+  <h4 class="fw-bold mb-3">Currently Reading</h4>
+  <div class="d-flex flex-wrap gap-2">
+    <?php foreach($files as $file): ?>
+      <?php if ($file['status'] === 'currently_reading'): ?>
+        <div class="book bg-light me-2" 
+            data-book-id="<?php echo htmlspecialchars($file['book_id'], ENT_QUOTES); ?>"
+            data-title="<?php echo htmlspecialchars($file['title'], ENT_QUOTES); ?>"
+            data-description="<?php echo htmlspecialchars($file['description'], ENT_QUOTES); ?>"
+            data-genre="<?php echo htmlspecialchars($file['genre'], ENT_QUOTES); ?>"
+            data-cover="<?php echo base64_encode($file['cover_image']); ?>"
+            data-filepath="<?php echo htmlspecialchars($file['file_path'], ENT_QUOTES); ?>"
+            onclick="showBookDetailFromElement(this)">
+          <?php
+          if ($file['cover_image']) {
+            $coverImageData = base64_encode($file['cover_image']);
+            echo '<img src="data:image/jpeg;base64,' . $coverImageData . '" alt="Book" class="w-100 h-100 object-fit-cover rounded-2">';
+          }
+          ?>
         </div>
+      <?php endif; ?>
+    <?php endforeach; ?>
+    <div class="book bg-light me-2">
+      <div class="add-book-btn bg-secondary text-white">
+        <a href="Uploadfile.php" class="text-decoration-none text-light">+</a>
       </div>
+    </div>
+  </div>
+</div>
 
-      <!-- Section: To Read -->
-      <div class="section p-4 bg-white rounded-3 shadow-sm mb-4">
-        <h4 class="fw-bold mb-3">To Read</h4>
-        <div class="d-flex flex-wrap gap-2">
-          <?php foreach($files as $file): ?>
-            <div class="book bg-light me-2" 
-              data-book-id="<?php echo htmlspecialchars($file['book_id'], ENT_QUOTES); ?>"
-              data-title="<?php echo htmlspecialchars($file['title'], ENT_QUOTES); ?>"
-              data-description="<?php echo htmlspecialchars($file['description'], ENT_QUOTES); ?>"
-              data-genre="<?php echo htmlspecialchars($file['genre'], ENT_QUOTES); ?>"
-              data-cover="<?php echo base64_encode($file['cover_image']); ?>"
-              data-filepath="<?php echo htmlspecialchars($file['file_path'], ENT_QUOTES); ?>"
-              onclick="showBookDetailFromElement(this)">
-              <?php
-              if ($file['cover_image']) {
-                $coverImageData = base64_encode($file['cover_image']);
-                echo '<img src="data:image/jpeg;base64,' . $coverImageData . '" alt="Book" class="w-100 h-100 object-fit-cover rounded-2">';
-              }
-              ?>
-            </div>
-          <?php endforeach; ?>
-          <div class="book bg-light me-2">
-            <div class="add-book-btn bg-secondary text-white">
-              <a href="Uploadfile.php" class="text-decoration-none text-light">+</a>
-            </div>
-          </div>
+<!-- Section: To Read -->
+<div class="section p-4 bg-white rounded-3 shadow-sm mb-4">
+  <h4 class="fw-bold mb-3">To Read</h4>
+  <div class="d-flex flex-wrap gap-2">
+    <?php foreach($files as $file): ?>
+      <?php if ($file['status'] === 'to_read'): ?>
+        <div class="book bg-light me-2" 
+            data-book-id="<?php echo htmlspecialchars($file['book_id'], ENT_QUOTES); ?>"
+            data-title="<?php echo htmlspecialchars($file['title'], ENT_QUOTES); ?>"
+            data-description="<?php echo htmlspecialchars($file['description'], ENT_QUOTES); ?>"
+            data-genre="<?php echo htmlspecialchars($file['genre'], ENT_QUOTES); ?>"
+            data-cover="<?php echo base64_encode($file['cover_image']); ?>"
+            data-filepath="<?php echo htmlspecialchars($file['file_path'], ENT_QUOTES); ?>"
+            onclick="showBookDetailFromElement(this)">
+          <?php
+          if ($file['cover_image']) {
+            $coverImageData = base64_encode($file['cover_image']);
+            echo '<img src="data:image/jpeg;base64,' . $coverImageData . '" alt="Book" class="w-100 h-100 object-fit-cover rounded-2">';
+          }
+          ?>
         </div>
+      <?php endif; ?>
+    <?php endforeach; ?>
+    <div class="book bg-light me-2">
+      <div class="add-book-btn bg-secondary text-white">
+        <a href="Uploadfile.php" class="text-decoration-none text-light">+</a>
       </div>
+    </div>
+  </div>
+</div>
 
       <!-- Section: Favourite Book -->
       <div class="section p-4 bg-white rounded-3 shadow-sm mb-4">
         <h4 class="fw-bold mb-3">Favourite Book</h4>
         <div class="d-flex flex-wrap gap-2">
-          <?php foreach($files as $file): ?>
-            <div class="book bg-light me-2" 
-              data-book-id="<?php echo htmlspecialchars($file['book_id'], ENT_QUOTES); ?>"
-              data-title="<?php echo htmlspecialchars($file['title'], ENT_QUOTES); ?>"
-              data-description="<?php echo htmlspecialchars($file['description'], ENT_QUOTES); ?>"
-              data-genre="<?php echo htmlspecialchars($file['genre'], ENT_QUOTES); ?>"
-              data-cover="<?php echo base64_encode($file['cover_image']); ?>"
-              data-filepath="<?php echo htmlspecialchars($file['file_path'], ENT_QUOTES); ?>"
-              onclick="showBookDetailFromElement(this)">
-              <?php
-              if ($file['cover_image']) {
-                $coverImageData = base64_encode($file['cover_image']);
-                echo '<img src="data:image/jpeg;base64,' . $coverImageData . '" alt="Book" class="w-100 h-100 object-fit-cover rounded-2">';
-              }
-              ?>
-            </div>
-          <?php endforeach; ?>
-        
+  
         <div class="book bg-light me-2">
           <div class="add-book-btn bg-secondary text-white">
             <a href="Uploadfile.php" class="text-decoration-none text-light">+</a>
@@ -298,6 +282,7 @@ if(isset( $_SESSION['user_id']) && isset($_SESSION['book_id'])){
         <div class="modal-content">
           <div class="modal-body p-3 m-3">
             <form action = "readbook.php" method = "POST">
+            <input type="hidden" name="book_id" id="book-id-input" value="">
             <input type="hidden" name="progress" id="progress-input" value = ''>
             <input type="hidden" name="current_page" id="current-page-input" value = ''>
             <input type="hidden" name="timer" id="timer-input" value = ''>
@@ -328,10 +313,6 @@ if(isset( $_SESSION['user_id']) && isset($_SESSION['book_id'])){
     </div>
   </div>
 </div>
-<?php 
-echo $user_id;
-echo $book_id;
-?>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
   <script src="home.js"></script>
