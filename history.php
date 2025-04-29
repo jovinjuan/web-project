@@ -1,6 +1,140 @@
 <?php
 require "config.php";
+
+session_start();
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 1; // Default user_id = 1 jika belum ada login
+
+// Ambil target streak pengguna dari tabel reading_targets
+$queryTarget = "
+    SELECT streak_time
+    FROM reading_targets
+    WHERE user_id = :user_id
+    LIMIT 1
+";
+$stmtTarget = $conn->prepare($queryTarget);
+$stmtTarget->execute(['user_id' => $user_id]);
+$target = $stmtTarget->fetch(PDO::FETCH_ASSOC);
+$streakTarget = $target ? $target['streak_time'] : 7; // Default target 7 hari jika tidak ada
+
+// Ambil aktivitas membaca 7 hari terakhir untuk lingkaran streak
+$today = new DateTime();
+$startDate = (clone $today)->modify('-6 days'); // Mulai dari 7 hari lalu (Senin-Minggu)
+$endDate = $today;
+
+$queryActivity = "
+    SELECT DATE(reading_date) as reading_date
+    FROM reading_activity
+    WHERE user_id = :user_id
+    AND reading_date BETWEEN :start_date AND :end_date
+    GROUP BY DATE(reading_date)
+";
+$stmtActivity = $conn->prepare($queryActivity);
+
+if (!$stmtActivity->execute([
+    'user_id' => $user_id,
+    'start_date' => $startDate->format('Y-m-d'),
+    'end_date' => $endDate->format('Y-m-d')
+])) {
+    error_log("Query failed: " . print_r($stmtActivity->errorInfo(), true));
+    $activities = [];
+} else {
+    $activities = $stmtActivity->fetchAll(PDO::FETCH_ASSOC) ?: [];
+}
+
+// Hitung streak dan tandai hari aktif untuk lingkaran
+$activeDays = array_fill(0, 7, false);
+$streak = 0;
+$currentDate = clone $today;
+$foundBreak = false;
+
+for ($i = 0; $i < 7; $i++) {
+    $checkDate = (clone $today)->modify("-$i days");
+    $dateStr = $checkDate->format('Y-m-d');
+    $dayIndex = ($checkDate->format('w') + 6) % 7; // Ubah ke 0=Senin, 6=Minggu
+
+    $hasActivity = false;
+    foreach ($activities as $activity) {
+        if ($activity['reading_date'] === $dateStr) {
+            $hasActivity = true;
+            break;
+        }
+    }
+
+    $activeDays[$dayIndex] = $hasActivity;
+
+    if (!$foundBreak) {
+        if ($hasActivity) {
+            $streak++;
+        } else {
+            $foundBreak = true;
+        }
+    }
+}
+
+// Ambil semua aktivitas membaca untuk kalender (tanpa batasan 7 hari)
+$queryAllActivities = "
+    SELECT DATE(reading_date) as reading_date
+    FROM reading_activity
+    WHERE user_id = :user_id
+    GROUP BY DATE(reading_date)
+";
+$stmtAllActivities = $conn->prepare($queryAllActivities);
+$stmtAllActivities->execute(['user_id' => $user_id]);
+$allActivities = $stmtAllActivities->fetchAll(PDO::FETCH_ASSOC) ?: [];
+
+// Hitung streak untuk kalender
+$streakDates = [];
+$currentStreak = 0;
+$lastDate = null;
+
+// Urutkan tanggal aktivitas dari terbaru ke terlama
+$activityDates = array_column($allActivities, 'reading_date');
+rsort($activityDates);
+
+foreach ($activityDates as $dateStr) {
+    $currentDate = new DateTime($dateStr);
+    
+    if ($lastDate === null) {
+        // Tanggal pertama (terbaru)
+        $currentStreak = 1;
+        $streakDates[$dateStr] = true;
+    } else {
+        $lastDateObj = new DateTime($lastDate);
+        $interval = $lastDateObj->diff($currentDate)->days;
+        
+        if ($interval == 1) {
+            // Tanggal berturut-turut
+            $currentStreak++;
+            $streakDates[$dateStr] = true;
+        } else {
+            // Streak terputus
+            $currentStreak = 1;
+            $streakDates[$dateStr] = false;
+        }
+    }
+    
+    $lastDate = $dateStr;
+}
+
+// Ambil tanggal dari parameter URL, jika tidak ada gunakan default (2 Maret 2025)
+$selectedDate = isset($_GET['date']) ? $_GET['date'] : '2025-03-02';
+$selectedDateFormatted = date('j F Y', strtotime($selectedDate));
+
+// Ambil riwayat baca berdasarkan tanggal yang dipilih
+$queryHistory = "
+    SELECT b.book_id, b.title, b.author, b.genre, b.cover_image, b.description,
+           r.reading_progress, r.current_pages, b.pages
+    FROM reading_activity r
+    JOIN book b ON r.book_id = b.book_id
+    WHERE DATE(r.reading_date) = :date
+    AND r.user_id = :user_id
+    ORDER BY r.reading_date DESC
+";
+$stmtHistory = $conn->prepare($queryHistory);
+$stmtHistory->execute(['date' => $selectedDate, 'user_id' => $user_id]);
+$historyResults = $stmtHistory->fetchAll(PDO::FETCH_ASSOC) ?: [];
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -189,6 +323,23 @@ require "config.php";
           margin-top: 10px;
         }
       }
+      .fc-event {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: none !important;
+        border: none !important;
+        padding: 2px;
+      }
+      .fc-event-title {
+        font-size: 0.8rem;
+        color: #ff9800;
+      }
+      .calendar-fire-icon {
+        width: 30px;
+        height: 30px;
+        margin-top: 5px;
+      }
     </style>
   </head>
   <body>
@@ -199,12 +350,12 @@ require "config.php";
     <!-- Streak -->
     <div class="container-fluid mt-5 pt-5">
       <div class="row g-4 mt-2">
+      <div class="px-3 px-md-5 mt-3">
+              <h2>My Streak</h2>
+            </div>
         <!-- Circle Chart -->
         <div class="col-12 col-md-5">
           <div class="card px-3 pt-2 streak-card">
-            <div class="px-3 px-md-5 mt-3">
-              <h2>My Streak</h2>
-            </div>
             <div class="card-body mb-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -219,36 +370,36 @@ require "config.php";
               <div
                 class="d-flex flex-column flex-md-row align-items-center justify-content-center"
               >
-                <h2 class="streak-number mx-2" id="streak-number">0</h2>
+                <h2 class="streak-number mx-2" id="streak-number"><?php echo $streak; ?></h2>
                 <h4 class="streak-text">streaks in a week!</h4>
               </div>
               <div class="d-flex justify-content-center streak-circle">
                 <div>
-                  <div id="monday" class="day-circle inactive">M</div>
+                  <div id="monday" class="day-circle mx-2 <?php echo $activeDays[0] ? 'active' : 'inactive'; ?>">M</div>
                   <div class="day-label">Mon</div>
                 </div>
                 <div>
-                  <div id="tuesday" class="day-circle inactive">T</div>
+                  <div id="tuesday" class="day-circle mx-2 <?php echo $activeDays[1] ? 'active' : 'inactive'; ?>">T</div>
                   <div class="day-label">Tue</div>
                 </div>
                 <div>
-                  <div id="wednesday" class="day-circle inactive">W</div>
+                  <div id="wednesday" class="day-circle mx-2 <?php echo $activeDays[2] ? 'active' : 'inactive'; ?>">W</div>
                   <div class="day-label">Wed</div>
                 </div>
                 <div>
-                  <div id="thursday" class="day-circle inactive">Th</div>
+                  <div id="thursday" class="day-circle mx-2 <?php echo $activeDays[3] ? 'active' : 'inactive'; ?>">Th</div>
                   <div class="day-label">Thu</div>
                 </div>
                 <div>
-                  <div id="friday" class="day-circle inactive">F</div>
+                  <div id="friday" class="day-circle mx-2 <?php echo $activeDays[4] ? 'active' : 'inactive'; ?>">F</div>
                   <div class="day-label">Fri</div>
                 </div>
                 <div>
-                  <div id="saturday" class="day-circle inactive">S</div>
+                  <div id="saturday" class="day-circle mx-2 <?php echo $activeDays[5] ? 'active' : 'inactive'; ?>">S</div>
                   <div class="day-label">Sat</div>
                 </div>
                 <div>
-                  <div id="sunday" class="day-circle inactive">S</div>
+                  <div id="sunday" class="day-circle mx-2 <?php echo $activeDays[6] ? 'active' : 'inactive'; ?>">S</div>
                   <div class="day-label">Sun</div>
                 </div>
               </div>
@@ -330,8 +481,12 @@ require "config.php";
             ORDER BY r.reading_date DESC
         ";
         $stmtToday = $conn->prepare($queryToday);
-        $stmtToday->execute(['today' => $today]);
-        $todayResults = $stmtToday->fetchAll(PDO::FETCH_ASSOC);
+        if (!$stmtToday->execute(['today' => $today])) {
+            error_log("Query failed: " . print_r($stmtToday->errorInfo(), true));
+            $todayResults = [];
+        } else {
+            $todayResults = $stmtToday->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        }
         ?>
         <div class="container-fluid">
           <div class="card px-2 mt-4 mx-md-5">
@@ -395,76 +550,55 @@ require "config.php";
           </div>
         </div>
 
-        <!-- Existing History Section -->
+        <!-- History Section -->
         <div class="container-fluid pt-5 my-5">
           <div class="px-3 px-md-5 mt-3">
             <h2 class="mb-5">History</h2>
-            <h1 class="text-center">2 March 2025</h1>
+            <h1 class="text-center"><?php echo $selectedDateFormatted; ?></h1>
             <hr />
           </div>
-          <div class="col-12 col-md-7 mx-auto">
+          <div class="col-12 col-md-7">
             <div class="px-3 pt-2 me-md-4 ms-md-4">
               <div class="card-body">
                 <div class="row mb-3 my-4">
-                  <div class="col-12 col-md-2 text-center mb-4 mb-md-0">
-                    <img
-                      src="Image/BookCover6.jpg"
-                      alt="Cover Buku Harapan Baru"
-                      class="book mb-3"
-                    />
-                    <img
-                      src="Image/BookCover3.jpg"
-                      alt="Cover Buku Bahagia itu Sederhana"
-                      class="book"
-                    />
-                  </div>
-                  <div class="col-12 col-md-10">
-                    <h2 class="mt-2 fs-4 fs-md-1 mb-2 mx-2 mx-md-5">
-                      Harapan Baru
-                    </h2>
-                    <div class="d-flex flex-wrap mb-3 mb-md-5 mx-2 mx-md-5">
-                      <h5 class="fw-normal text-secondary me-3 me-md-5">
-                        Itsuki Takahashi
-                      </h5>
-                      <h5 class="fw-normal text-secondary">Drama</h5>
+                  <?php if (!empty($historyResults)): ?>
+                    <div class="col-12 col-md-2  mb-4 mb-md-0">
+                      <?php foreach ($historyResults as $row): ?>
+                        <?php
+                        if (!empty($row['cover_image'])) {
+                          echo '<img src="data:image/jpeg;base64,'.base64_encode($row['cover_image']).'" alt="Cover Buku '.htmlspecialchars($row['title']).'" class="book mb-5">';
+                        } else {
+                          echo '<img src="default_cover.jpg" alt="Cover Buku '.htmlspecialchars($row['title']).'" class="book mb-3">';
+                        }
+                        ?>
+                      <?php endforeach; ?>
                     </div>
-                    <div
-                      class="d-flex flex-column flex-md-row justify-content-between align-items-center mx-2 mx-md-5"
-                    >
-                      <h5 class="fw-normal text-secondary mt-2 mt-md-5">
-                        229 / 859 pages
-                      </h5>
-                      <button
-                        type="button"
-                        class="btn btn-primary border rounded mt-2 mt-md-5 fw-bold"
-                      >
-                        Resume Reading
-                      </button>
+                    <div class="col-12 col-md-10">
+                      <?php foreach ($historyResults as $index => $row): ?>
+                        <h2 class="mt-2 fs-4 fs-md-1 mb-2 mx-2 mx-md-5">
+                          <?php echo htmlspecialchars($row['title']); ?>
+                        </h2>
+                        <div class="d-flex flex-wrap mb-3 mb-md-5 mx-2 mx-md-5">
+                          <h5 class="fw-normal text-secondary me-3 me-md-5">
+                            <?php echo htmlspecialchars($row['author']); ?>
+                          </h5>
+                          <h5 class="fw-normal text-secondary"><?php echo htmlspecialchars($row['genre']); ?></h5>
+                        </div>
+                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mx-2 mx-md-5 mb-5">
+                          <h5 class="fw-normal text-secondary mt-2 mt-md-5">
+                            <?php echo htmlspecialchars($row['current_pages']); ?> / <?php echo htmlspecialchars($row['pages']); ?> pages
+                          </h5>
+                        </div>
+                        <?php if ($index < count($historyResults) - 1): ?>
+                          <hr />
+                        <?php endif; ?>
+                      <?php endforeach; ?>
                     </div>
-                    <hr />
-                    <h2 class="mt-2 fs-4 fs-md-1 mb-2 mx-2 mx-md-5">
-                      Bahagia itu Sederhana
-                    </h2>
-                    <div class="d-flex flex-wrap mb-3 mb-md-5 mx-2 mx-md-5">
-                      <h5 class="fw-normal text-secondary me-3 me-md-5">
-                        Francois Mercer
-                      </h5>
-                      <h5 class="fw-normal text-secondary">Drama</h5>
+                  <?php else: ?>
+                    <div class="col-12 text-center">
+                      <p>No reading history on this date.</p>
                     </div>
-                    <div
-                      class="d-flex flex-column flex-md-row justify-content-between align-items-center mx-2 mx-md-5"
-                    >
-                      <h5 class="fw-normal text-secondary mt-2 mt-md-5">
-                        373 / 809 pages
-                      </h5>
-                      <button
-                        type="button"
-                        class="btn btn-primary border rounded mt-2 mt-md-5 fw-bold"
-                      >
-                        Resume Reading
-                      </button>
-                    </div>
-                  </div>
+                  <?php endif; ?>
                 </div>
               </div>
             </div>
@@ -482,19 +616,28 @@ require "config.php";
         $queryEvents = "
             SELECT DATE(reading_date) as date, COUNT(*) as count
             FROM reading_activity
+            WHERE user_id = :user_id
             GROUP BY DATE(reading_date)
         ";
         $stmtEvents = $conn->prepare($queryEvents);
-        $stmtEvents->execute();
-        $events = $stmtEvents->fetchAll(PDO::FETCH_ASSOC);
+        $stmtEvents->execute(['user_id' => $user_id]);
+        $events = $stmtEvents->fetchAll(PDO::FETCH_ASSOC) ?: [];
         $calendarEvents = [];
+
+        $fireIcon = '<svg class="calendar-fire-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="#d7410f" d="M159.3 5.4c7.8-7.3 19.9-7.2 27.7 .1c27.6 25.9 53.5 53.8 77.7 84c11-14.4 23.5-30.1 37-42.9c7.9-7.4 20.1-7.4 28 .1c34.6 33 63.9 76.6 84.5 118c20.3 40.8 33.8 82.5 33.8 111.9C448 404.2 348.2 512 224 512C98.4 512 0 404.1 0 276.5c0-38.4 17.8-85.3 45.4-131.7C73.3 97.7 112.7 48.6 159.3 5.4zM225.7 416c25.3 0 47.7-7 68.8-21c42.1-29.4 53.4-88.2 28.1-134.4c-4.5-9-16-9.6-22.5-2l-25.2 29.3c-6.6 7.6-18.5 7.4-24.7-.5c-16.5-21-46-58.5-62.8-79.8c-6.3-8-18.3-8.1-24.7-.1c-33.8 42.5-50.8 69.3-50.8 99.4C112 375.4 162.6 416 225.7 416z"/></svg>';
+
         foreach ($events as $event) {
-          $calendarEvents[] = [
-            'title' => $event['count'] . ' book(s)',
-            'start' => $event['date'],
-            'backgroundColor' => '#ff9800',
-            'borderColor' => '#ff9800'
-          ];
+            $date = $event['date'];
+            $title = $event['count'] . ' book(s)';
+            $isStreakDate = isset($streakDates[$date]) && $streakDates[$date];
+            
+            $calendarEvents[] = [
+                'title' => $title,
+                'start' => $date,
+                'description' => $isStreakDate ? $fireIcon : '',
+                'backgroundColor' => 'transparent',
+                'borderColor' => 'transparent'
+            ];
         }
         ?>
         var calendarEl = document.getElementById("streak-calendar");
@@ -506,84 +649,25 @@ require "config.php";
             right: "dayGridMonth,timeGridWeek,timeGridDay",
           },
           events: <?php echo json_encode($calendarEvents); ?>,
+          eventContent: function(arg) {
+            // Custom render untuk event
+            let titleEl = document.createElement('div');
+            titleEl.className = 'fc-event-title';
+            titleEl.innerHTML = arg.event.title;
+
+            let descriptionEl = document.createElement('div');
+            descriptionEl.innerHTML = arg.event.extendedProps.description || '';
+
+            let arrayOfDomNodes = [titleEl, descriptionEl];
+            return { domNodes: arrayOfDomNodes };
+          },
+          dateClick: function(info) {
+            // Redirect ke halaman yang sama dengan parameter tanggal
+            window.location.href = 'history.php?date=' + info.dateStr;
+          }
         });
         calendar.render();
       });
-
-      // Perbaikan script streak
-      document.addEventListener('DOMContentLoaded', function() {
-        const today = new Date();
-        const todayStr = today.toISOString().split('T')[0];
-        const todayDay = today.getDay();
-
-        let lastDate = localStorage.getItem('lastActiveDate');
-        let streak = localStorage.getItem('streak') ? parseInt(localStorage.getItem('streak')) : 0;
-        let activeDays = JSON.parse(localStorage.getItem('activeDays')) || [false, false, false, false, false, false, false];
-
-        // Cek apakah halaman sudah di-load hari ini
-        const lastLoadDate = localStorage.getItem('lastLoadDate');
-        const isNewDay = lastLoadDate !== todayStr;
-
-        // Hanya update streak jika hari baru
-        if (isNewDay) {
-          activeDays[todayDay] = true;
-          localStorage.setItem('activeDays', JSON.stringify(activeDays));
-
-          if (lastDate) {
-            const lastActive = new Date(lastDate);
-            const diffTime = today.setHours(0,0,0,0) - lastActive.setHours(0,0,0,0);
-            const diffDays = diffTime / (1000 * 60 * 60 * 24);
-
-            if (diffDays === 1) {
-              streak += 1;
-            } else if (diffDays > 1) {
-              streak = 1;
-            }
-          } else {
-            streak = 1;
-          }
-
-          localStorage.setItem('lastActiveDate', todayStr);
-          localStorage.setItem('streak', streak);
-          localStorage.setItem('lastLoadDate', todayStr);
-
-          // Update server
-          fetch('update_streak.php', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'streak=' + encodeURIComponent(streak)
-          })
-          .then(response => response.json())
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch((error) => {
-            console.error('Error:', error);
-          });
-        }
-
-        // Update tampilan lingkaran hari dan streak
-        const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-        activeDays.forEach((active, index) => {
-          const dayElement = document.getElementById(days[index]);
-          if (dayElement) {
-            if (active) {
-              dayElement.classList.add('active');
-              dayElement.classList.remove('inactive');
-            } else {
-              dayElement.classList.add('inactive');
-              dayElement.classList.remove('active');
-            }
-          }
-        });
-
-        const streakEl = document.getElementById('streak-number');
-        if (streakEl) {
-          streakEl.innerText = streak;
-        }
-      });
     </script>
-  </body>
+  </body>
 </html>
