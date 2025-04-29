@@ -68,7 +68,90 @@ else {
     echo "User ID tidak ditemukan dalam session.";
 
 }
+// Fetch data for the daily line chart
+$daily_counts = array_fill(0, 7, 0); // Initialize array with 7 zeros
+$daily_labels = ['Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Tuesday']; // Labels for April 23 to April 29, 2025
 
+try {
+    // Define the date range: last 7 days including today (April 29, 2025)
+    $end_date = '2025-04-29'; // Today
+    $start_date = date('Y-m-d', strtotime($end_date . ' -6 days')); // April 23, 2025
+
+    // Query to count distinct completed books per day
+    $sql = "SELECT DATE(reading_date) as reading_day, COUNT(DISTINCT book_id) as book_count
+            FROM reading_activity
+            WHERE user_id = :user_id
+            AND reading_progress = 100
+            AND reading_date BETWEEN :start_date AND :end_date
+            GROUP BY DATE(reading_date)";
+    
+    $query = $conn->prepare($sql);
+    $query->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $query->bindParam(':start_date', $start_date, PDO::PARAM_STR);
+    $query->bindParam(':end_date', $end_date, PDO::PARAM_STR);
+    $query->execute();
+    $results = $query->fetchAll(PDO::FETCH_ASSOC);
+
+    // Map the results to the daily_counts array
+    foreach ($results as $row) {
+        $day = $row['reading_day']; // e.g., '2025-04-25'
+        $count = (int)$row['book_count'];
+
+        // Calculate the index (0 to 6) based on the difference from start_date
+        $day_index = (strtotime($day) - strtotime($start_date)) / (60 * 60 * 24);
+        $day_index = (int)$day_index; // Convert to integer (0 to 6)
+
+        if ($day_index >= 0 && $day_index < 7) {
+            $daily_counts[$day_index] = $count;
+        }
+    }
+} catch (PDOException $e) {
+    echo "Error fetching daily chart data: " . $e->getMessage();
+}
+// Fetch data for the monthly line chart
+$monthly_counts = array_fill(0, 12, 0);
+$monthly_labels = ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr'];
+
+try {
+    $end_date = '2025-04-30';
+    $start_date = '2024-05-01';
+
+    // Debug: Print the user_id
+    echo "<pre>User ID: $user_id\n</pre>";
+
+    $sql = "SELECT YEAR(reading_date) as reading_year, MONTH(reading_date) as reading_month, 
+                   COUNT(DISTINCT book_id) as book_count
+            FROM reading_activity
+            WHERE user_id = :user_id
+            AND reading_progress = 100
+            AND reading_date BETWEEN :start_date AND :end_date
+            GROUP BY YEAR(reading_date), MONTH(reading_date)";
+    
+    $query = $conn->prepare($sql);
+    $query->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $query->bindParam(':start_date', $start_date, PDO::PARAM_STR);
+    $query->bindParam(':end_date', $end_date, PDO::PARAM_STR);
+    $query->execute();
+    $results = $query->fetchAll(PDO::FETCH_ASSOC);
+
+
+    foreach ($results as $row) {
+        $year = (int)$row['reading_year'];
+        $month = (int)$row['reading_month'];
+
+        if ($year == 2024) {
+            $month_index = $month - 5;
+        } else {
+            $month_index = $month + 7;
+        }
+
+        if ($month_index >= 0 && $month_index < 12) {
+            $monthly_counts[$month_index] = (int)$row['book_count'];
+        }
+    }
+} catch (PDOException $e) {
+    echo "Error fetching monthly chart data: " . $e->getMessage();
+}
 ?>
 
 <!DOCTYPE html>
@@ -435,54 +518,72 @@ else {
                             </div>
                             <canvas id="myChart"></canvas>
                             <script>
-                                const ctx = document.getElementById("myChart").getContext("2d");
+    const ctx = document.getElementById("myChart").getContext("2d");
 
-                                let monthlyData = {
-                                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                                    datasets: [{
-                                        label: "Monthly Statistics",
-                                        data: [10, 22, 2, 5, 17, 0, 1, 6, 12, 1, 0, 0],
-                                        borderColor: "rgb(75, 192, 192)",
-                                        backgroundColor: "rgb(75, 192, 192)",
-                                        tension: 0.1,
-                                    }],
-                                };
+    let monthlyData = {
+        labels: <?php echo json_encode($monthly_labels); ?>,
+        datasets: [{
+            label: "Monthly Statistics",
+            data: <?php echo json_encode($monthly_counts); ?>,
+            borderColor: "rgb(75, 192, 192)",
+            backgroundColor: "rgb(75, 192, 192)",
+            tension: 0.1,
+        }],
+    };
 
-                                let dailyData = {
-                                    labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-                                    datasets: [{
-                                        label: "Daily Statistics",
-                                        data: [5, 12, 7, 9, 3, 5, 2],
-                                        borderColor: "purple",
-                                        backgroundColor: "purple",
-                                        tension: 0.1,
-                                    }],
-                                };
+    let dailyData = {
+        labels: <?php echo json_encode($daily_labels); ?>,
+        datasets: [{
+            label: "Daily Statistics",
+            data: <?php echo json_encode($daily_counts); ?>,
+            borderColor: "purple",
+            backgroundColor: "purple",
+            tension: 0.1,
+        }],
+    };
 
-                                let chart = new Chart(ctx, {
-                                    type: "line",
-                                    data: monthlyData,
-                                    options: { responsive: true },
-                                });
+    let chart = new Chart(ctx, {
+        type: "line",
+        data: monthlyData,
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true, // Start the y-axis at 0
+                    max: 10, // Set a higher maximum for monthly data (adjust as needed)
+                    ticks: {
+                        stepSize: 1, // Use whole numbers (1, 2, 3, etc.)
+                        callback: function(value) {
+                            return Number.isInteger(value) ? value : ''; // Show only whole numbers
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Number of Books Completed'
+                    }
+                }
+            }
+        }
+    });
 
-                                document.getElementById("dailyBtn").addEventListener("click", function () {
-                                    chart.data = dailyData;
-                                    chart.update();
-                                    toggleActive(this);
-                                });
+    document.getElementById("dailyBtn").addEventListener("click", function () {
+        chart.data = dailyData;
+        chart.update();
+        toggleActive(this);
+    });
 
-                                document.getElementById("monthlyBtn").addEventListener("click", function () {
-                                    chart.data = monthlyData;
-                                    chart.update();
-                                    toggleActive(this);
-                                });
+    document.getElementById("monthlyBtn").addEventListener("click", function () {
+        chart.data = monthlyData;
+        chart.update();
+        toggleActive(this);
+    });
 
-                                function toggleActive(button) {
-                                    document.getElementById("dailyBtn").classList.remove("active-btn");
-                                    document.getElementById("monthlyBtn").classList.remove("active-btn");
-                                    button.classList.add("active-btn");
-                                }
-                            </script>
+    function toggleActive(button) {
+        document.getElementById("dailyBtn").classList.remove("active-btn");
+        document.getElementById("monthlyBtn").classList.remove("active-btn");
+        button.classList.add("active-btn");
+    }
+</script>
                         </div>
                     </div>
                 </div>
