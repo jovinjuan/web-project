@@ -126,7 +126,17 @@ if(cekLogin()){
           <div class="sidebar-profile">
             <img id="profile-img" src="" alt="" />
             <h4 class="pt-3"><?php echo htmlspecialchars($username); ?></h4>
-            <h5 class="fw-normal">Rank: 90</h5>
+            <?php
+            $userRank = 0;
+            foreach ($ranking as $i => $user) {
+                if ($user['username'] === $username) {
+                    $userRank = $i + 1; // karena index mulai dari 0
+                    break;
+                }
+            }
+            ?>
+            <h5 class="fw-normal">Rank: <?php echo $userRank; ?></h5>
+            
           </div>
         </div>
 
