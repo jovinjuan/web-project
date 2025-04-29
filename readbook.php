@@ -35,6 +35,16 @@ try {
     $check_query->execute();
     $entry_exists = $check_query->fetchColumn() > 0;
 
+    // Cek apakah progress buku ud completed 
+    $progress_value = floatval(str_replace('%', '', $reading_progress)); // Ubah "100%" menjadi 100
+    $new_status = ($progress_value >= 100) ? 'completed' : 'currently_reading';
+
+    $update_sql = "UPDATE book SET status = :new_status WHERE book_id = :book_id";
+    $query = $conn->prepare($update_sql);
+    $query->bindParam(':new_status', $new_status, PDO::PARAM_STR);
+    $query->bindParam(':book_id', $book_id, PDO::PARAM_INT);
+    $query->execute();
+
     if ($entry_exists) {
         // Jika entri sudah ada, lakukan UPDATE
         $update_sql = "UPDATE reading_activity 
@@ -67,7 +77,7 @@ try {
 
     if ($result) {
         // Redirect ke myprogress.php
-        header("Location: myprogress.php?message=success");
+        header("Location: home.php?message=success");
         exit;
     } else {
         throw new Exception("Failed to save reading activity.");

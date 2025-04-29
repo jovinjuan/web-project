@@ -10,7 +10,8 @@ if (isset($user_id)) {
         book.description,
         book.cover_image,
         book.file_path,
-        COALESCE(ra.reading_progress, '0%') AS reading_progress
+        COALESCE(ra.reading_progress, '0%') AS reading_progress,
+        ra.activity_id -- Add activity_id to the query
     FROM
         book
     LEFT JOIN
@@ -28,10 +29,26 @@ if (isset($user_id)) {
         $data = [];
         echo "Error fetching data";
     }
-} else {
+    $book_target = 'Belum diatur';
+    $streak_time = 'Belum diatur';
+
+    $sql = "SELECT book_target, streak_time FROM reading_targets WHERE user_id = :user_id";
+    $query = $conn->prepare($sql);
+    $query->bindParam(':user_id',$user_id,PDO::PARAM_INT);
+    $result = $query->execute();
+    $targetdata = $query->fetch(PDO::FETCH_ASSOC);
+
+    if ($targetdata) {
+        $book_target = $targetdata['book_target'] > 0 ? $targetdata['book_target'] : 'Belum diatur';
+        $streak_time = $targetdata['streak_time'] > 0 ? $targetdata['streak_time'] : 'Belum diatur';
+    }
+} 
+else {
     $data = [];
     echo "User ID tidak ditemukan dalam session.";
+
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -112,17 +129,17 @@ if (isset($user_id)) {
     }
     /* PDF viewer in reading modal */
     .pdf-viewer {
-    max-width: 100%;
-    width: 100%;
-    overflow: hidden;
-    margin: 0 auto;
-    display : flex;
-    justify-content: center;
-    align-items: center;
+        max-width: 100%;
+        width: 100%;
+        overflow: hidden;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     #pdf-canvas {
-    width: 30% !important;
-    height: auto !important;
+        width: 30% !important;
+        height: auto !important;
     }
     .pdf-viewer:hover {
         border-color: #93c5fd;
@@ -139,6 +156,56 @@ if (isset($user_id)) {
     .modal-header-info span {
         margin-right: 20px;
     }
+    /* Styling untuk modal set target */
+    .custom-modal-size {
+        max-width: 600px;
+    }
+    .modal-content {
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        background: #ffffff;
+    }
+    .modal-header {
+        background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+        color: white;
+        border-radius: 20px 20px 0 0 !important;
+        font-weight: 600;
+        font-size: 1.75rem;
+        padding: 1.5rem;
+    }
+    .modal-body {
+        padding: 2rem;
+    }
+    .form-label {
+        font-weight: 500;
+        color: #333;
+        font-size: 1.25rem;
+    }
+    .form-control {
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        transition: border-color 0.2s;
+        font-size: 1.25rem;
+        padding: 0.75rem;
+        height: 50px;
+    }
+    .form-control:focus {
+        border-color: #2575fc;
+        box-shadow: 0 0 5px rgba(37, 117, 252, 0.3);
+    }
+    .btn-primary {
+        background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+        border: none;
+        border-radius: 10px;
+        padding: 12px 30px;
+        font-weight: 500;
+        font-size: 1rem;
+        transition: transform 0.1s;
+    }
+    .btn-primary:hover {
+        transform: scale(1.05);
+    }
     /* Responsive adjustments */
     @media (max-width: 400px) {
         .pdf-viewer {
@@ -153,7 +220,7 @@ if (isset($user_id)) {
             height: auto;
         }
     }
-</style>
+    </style>
 </head>
 <body>
     <!-- Nav Bar -->
@@ -222,7 +289,7 @@ if (isset($user_id)) {
                         <div class="card-body">
                             <h4 class="card-title">Target</h4>
                             <div class="row align-items-center mb-3">
-                                <div class="col-4">
+                                <div class="col-3">
                                     <svg width="160" height="160" viewBox="0 0 100 100">
                                         <circle
                                             cx="50"
@@ -255,21 +322,25 @@ if (isset($user_id)) {
                                         </text>
                                     </svg>
                                 </div>
-                                <div class="col-md-8">
-                                    <h4 class="fw-bold">Monthly Book Explorer</h4>
-                                    <p class="card-text">
-                                        Finish 2 books within 30 days to stay on track with your reading goals.
+                                <div class="col-md-9">
+                                    <h4 class="fw-bold fs-2">Monthly Book Explorer</h4>
+                                    <p class="card-text fs-5">
+                                    <?php if ($book_target === 'Belum diatur'): ?>
+                                            Target belum diatur. Silakan set target untuk memulai.
+                                        <?php else: ?>
+                                            Finish <?php echo htmlspecialchars($book_target, ENT_QUOTES); ?> books within 30 days to stay on track with your reading goals.
+                                        <?php endif; ?>
                                     </p>
                                     <div class="d-flex align-items-center justify-content-between">
-                                        <button type="button" class="btn btn-primary border rounded ms-auto">
-                                            Continue
+                                        <button type="button" class="btn btn-primary border rounded ms-auto" data-bs-toggle="modal" data-bs-target="#setBookTargetModal">
+                                            Set Target
                                         </button>
                                         <h6 class="fw-bold display"></h6>
                                     </div>
                                 </div>
                             </div>
                             <div class="row align-items-center mt-2 mb-2">
-                                <div class="col-4">
+                                <div class="col-3">
                                     <svg width="160" height="160" viewBox="0 0 100 100">
                                         <circle
                                             cx="50"
@@ -302,14 +373,18 @@ if (isset($user_id)) {
                                         </text>
                                     </svg>
                                 </div>
-                                <div class="col-md-8">
-                                    <h4 class="fw-bold">7-Day Reading Streak</h4>
-                                    <p class="card-text">
-                                        Read at least 20 minutes per day for 7 consecutive days to build a consistent reading habit.
+                                <div class="col-md-9">
+                                    <h4 class="fw-bold fs-2">7-Day Reading Streak</h4>
+                                    <p class="card-text fs-5">
+                                    <?php if ($streak_time === 'Belum diatur'): ?>
+                                            Target belum diatur. Silakan set target untuk memulai.
+                                        <?php else: ?>
+                                            Read at least <?php echo htmlspecialchars($streak_time, ENT_QUOTES); ?> minutes per day for 7 consecutive days to build a consistent reading habit.
+                                        <?php endif; ?>
                                     </p>
                                     <div class="d-flex align-items-center justify-content-between">
-                                        <button type="button" class="btn btn-primary border rounded ms-auto">
-                                            Continue
+                                        <button type="button" class="btn btn-primary border rounded ms-auto" data-bs-toggle="modal" data-bs-target="#setStreakTargetModal">
+                                            Set Target
                                         </button>
                                     </div>
                                 </div>
@@ -407,22 +482,10 @@ if (isset($user_id)) {
                                                             <p class="card-text p-0">
                                                                 <?php echo htmlspecialchars(substr($book['description'], 0, 150), ENT_QUOTES); ?>
                                                             </p>
-                                                            <progress id="progress" value="<?php echo str_replace('%', '', $book['reading_progress']); ?>" max="100">
+                                                            <progress id="progress" class = "fs-4" value="<?php echo str_replace('%', '', $book['reading_progress']); ?>" max="100">
                                                                 <?php echo htmlspecialchars($book['reading_progress'], ENT_QUOTES); ?>
                                                             </progress>
-                                                            <!-- Tombol Continue -->
-                                                            <button
-                                                                type="button"
-                                                                class="btn btn-primary position-absolute bottom-0 end-0 m-3"
-                                                                data-book-id="<?php echo htmlspecialchars($book['book_id'], ENT_QUOTES); ?>"
-                                                                data-title="<?php echo htmlspecialchars($book['title'], ENT_QUOTES); ?>"
-                                                                data-description="<?php echo htmlspecialchars($book['description'], ENT_QUOTES); ?>"
-                                                                data-cover="<?php echo base64_encode($book['cover_image']); ?>"
-                                                                data-filepath="<?php echo htmlspecialchars($book['file_path'], ENT_QUOTES); ?>"
-                                                                onclick="showBookDetailFromElement(this)"
-                                                            >
-                                                            >
-                                                            </button>
+                                                            <p><?php echo htmlspecialchars($book['reading_progress']) ;?>%</p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -439,58 +502,53 @@ if (isset($user_id)) {
             </div>
         </div>
     </div>
-
-    <!-- Section: Modal -->
-    <div class="modal fade" id="bookDetailModal" tabindex="-1" aria-labelledby="bookDetailModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered custom-modal-size">
-          <div class="modal-content p-4 shadow-lg rounded-4">
-            <div class="modal-body text-center">
-              <img id="detail-cover" class="img-fluid rounded-3 shadow-sm mb-4" style="max-width: 180px;" />
-              <h3 id="detail-title" class="fw-semibold mb-3"></h3>
-              <p id="detail-description" class="text-muted mb-3" style="font-size: 1rem;"></p>
-              <p class="mb-4" style="font-size: 0.95rem;"><strong>Genre:</strong> <span id="detail-genre"></span></p>
-              <button id="view-pdf-btn" class="btn btn-primary rounded-pill px-4" onclick="openReadingModal()">Read</button>
+    <!-- Modal untuk Monthly Book Explorer -->
+<div class="modal fade" id="setBookTargetModal" tabindex="-1" aria-labelledby="setBookTargetModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered custom-modal-size">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title mb-0" id="setBookTargetModalLabel">Set Monthly Book Target</h4>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-          </div>
-        </div>
-      </div>
-
-    <!-- Section: Reading Modal -->
-    <div class="modal fade reading-modal" id="readingModal" tabindex="-1" aria-labelledby="readingModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-fullscreen">
-            <div class="modal-content">
-                <div class="modal-body p-3 m-3">
-                    <form action="readbook.php" method="POST">
-                        <input type="hidden" name="book_id" id="book-id-input" value="">
-                        <input type="hidden" name="progress" id="progress-input" value="">
-                        <input type="hidden" name="current_page" id="current-page-input" value="">
-                        <input type="hidden" name="timer" id="timer-input" value="">
-                        <!-- Header -->
-                        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
-                            <h3 id="reading-title" class="fw-bold text-primary mb-0"></h3>
-                            <div class="modal-header-info d-flex gap-3">
-                                <span><i class="fas fa-chart-line"></i> Progress: <span id="progress">0%</span></span>
-                                <span><i class="fas fa-book-open"></i> Halaman: <span id="current-page">1</span> dari <span id="total-pages">1</span></span>
-                                <span><i class="fas fa-clock"></i> Membaca: <span id="timer">0 menit</span></span>
-                            </div>
-                        </div>
-                        <!-- PDF Viewer -->
-                        <div class="pdf-viewer">
-                            <canvas id="pdf-canvas"></canvas>
-                        </div>
-                        <!-- Navigasi Halaman -->
-                        <div class="d-flex justify-content-center gap-2 my-3 flex-wrap mb-5">
-                            <button type="button" class="btn btn-outline-primary btn-sm mx-5" id="prev-page"><i class="fas fa-arrow-left"></i> Previous</button>
-                            <button type="submit" class="btn btn-success rounded-3 fw-bold" id="bookmark-button"><i class="fa-solid fa-bookmark mx-1"></i> Save Bookmark</button>
-                            <button type="button" class="btn btn-danger rounded-3 fw-bold" id="close-button"><i class="fas fa-times mx-1"></i> Tutup</button>
-                            <button type="button" class="btn btn-outline-primary btn-sm mx-5" id="next-page">Next <i class="fas fa-arrow-right"></i></button>
-                        </div>
-                    </form>
+            <form action="settarget.php" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="target_type" value="monthly">
+                    <div class="mb-5">
+                        <label for="bookTarget" class="form-label">Number of Books to Complete This Month</label>
+                        <input type="number" class="form-control" id="bookTarget" name="book_target" min="1" placeholder="Enter number of books" required>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Save Target</button>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
-                                    </div>
+</div>
+
+<!-- Modal untuk 7-Day Reading Streak -->
+<div class="modal fade" id="setStreakTargetModal" tabindex="-1" aria-labelledby="setStreakTargetModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered custom-modal-size">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title mb-0" id="setStreakTargetModalLabel">Set Daily Reading Streak Target</h4>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="settarget.php" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="target_type" value="streak">
+                    <div class="mb-5">
+                        <label for="streakTime" class="form-label">Daily Reading Time for Streak (in minutes)</label>
+                        <input type="number" class="form-control" id="streakTime" name="streak_time" min="1" placeholder="Enter minutes per day" required>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Save Target</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
