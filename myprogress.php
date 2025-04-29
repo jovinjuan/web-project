@@ -1,5 +1,6 @@
 <?php
 require "config.php";
+include "getprogress.php";
 $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 
 // Ambil data buku dengan status 'currently_reading' dan progress membaca jika ada
@@ -31,18 +32,37 @@ if (isset($user_id)) {
     }
     $book_target = 'Belum diatur';
     $streak_time = 'Belum diatur';
-
-    $sql = "SELECT book_target, streak_time FROM reading_targets WHERE user_id = :user_id";
+    
+    $current_date = date('Y-m-d');
+    
+    $sql = "SELECT book_target 
+            FROM reading_targets 
+            WHERE user_id = :user_id 
+            AND target_type = 'monthly' 
+            AND :current_date BETWEEN target_start_date AND target_end_date";
     $query = $conn->prepare($sql);
-    $query->bindParam(':user_id',$user_id,PDO::PARAM_INT);
-    $result = $query->execute();
+    $query->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $query->bindParam(':current_date', $current_date, PDO::PARAM_STR);
+    $query->execute();
     $targetdata = $query->fetch(PDO::FETCH_ASSOC);
-
-    if ($targetdata) {
-        $book_target = $targetdata['book_target'] > 0 ? $targetdata['book_target'] : 'Belum diatur';
-        $streak_time = $targetdata['streak_time'] > 0 ? $targetdata['streak_time'] : 'Belum diatur';
+    
+    if ($targetdata && $targetdata['book_target'] > 0) {
+        $book_target = $targetdata['book_target'];
     }
-} 
+    
+    $sql = "SELECT streak_time 
+            FROM reading_targets 
+            WHERE user_id = :user_id 
+            AND target_type = 'streak'";
+    $query = $conn->prepare($sql);
+    $query->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $query->execute();
+    $targetdata = $query->fetch(PDO::FETCH_ASSOC);
+    
+    if ($targetdata && $targetdata['streak_time'] > 0) {
+        $streak_time = $targetdata['streak_time'];
+    }
+}
 else {
     $data = [];
     echo "User ID tidak ditemukan dalam session.";
@@ -290,6 +310,12 @@ else {
                             <h4 class="card-title">Target</h4>
                             <div class="row align-items-center mb-3">
                                 <div class="col-3">
+                                <?php
+                                // Calculate stroke-dashoffset for monthly progress
+                                $monthly_progress = isset($monthly_progress) ? round($monthly_progress, 1) : 0;
+                                $dasharray = 251.2; // Circumference of the circle (2 * π * 40)
+                                $dashoffset = $dasharray * (1 - $monthly_progress / 100);
+                                ?>
                                     <svg width="160" height="160" viewBox="0 0 100 100">
                                         <circle
                                             cx="50"
@@ -307,7 +333,7 @@ else {
                                             stroke-width="10"
                                             fill="none"
                                             stroke-dasharray="251.2"
-                                            stroke-dashoffset="167.5"
+                                            stroke-dashoffset="<?php echo $dashoffset ; ?>"
                                             stroke-linecap="round"
                                         />
                                         <text
@@ -318,7 +344,7 @@ else {
                                             fill="black"
                                             font-weight="bold"
                                         >
-                                            33%
+                                        <?php echo $monthly_progress; ?>%
                                         </text>
                                     </svg>
                                 </div>
@@ -341,6 +367,10 @@ else {
                             </div>
                             <div class="row align-items-center mt-2 mb-2">
                                 <div class="col-3">
+                                <?php
+                                $streak_progress = isset($streak_progress) ? round($streak_progress, 1) : 0;
+                                $dashoffset = $dasharray * (1 - $streak_progress / 100);
+                                ?>
                                     <svg width="160" height="160" viewBox="0 0 100 100">
                                         <circle
                                             cx="50"
@@ -358,7 +388,7 @@ else {
                                             stroke-width="10"
                                             fill="none"
                                             stroke-dasharray="251.2"
-                                            stroke-dashoffset="167.5"
+                                            stroke-dashoffset="<?php echo $dashoffset; ?>"
                                             stroke-linecap="round"
                                         />
                                         <text
@@ -369,7 +399,7 @@ else {
                                             fill="black"
                                             font-weight="bold"
                                         >
-                                            33%
+                                        <?php echo $streak_progress; ?>%
                                         </text>
                                     </svg>
                                 </div>
