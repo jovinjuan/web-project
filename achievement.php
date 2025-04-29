@@ -4,7 +4,6 @@ require "config.php";
 if(cekLogin()){
     if (isset($_SESSION['username'])) {
         $username = $_SESSION['username'];
-        
     }
     // Mengambil data ranking berdasarkan streak
     $query = "SELECT username, streak FROM user ORDER BY streak DESC";
@@ -97,7 +96,7 @@ if(cekLogin()){
         }
 
         .achievement-content {
-            padding-top: 0px; /* default (desktop) */
+            padding-top: 100px; /* Ditambah jarak dari navbar */
         }
 
         /* Responsive untuk mobile */
@@ -116,32 +115,22 @@ if(cekLogin()){
 </head>
 <body>
     <!-- Nav Bar -->
-    <?php include 'Navbar.php';
-    ?>
+    <?php include 'Navbar.php'; ?>
     <!-- Akhir Nav Bar -->
+
     <div class="container-fluid">
         <div class="row achievement-content">
             <!-- Sidebar -->
-            <div class="col-md-2 sidebar pt-5 mt-5">
-          <div class="sidebar-profile">
-            <img id="profile-img" src="" alt="" />
-            <h4 class="pt-3"><?php echo htmlspecialchars($username); ?></h4>
-            <?php
-            $userRank = 0;
-            foreach ($ranking as $i => $user) {
-                if ($user['username'] === $username) {
-                    $userRank = $i + 1; // karena index mulai dari 0
-                    break;
-                }
-            }
-            ?>
-            <h5 class="fw-normal">Rank: <?php echo $userRank; ?></h5>
-            
-          </div>
-        </div>
+            <div class="col-md-2 sidebar">
+                <div class="sidebar-profile">
+                    <img id="profile-img" src="" alt="" />
+                    <h4 class="pt-3"><?php echo htmlspecialchars($username); ?></h4>
+                    <h5 class="fw-normal">Rank: 90</h5>
+                </div>
+            </div>
 
             <!-- Main Content -->
-            <div class="col-md-10 p-4 mt-5 pt-5">
+            <div class="col-md-10 p-4">
                 <!-- Ranking List -->
                 <h5>Ranking</h5>
                 <div class="ranking-container">
@@ -161,8 +150,6 @@ if(cekLogin()){
                     ?>
                 </div>
 
-                
-
                 <!-- Badges Section -->
                 <div class="badges-container">
                     <h5>Badges</h5>
@@ -175,6 +162,7 @@ if(cekLogin()){
             </div>
         </div>
     </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
