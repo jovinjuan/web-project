@@ -188,6 +188,31 @@ require "config.php";
               }
             }
 
+            .streak-circle {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+ 
+}
+
+.streak-circle > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Responsive layout: stack 4 on top, 3 on bottom */
+@media (max-width: 576px) {
+  .streak-circle > div {
+    width: 22%; /* 4 per row for 1st line, 3 per row for 2nd line */
+  }
+
+  .streak-circle > div:nth-child(n+5) {
+    margin-top: 10px;
+  }
+}
+
+
     
     </style>
   </head>
@@ -223,7 +248,7 @@ require "config.php";
                 <h4 class="streak-text">streaks in a week!</h4>
               </div>
               <!-- Bagian Lingkaran Hari-->
-              <div class="d-flex justify-content-center ">
+              <div class="d-flex justify-content-center streak-circle">
                 <div>
                   <div id="monday" class="day-circle inactive">M</div>
                   <div class="day-label">Mon</div>
