@@ -278,7 +278,6 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
               <img id="detail-cover" class="img-fluid rounded-3 shadow-sm mb-4" style="max-width: 180px;" />
               <h3 id="detail-title" class="fw-semibold mb-3"></h3>
               <p id="detail-description" class="text-muted mb-3" style="font-size: 1rem;"></p>
-              <p class="mb-4" style="font-size: 0.95rem;"><strong>Genre:</strong> <span id="detail-genre"></span></p>
               <button id="view-pdf-btn" class="btn btn-primary rounded-pill px-4" onclick="openReadingModal()">Read</button>
             </div>
           </div>
