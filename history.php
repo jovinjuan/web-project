@@ -1,7 +1,6 @@
 <?php
 require "config.php";
 
-session_start();
 $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 1; // Default user_id = 1 jika belum ada login
 
 // Ambil target streak pengguna dari tabel reading_targets
@@ -159,7 +158,7 @@ $historyResults = $stmtHistory->fetchAll(PDO::FETCH_ASSOC) ?: [];
       .streak-info,
       .top-view-book,
       .history-item {
-        background-color: #2e2e2e;
+        background-color:rgb(255, 253, 253);
         padding: 1rem;
         border-radius: 8px;
       }
@@ -283,18 +282,30 @@ $historyResults = $stmtHistory->fetchAll(PDO::FETCH_ASSOC) ?: [];
         color: #ff5722;
       }
       #streak-calendar {
-        width: 60%;
+        width: 100%;                  
+        max-width: 1000px;            
         min-height: 500px;
+        margin: 0 auto;              
         border: 2px solid grey;
         padding: 20px;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        overflow-x: auto;        
       }
+
       #streak-calendar:hover {
         cursor: pointer;
         color: blue;
         border: 2px solid rgba(75, 192, 192, 0.5);
         box-shadow: 0 1000px 1000px rgba(30, 204, 204, 0.1);
       }
+
+      @media (max-width: 768px) {
+        #streak-calendar {
+          padding: 10px;
+          min-height: 400px;
+        }
+      }
+
       .fire-icon {
         max-width: 100px;
         scale: 100%;
@@ -340,6 +351,55 @@ $historyResults = $stmtHistory->fetchAll(PDO::FETCH_ASSOC) ?: [];
         height: 30px;
         margin-top: 5px;
       }
+      .history-book-card {
+            transition: transform 0.2s;
+        }
+        .history-book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .history-book-cover {
+            width: 100%;
+            max-width: 150px;
+            height: auto;
+            aspect-ratio: 2/3;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .progress {
+            height: 8px;
+        }
+        .progress-bar {
+            background-color:#0d6efd;
+        }
+        .history-date-header {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        .history-item {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .history-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .genre-badge {
+            background-color:#0d6efd;
+            color:#ffffff
+            font-weight: normal;
+        }
+        @media (max-width: 768px) {
+            .history-book-cover {
+                margin-bottom: 15px;
+            }
+            .history-meta {
+                margin-top: 10px;
+            }
+        }
     </style>
   </head>
   <body>
@@ -349,14 +409,17 @@ $historyResults = $stmtHistory->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
     <!-- Streak -->
     <div class="container-fluid mt-5 pt-5">
-      <div class="row g-4 mt-2">
-      <div class="px-3 px-md-5 mt-3">
-              <h2>My Streak</h2>
+      <div class="row g-4 ">
+      <div class="px-3 px-md-5 ">
+              
             </div>
         <!-- Circle Chart -->
         <div class="col-12 col-md-5">
+        
           <div class="card px-3 pt-2 streak-card">
-            <div class="card-body mb-4">
+          <h3 class="pt-3"
+          >My Streak</h3>
+            <div class="card-body mb-3">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="me-2 me-md-4 mb-3 mb-md-5 fire-icon"
@@ -375,31 +438,31 @@ $historyResults = $stmtHistory->fetchAll(PDO::FETCH_ASSOC) ?: [];
               </div>
               <div class="d-flex justify-content-center streak-circle">
                 <div>
-                  <div id="monday" class="day-circle mx-2 <?php echo $activeDays[0] ? 'active' : 'inactive'; ?>">M</div>
+                  <div id="monday" class="day-circle  <?php echo $activeDays[0] ? 'active' : 'inactive'; ?>">M</div>
                   <div class="day-label">Mon</div>
                 </div>
                 <div>
-                  <div id="tuesday" class="day-circle mx-2 <?php echo $activeDays[1] ? 'active' : 'inactive'; ?>">T</div>
+                  <div id="tuesday" class="day-circle  <?php echo $activeDays[1] ? 'active' : 'inactive'; ?>">T</div>
                   <div class="day-label">Tue</div>
                 </div>
                 <div>
-                  <div id="wednesday" class="day-circle mx-2 <?php echo $activeDays[2] ? 'active' : 'inactive'; ?>">W</div>
+                  <div id="wednesday" class="day-circle  <?php echo $activeDays[2] ? 'active' : 'inactive'; ?>">W</div>
                   <div class="day-label">Wed</div>
                 </div>
                 <div>
-                  <div id="thursday" class="day-circle mx-2 <?php echo $activeDays[3] ? 'active' : 'inactive'; ?>">Th</div>
+                  <div id="thursday" class="day-circle <?php echo $activeDays[3] ? 'active' : 'inactive'; ?>">Th</div>
                   <div class="day-label">Thu</div>
                 </div>
                 <div>
-                  <div id="friday" class="day-circle mx-2 <?php echo $activeDays[4] ? 'active' : 'inactive'; ?>">F</div>
+                  <div id="friday" class="day-circle  <?php echo $activeDays[4] ? 'active' : 'inactive'; ?>">F</div>
                   <div class="day-label">Fri</div>
                 </div>
                 <div>
-                  <div id="saturday" class="day-circle mx-2 <?php echo $activeDays[5] ? 'active' : 'inactive'; ?>">S</div>
+                  <div id="saturday" class="day-circle  <?php echo $activeDays[5] ? 'active' : 'inactive'; ?>">S</div>
                   <div class="day-label">Sat</div>
                 </div>
                 <div>
-                  <div id="sunday" class="day-circle mx-2 <?php echo $activeDays[6] ? 'active' : 'inactive'; ?>">S</div>
+                  <div id="sunday" class="day-circle <?php echo $activeDays[6] ? 'active' : 'inactive'; ?>">S</div>
                   <div class="day-label">Sun</div>
                 </div>
               </div>
@@ -427,7 +490,7 @@ $historyResults = $stmtHistory->fetchAll(PDO::FETCH_ASSOC) ?: [];
           <div class="card px-3 pt-2 me-md-4">
             <div class="card-body mb-1">
               <h4 class="card-title">Top-Viewed Book!</h4>
-              <div id="book-list" class="row mb-3 my-4">
+              <div id="book-list" class="row mb-1 my-4">
                 <?php foreach ($result as $row): ?>
                   <?php
                     $totalSeconds = $row['total_duration'];
@@ -435,7 +498,7 @@ $historyResults = $stmtHistory->fetchAll(PDO::FETCH_ASSOC) ?: [];
                     $minutes = floor(($totalSeconds % 3600) / 60);
                     $seconds = $totalSeconds % 60;
                   ?>
-                  <div class="col-6 col-md-4 col-lg-3 mb-4">
+                  <div class="col-6 col-md-4 col-lg-3 mb-2">
                     <div class="card h-100 d-flex flex-column position-relative">
                       <?php
                         if (!empty($row['cover_image'])) {
@@ -451,7 +514,8 @@ $historyResults = $stmtHistory->fetchAll(PDO::FETCH_ASSOC) ?: [];
                         <p class="card-text mb-2">
                           <?php echo htmlspecialchars($row['author']); ?>
                         </p>
-                        <div class="flex-grow-1"></div>
+                        <div class="flex-grow-1 mb-3
+                        "></div>
                         <div class="text-end small text-secondary mt-3">
                           <?php echo "{$hours} hr {$minutes} min {$seconds} sec"; ?>
                         </div>
@@ -551,60 +615,77 @@ $historyResults = $stmtHistory->fetchAll(PDO::FETCH_ASSOC) ?: [];
         </div>
 
         <!-- History Section -->
+        <!-- History Section -->
         <div class="container-fluid pt-5 my-5">
-          <div class="px-3 px-md-5 mt-3">
-            <h2 class="mb-5">History</h2>
-            <h1 class="text-center"><?php echo $selectedDateFormatted; ?></h1>
-            <hr />
-          </div>
-          <div class="col-12 col-md-7">
-            <div class="px-3 pt-2 me-md-4 ms-md-4">
-              <div class="card-body">
-                <div class="row mb-3 my-4">
-                  <?php if (!empty($historyResults)): ?>
-                    <div class="col-12 col-md-2  mb-4 mb-md-0">
-                      <?php foreach ($historyResults as $row): ?>
-                        <?php
-                        if (!empty($row['cover_image'])) {
-                          echo '<img src="data:image/jpeg;base64,'.base64_encode($row['cover_image']).'" alt="Cover Buku '.htmlspecialchars($row['title']).'" class="book mb-5">';
-                        } else {
-                          echo '<img src="default_cover.jpg" alt="Cover Buku '.htmlspecialchars($row['title']).'" class="book mb-3">';
-                        }
-                        ?>
-                      <?php endforeach; ?>
-                    </div>
-                    <div class="col-12 col-md-10">
-                      <?php foreach ($historyResults as $index => $row): ?>
-                        <h2 class="mt-2 fs-4 fs-md-1 mb-2 mx-2 mx-md-5">
-                          <?php echo htmlspecialchars($row['title']); ?>
-                        </h2>
-                        <div class="d-flex flex-wrap mb-3 mb-md-5 mx-2 mx-md-5">
-                          <h5 class="fw-normal text-secondary me-3 me-md-5">
-                            <?php echo htmlspecialchars($row['author']); ?>
-                          </h5>
-                          <h5 class="fw-normal text-secondary"><?php echo htmlspecialchars($row['genre']); ?></h5>
-                        </div>
-                        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mx-2 mx-md-5 mb-5">
-                          <h5 class="fw-normal text-secondary mt-2 mt-md-5">
-                            <?php echo htmlspecialchars($row['current_pages']); ?> / <?php echo htmlspecialchars($row['pages']); ?> pages
-                          </h5>
-                        </div>
-                        <?php if ($index < count($historyResults) - 1): ?>
-                          <hr />
-                        <?php endif; ?>
-                      <?php endforeach; ?>
-                    </div>
-                  <?php else: ?>
-                    <div class="col-12 text-center">
-                      <p>No reading history on this date.</p>
-                    </div>
-                  <?php endif; ?>
+            <div class="px-3 px-md-5">
+                <div class="history-date-header">
+                    <h2 class="mb-3">Reading History</h2>
+                    <h3 class="text-center text-muted"><?php echo $selectedDateFormatted; ?></h3>
                 </div>
-              </div>
+                
+                <div class="row">
+                    <div class="col-12">
+                        <?php if (!empty($historyResults)): ?>
+                            <?php foreach ($historyResults as $index => $row): ?>
+                                <div class="history-item">
+                                    <div class="row align-items-center">
+                                        <!-- Book Cover -->
+                                        <div class="col-md-2 text-center text-md-start mb-3 mb-md-0">
+                                            <?php if (!empty($row['cover_image'])): ?>
+                                                <img src="data:image/jpeg;base64,<?php echo base64_encode($row['cover_image']); ?>" 
+                                                     alt="<?php echo htmlspecialchars($row['title']); ?>" 
+                                                     class="history-book-cover shadow-sm">
+                                            <?php else: ?>
+                                                <img src="default_cover.jpg" 
+                                                     alt="<?php echo htmlspecialchars($row['title']); ?>" 
+                                                     class="history-book-cover shadow-sm">
+                                            <?php endif; ?>
+                                        </div>
+                                        
+                                        <!-- Book Details -->
+                                        <div class="col-md-10">
+                                            <div class="ps-md-3">
+                                                <h2 class="h4 mb-1"><?php echo htmlspecialchars($row['title']); ?></h2>
+                                                <p class="text-muted mb-2">by <?php echo htmlspecialchars($row['author']); ?></p>
+                                                
+                                                <div class="d-flex flex-wrap align-items-center mb-2">
+                                                    <span class="badge genre-badge me-2 mb-1"><?php echo htmlspecialchars($row['genre']); ?></span>
+                                                </div>
+                                                
+                                                <div class="mb-3">
+                                                    <div class="progress">
+                                                        <div class="progress-bar" 
+                                                             role="progressbar" 
+                                                             style="width: <?php echo htmlspecialchars($row['reading_progress']); ?>%;" 
+                                                             aria-valuenow="<?php echo htmlspecialchars($row['reading_progress']); ?>" 
+                                                             aria-valuemin="0" 
+                                                             aria-valuemax="100">
+                                                        </div>
+                                                    </div>
+                                                    <small class="text-muted">
+                                                        <?php echo htmlspecialchars($row['current_pages']); ?> of <?php echo htmlspecialchars($row['pages']); ?> pages read
+                                                    </small>
+                                                </div>
+                                                
+                                                <?php if (!empty($row['description'])): ?>
+                                                    <p class="text-muted small"><?php echo htmlspecialchars(substr($row['description'], 0, 150)); ?>...</p>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div class="text-center py-5">
+                                <i class="bi bi-book" style="font-size: 3rem; color:rgb(255, 255, 255);"></i>
+                                <h4 class="mt-3 text-muted">No reading history on this date</h4>
+                                <p class="text-muted">You haven't recorded any reading activity for <?php echo $selectedDateFormatted; ?></p>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
     <!-- Akhir History -->
 
