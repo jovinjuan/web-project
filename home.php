@@ -311,7 +311,7 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
             <!-- Navigasi Halaman -->
             <div class="d-flex justify-content-center gap-2 my-3 flex-wrap mb-5">
               <button type = "button" class="btn btn-outline-primary btn-sm mx-5" id="prev-page"><i class="fas fa-arrow-left"></i> Previous</button>
-              <button type = "submit" class="btn btn-success rounded-3 fw-bold" id="bookmark-button"><i class="fa-solid fa-bookmark mx-1"></i> Save Bookmark</button>
+              <button type = "submit" class="btn btn-success rounded-3 fw-bold" id="bookmark-button"><i class="fa-solid fa-bookmark mx-1"></i> Save</button>
               <button type = "button" class="btn btn-danger rounded-3 fw-bold" id="close-button"><i class="fas fa-times mx-1"></i> Tutup</button>
               <button type = "button" class="btn btn-outline-primary btn-sm mx-5" id="next-page">Next <i class="fas fa-arrow-right"></i></button>
             </div>
