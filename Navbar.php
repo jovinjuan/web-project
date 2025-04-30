@@ -1,7 +1,4 @@
-
 <!-- Nav Bar -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 <nav class="navbar navbar-expand-lg bg-light shadow p-3 fixed-top">
   <div class="container-fluid px-4">
     <img
@@ -10,7 +7,7 @@
       class="mx-2 mt-3"
       style="width: 50px; height: 50px"
     />
-    <a class="navbar-brand ps-2" href="#">Tready</a>
+    <a class="navbar-brand ps-2" href="home.php">Tready</a>
     <button
       class="navbar-toggler"
       type="button"
@@ -59,12 +56,14 @@
         </li>
       </ul>
       <!-- Search Bar -->
-      <form class="d-flex ms-auto" role="search">
+      <form class="d-flex ms-auto" role="search" action="search.php" method="GET">
         <input
           class="form-control me-2 w-80"
           type="search"
-          placeholder="Search"
+          name="search_query"
+          placeholder="Search by title or author"
           aria-label="Search"
+          value="<?= htmlspecialchars($_GET['search_query'] ?? '') ?>"
         />
         <button class="btn btn-outline-primary" type="submit">Search</button>
       </form>
@@ -75,5 +74,6 @@
     </div>
   </div>
 </nav>
-<!-- Akhir Nav Bar -->
+<!-- End Nav Bar -->
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
