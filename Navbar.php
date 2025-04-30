@@ -1,3 +1,4 @@
+
 <!-- Nav Bar -->
 <nav class="navbar navbar-expand-lg bg-light shadow p-3 fixed-top">
   <div class="container-fluid px-4">
@@ -55,18 +56,6 @@
           >
         </li>
       </ul>
-      <!-- Search Bar -->
-      <form class="d-flex ms-auto" role="search" action="search.php" method="GET">
-        <input
-          class="form-control me-2 w-80"
-          type="search"
-          name="search_query"
-          placeholder="Search by title or author"
-          aria-label="Search"
-          value="<?= htmlspecialchars($_GET['search_query'] ?? '') ?>"
-        />
-        <button class="btn btn-outline-primary" type="submit">Search</button>
-      </form>
       <!-- Settings -->
       <a href="settings.php" class="btn btn-light">
         <i class="bi bi-person-circle fs-5 justify-content-center"></i>

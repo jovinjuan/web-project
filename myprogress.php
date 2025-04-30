@@ -323,71 +323,40 @@ try {
             height: auto;
         }
     }
+    @media (max-width: 768px) {
+        .progress-title{
+            text-align : center;
+        }
+        .progress-subtitle{
+            margin-top : 30px;
+            text-align : center
+        }
+        .circle-c{
+            margin-top : 100px;
+        }
+        .statistics{
+            margin-top : 400px;
+        }
+        .progress-card{
+            max-width : 90%;
+        }
+    }
+
     </style>
 </head>
 <body>
-    <!-- Nav Bar -->
-    <nav class="navbar navbar-expand-lg bg-light shadow p-3 fixed-top">
-        <div class="container-fluid px-5">
-            <img src="treadyicon.png" alt="web icon" class="mx-2" style="width: 50px; height: 63px;">
-            <a class="navbar-brand" href="#">Tready</a>
-            <button
-                class="navbar-toggler"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#navbarNav"
-                aria-controls="navbarNav"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-            >
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="nav nav-pills">
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="home.php">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="myprogress.php">My Progress</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="achievement.php">Achievement</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="history.php">History</a>
-                    </li>
-                </ul>
-            </div>
-            <nav class="navbar bg-body-tertiary">
-                <div class="container-fluid">
-                    <form class="d-flex ms-auto" role="search">
-                        <input
-                            class="form-control me-2 w-80"
-                            type="search"
-                            placeholder="Search"
-                            aria-label="Search"
-                        />
-                        <button class="btn btn-outline-primary" type="submit">
-                            Search
-                        </button>
-                    </form>
-                </div>
-            </nav>
-            <a href="settings.php" class="btn btn-light">
-                <i class="bi bi-person-circle fs-5"></i>
-            </a>
-        </div>
-    </nav>
-    <!-- Akhir Nav Bar -->
+    <?php
+    include "Navbar.php";
+    ?>
 
     <!-- Awal Statistik -->
     <div class="container-fluid mt-5 pt-5">
         <div class="px-5 mt-3">
-            <h2>My Progress</h2>
-            <h5>Track Your Reading Progress</h5>
+            <h2 class = "progress-title">My Progress</h2>
+            <h5 class = "progress-subtitle">Track Your Reading Progress</h5>
             <div class="row g-4 mt-2">
                 <!-- Circle Chart -->
-                <div class="col-6">
+                <div class="col-md-6 col-12">
                     <div class="card px-3 pt-2 fixed-height-chart">
                         <div class="card-body">
                             <h4 class="card-title">Target</h4>
@@ -448,7 +417,7 @@ try {
                                     </div>
                                 </div>
                             </div>
-                            <div class="row align-items-center mt-2 mb-2">
+                            <div class="row align-items-center mt-2 mb-2 circle-c">
                                 <div class="col-3">
                                 <?php
                                 $streak_progress = isset($streak_progress) ? round($streak_progress, 1) : 0;
@@ -506,7 +475,7 @@ try {
                     </div>
                 </div>
                 <!-- Line Chart -->
-                <div class="col-6">
+                <div class="col-md-6 col-12 statistics">
                     <div class="card px-3 pt-2 fixed-height-chart">
                         <div class="card-body">
                             <h4 class="card-title">Statistics</h4>
@@ -588,8 +557,8 @@ try {
                     </div>
                 </div>
                 <!-- In Progress -->
-                <div class="col">
-                    <div class="card px-3 py-2 mb-5">
+                <div class="col-12">
+                    <div class="card px-3 py-2 mb-5 progress-card">
                         <div class="card-body">
                             <h4 class="card-title">In Progress</h4>
                             <h6 class="card-subtitle mb-2 text-body-secondary"></h6>
